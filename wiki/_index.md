@@ -27,4 +27,6 @@ A learning lives at root **only if it applies to both subprojects** (e.g., overf
   - [data-sourcing.md](methodology/data-sourcing.md) — default order: subproject downloader → ccxt → direct API → S3 → yfinance → scrapers
 - `references/`
   - [divergence_portfolio_theory.md](references/divergence_portfolio_theory.md) — α-portfolio framing that motivates multi-objective search
+- `ideas/` — parked ideas not yet attached to an experiment
+  - [random-projection-stability.md](ideas/random-projection-stability.md) — sliced/projection-based stability tests for regime robustness; pull off shelf when the first Pareto front exists
 - `../literature/` — shared paper library (PDFs)

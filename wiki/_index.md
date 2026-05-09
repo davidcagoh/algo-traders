@@ -20,7 +20,11 @@ A learning lives at root **only if it applies to both subprojects** (e.g., overf
 ## Contents
 
 - [PATTERN.md](../PATTERN.md) — original cross-project pattern observations (May 2026)
-- [learnings.md](learnings.md) — confirmed cross-cutting facts and open questions
-- `methodology/` — reusable experiment-design protocols (CV, deflation, multi-objective search)
-- `references/` — theoretical frames that inform methodology (e.g., divergence portfolio theory)
+- [learnings.md](learnings.md) — confirmed cross-cutting facts, open questions, data-sourcing defaults
+- `methodology/`
+  - [multi-objective-search.md](methodology/multi-objective-search.md) — design draft for Pareto-front sweep over a bounded primitive grammar
+  - [cv-and-deflation.md](methodology/cv-and-deflation.md) — CPCV protocol, DSR/PBO gates, pre-registration template
+  - [data-sourcing.md](methodology/data-sourcing.md) — default order: subproject downloader → ccxt → direct API → S3 → yfinance → scrapers
+- `references/`
+  - [divergence_portfolio_theory.md](references/divergence_portfolio_theory.md) — α-portfolio framing that motivates multi-objective search
 - `../literature/` — shared paper library (PDFs)

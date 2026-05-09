@@ -91,3 +91,18 @@ If these aren't met, the sweep result is statistically dead on arrival regardles
 - Are 5 objectives enough, or does adding more (e.g., tail-risk, max-consecutive-losses) help structurally or just add noise?
 - Does Pareto-front rank predict OOS performance better than single-metric rank? Empirical question — measure on a held-out year before trusting the framework.
 - Can the divergence-portfolio loss formulation (`../references/divergence_portfolio_theory.md`) be applied directly as a strategy-evaluation loss, or is the analogy purely structural?
+
+---
+
+## Production-scale endpoint (for orientation, not prescription)
+
+The Pareto-frontier-of-objectives framing here is structurally the same architecture that production quant funds run, just at much smaller scale. From Leek 2025 (popular-press but consistent with what's documented elsewhere about Citadel, Two Sigma, AQR):
+
+> *"Instead of one grand model, they run hundreds of small, specialized ones. Each targets a distinct horizon — milliseconds: market-making and order-flow prediction; hours: short-term flow and liquidity shocks; weeks: trend and relative momentum; months: valuation, factor rotation, or regime-switch models. Some firms operate with a higher-level meta-strategy which allocates capital dynamically across these sub-models, smoothing performance across time and market conditions."*
+
+Map to the framework:
+- **Each "small specialized model"** ≈ one config on the Pareto frontier — a (primitive grammar config, holding horizon, asset universe) tuple optimized for one or two objectives.
+- **The meta-allocator** ≈ the Pareto-front itself: rather than picking one config, you hold a portfolio across the frontier and dynamically weight by recent regime fit.
+- **The horizon stratification** is the implicit covering structure that makes the objectives non-degenerate — a 1ms market-making model and a 3-month factor model have nearly orthogonal failure modes by construction.
+
+This is **not** a near-term goal (we don't have the data, infra, or capital to operate at that scale). It's a sanity check that the structural direction isn't a dead end — the production version exists and works. The near-term goal is just to get *one* Pareto front out of *one* primitive grammar on *one* asset, with proper deflation, and see whether multi-objective rank predicts OOS performance better than single-metric rank.

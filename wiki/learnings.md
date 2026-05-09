@@ -6,7 +6,7 @@ Facts, hypotheses, and ruled-out directions that apply to **both** subprojects. 
 
 ## Confirmed (cross-project)
 
-- **LLM-driven sequential strategy refinement gets geometrically trapped.** Both feishu and backtesting independently saw an LLM start from a simple template (SMA, momentum) and refine along that vein for many iterations without exploring orthogonal signal families. The local-minimum is the LLM's prior, not the data. See `methodology/multi-objective-search.md` for the proposed escape route.
+- **LLM-driven sequential strategy refinement gets geometrically trapped.** Both feishu and backtesting independently saw an LLM start from a simple template (SMA, momentum) and refine along that vein for many iterations without exploring orthogonal signal families. The local-minimum is the LLM's prior, not the data. **Mechanistic confirmation:** Simhi et al. 2026 ("Old Habits Die Hard: How Conversational History Geometrically Traps LLMs", arXiv 2603.03308) measures this directly across 3 model families × 6 datasets — once a phenomenon appears in a turn, it persists, with Spearman 0.78 between probabilistic (Markov trace) and geometric (hidden-state angle) measures. **Mitigation hint:** the paper shows the trap *dissolves under topical inconsistency* — randomly shuffling unrelated prompts breaks carryover. Practical implication for strategy ideation: deliberately interleave unrelated topics in any LLM-driven search loop, don't let it stay on one thread for many iterations. See `methodology/multi-objective-search.md` for the structural escape route (move to bounded primitive grammar + Pareto search).
 - **Single-objective optimisation overfits at any scale.** Feishu IS-parameter-space exhaustion was reached at modest sweep size; further tuning was flagged as overfitting risk. Backtesting's thin samples (N=6, N=32) make any single-metric ranking noise-dominated.
 - **Deflated Sharpe Ratio (López de Prado).** Expected max Sharpe under the null grows with √log(N_configs). Any sweep across more than ~10 configs needs DSR or PBO as a gate, otherwise the winner is structurally noise. Pre-register the gate before running the sweep.
 
@@ -23,7 +23,11 @@ Facts, hypotheses, and ruled-out directions that apply to **both** subprojects. 
 
 1. **Multi-objective Pareto search beats single-metric max** when objectives are negatively correlated under noise (Calmar-bull, Calmar-bear, ulcer, turnover-adjusted PF, OOS-stability). Inspired by `references/divergence_portfolio_theory.md` — same logic as α-portfolio for distribution fitting.
    - **Test:** scaffold an NSGA-II run on a small primitive grammar (~6 signal families × 2–3 hyperparams) once a subproject has enough independent trades per fold.
-   - **Open methodology:** see `methodology/` (to be written).
+   - **Open methodology:** see `methodology/multi-objective-search.md`.
+
+2. **Strategy retirement / kill criteria are missing from both subprojects.** Per Dan Davies (ex-quant, in the comment thread of Leek 2025): *"quant funds survive in the long term because of fundamentally non-quantitative attributes of their managers; it is a very rare person indeed [who] combines the common sense to turn the model off when it is breaking down, with self-discipline to resist the temptation to tinker."* Neither feishu's `trend_vol_v4` nor backtesting's `SmaRegime180` has a documented condition under which it would be retired. This is the real survival mechanism — risk *management*, not signal *quality*.
+   - **Test:** before any strategy graduates from leaderboard to paper-trading, write a retirement rule of the form: "kill if rolling-90d Calmar drops below X, or if drawdown exceeds Y% of historical max DD, or if regime indicator Z flips for N consecutive bars."
+   - **Open methodology:** add `methodology/kill-criteria.md` once the first concrete rule is drafted (don't write it speculatively — wait for the first real candidate).
 
 ## Ruled out (cross-project)
 

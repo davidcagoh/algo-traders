@@ -102,17 +102,19 @@ A strategy is rarely simply *broken* or *working*. More often, it is **regime-co
 
 The cleanest evidence in the project is the `HmmSmaSlope` family. The premise: combine the Hidden Markov Model regime detector (which performs well in bulls but is bear-blind) with the SMA-180 slope filter (which is bear-resilient but mostly stays flat). Three variants were tested, differing only in how the slope value modulates position size:
 
-| Variant | Sizing rule | Bull return | Bear MDD | Frontier role |
+| Variant | Sizing rule | Calmar | MDD | Frontier role |
 |---|---|---:|---:|---|
-| V1 (binary) | `slope > 0 ⇒ full size, else 0` | +50.5% | 8.65% | aggressive corner |
-| V2 (linear) | `size = clip(slope / 0.005, 0, 1)` | +33.4% | 4.44% | first multi-coin pass under K1 = 5.5% |
-| V3 (sqrt) | `size = clip((slope / 0.005)^0.5, 0, 1)` | +39.6% | 5.72% | bull-leaning, 0.22pp shy of K1 |
+| V1 (binary) | `slope > 0 ⇒ full size, else 0` | 25.01 | 8.21% | aggressive corner; breaches K1 by 2.71pp |
+| V2 (linear) | `size = clip(slope / 0.005, 0, 1)` | 30.23 | 6.05% | best Calmar/MDD pair; admitted to book under portfolio-aware K1 |
+| V3 (sqrt) | `size = clip((slope / 0.005)^0.5, 0, 1)` | 27.28 | 6.91% | bull-leaning intermediate; 1.41pp past K1 |
 
-Three observations.
+Numbers are 5.5-year Binance common-window aggregates from [`backtesting/wiki/_index.md`](backtesting/wiki/_index.md). Three observations.
 
 **First, these are not three different strategies; they are three points on a tradeoff curve.** Pairwise Pearson correlation between V1, V2, V3 is 0.96–1.00. The underlying signal is the same; the sizing exponent is the only knob. Crank it toward infinity and you get a binary gate (V1); crank it toward zero and you get full-size always (the unfiltered HMM-multi); the exponent values 1.0 (V2) and 0.5 (V3) trace a smooth path between.
 
-**Second, the binary gate (V1) is dominated.** On the Pareto frame of (bull return, bear MDD), V2 and V3 sit on the frontier; V1 sits behind the curve traced by V2 and V3 extrapolated. The binary rule throws away signal because it treats a barely-positive slope identically to a strongly-positive one — and barely-positive entries turn out to be roughly as profitable on average as strongly-positive ones in this signal. The cost of V1's harshness is structural, not noise.
+**Second, the binary gate (V1) is dominated.** On the Pareto frame of (Calmar, MDD), V2 dominates V1 outright — higher Calmar (30.23 vs 25.01) at lower MDD (6.05% vs 8.21%). V3 sits between them. The binary rule throws away signal because it treats a barely-positive slope identically to a strongly-positive one — and barely-positive entries turn out to be roughly as profitable on average as strongly-positive ones in this signal. The cost of V1's harshness is structural, not noise.[^vwindow]
+
+[^vwindow]: A finer-grained bull-window / bear-window decomposition of the same three variants exists for the Hyperliquid 1h substrate (see [`writeup-2026-05-10`](writeup-2026-05-10.md) and the per-variant cards under [`backtesting/wiki/results/2026-05-10-hmm-sma-slope*.md`](backtesting/wiki/results/)). The common-window Calmar / MDD numbers reported here are the aggregate 5.5-year Binance figures used for paper-candidate selection; they collapse the bull-return vs bear-MDD tradeoff into a single risk-adjusted-return frame.
 
 **Third, the family of continuous-shrinkage forms generalises.** Ravagnani et al. (2026, summarised in the project's papers folder) propose the same shape for robust forecast combination:
 

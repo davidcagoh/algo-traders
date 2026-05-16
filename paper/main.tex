@@ -42,7 +42,7 @@ maximum pairwise Pearson; a demonstration that \emph{continuous position
 shrinkage} along a bull-return / bear-drawdown Pareto frontier dominates
 binary regime gates, exhibited via a V1/V2/V3 sweep of an HMM-and-slope
 strategy; and a candid treatment of DSR over-rejection at $N{<}200$ with
-kurtosis 5--340 typical of trend strategies with fat right tails. We apply
+kurtosis 5--680 typical of trend strategies with fat right tails. We apply
 the framework to a candidate book of two strategies (T3 \texttt{SmaRegime180},
 R$\wedge$T2 \texttt{HmmSmaSlopeV2}) with pairwise Pearson correlation 0.07,
 combined-book risk-parity MDD 2.12\%, and robust MDB +0.55. We name the
@@ -64,7 +64,7 @@ process generating selection bias. The pre-registration discipline of
 of \citet{lopezdeprado2014dsr} addresses multiple-testing inflation. Both are
 necessary; neither, applied alone, is sufficient. In our setting (5.5 years
 of Binance perpetuals, 5 coins, $N$ closed trades typically in $[30, 700]$,
-returns with sample skew up to $+21$ and excess kurtosis up to $+470$), DSR
+returns with sample skew up to $+24$ and excess kurtosis up to $+680$), DSR
 flags every candidate strategy as ``noise.'' If we gate on DSR alone, the
 project is over. If we ignore it, we replay the same overfitting failures
 that motivated its introduction.
@@ -140,7 +140,7 @@ reporting the best Sharpe systematically overstates out-of-sample
 performance. The Deflated Sharpe Ratio (DSR) corrects the observed Sharpe
 for: (a) the number of trials, (b) the cross-trial Sharpe variance, and (c)
 the skew and kurtosis of the strategy returns. The skew/kurtosis correction
-is the term that bites at our scale --- with kurtosis 5--340 our raw Sharpe
+is the term that bites at our scale --- with kurtosis 5--680 our raw Sharpe
 estimates are aggressively shrunken even before the multiple-testing
 adjustment, and the resulting DSR is below conventional significance for
 every standalone strategy we tested. We retain DSR as Layer 4 (\S\ref{sec:l4})
@@ -256,7 +256,7 @@ $\hat{\gamma}_3$ and $\hat{\gamma}_4$ are sample skew and kurtosis of
 returns, and $\Phi$ is the standard normal CDF.
 
 Two terms in the denominator dominate at our scale. First, $\hat{\gamma}_4$
-ranges from 5 to 340 across our strategies; the kurtosis correction shrinks
+ranges from 5 to 680 across our strategies; the kurtosis correction shrinks
 the test statistic by a factor of 3--20. Second, $\sqrt{N-1}$ with
 $N \in [30, 700]$ does not overcome the variance inflation. The empirical
 result, documented in our DSR sweep~\citep{result_dsr_analysis}, is that
@@ -496,8 +496,8 @@ L3 SQN & 1.78 & 2.73 \\
 L3 trades & 85 & 616 \\
 L5 Ulcer & 1.30 & 2.87 \\
 L5 Martin & $+2.51$ & $+7.41$ \\
-L5 skew & $+18$ & $+11$ \\
-L5 kurtosis (excess) & $+440$ & $+115$ \\
+L5 skew & $+20.4$ & $+24.0$ \\
+L5 kurtosis (excess) & $+455$ & $+680$ \\
 L6 $\rho \to$ other & 0.07 & 0.07 \\
 L6 MDB-rp vs other & $+0.55$ (book) & $+0.55$ (book) \\
 \bottomrule

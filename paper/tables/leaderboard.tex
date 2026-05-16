@@ -1,0 +1,31 @@
+% Common-window leaderboard, Binance perp 2020-09-23 -> 2026-05-09 (5.5y).
+% Risk-parity MDB computed against the candidate book {T3, R^T2}.
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{llrrrrrrrl}
+\toprule
+Code & Strategy & Calmar & SQN & MDD\% & Ulcer & Martin & corr$\to$T3 & MDB-rp & Status \\
+\midrule
+T3      & SmaRegime180          & 8.76  & 1.78 & 2.21  & 1.30  & +2.51 & (book) & (book) & \textbf{$\star$} \\
+R$\wedge$T2 & HmmSmaSlopeV2     & 30.23 & 2.73 & 6.05  & 2.87  & +7.41 & (book) & (book) & \textbf{$\star$} \\
+R$\wedge$T3 & HmmSmaSlopeV3     & 27.28 & 2.79 & 6.91  & 3.30  & +6.58 & +0.07  & $-0.023$ & $\blacktriangle$ \\
+R$\wedge$T1 & HmmSmaSlope (V1)  & 25.01 & 2.97 & 8.21  & 3.82  & +6.00 & +0.07  & $+0.012$ & $\blacktriangle$ \\
+R1$\sim$ & HmmRegime4 (look-ahead) & 9.16 & 3.88 & 2.94 & 1.09 & +4.24 & 0.00 & $+0.07$ & $\sim$ \\
+T2      & SmaRegime720          & 5.39  & 1.74 & 3.57  & 1.75  & +1.82 & +0.65  & $-0.023$ & $\blacktriangle$ \\
+T1      & TrendFilter200        & 1.69  & 1.10 & 8.54  & 3.79  & +0.67 & 0.00 & $+0.040$ & $\blacktriangle$ \\
+X2      & CrossSectionalMom.    & ---   & ---  & 13.04 & ---   & ---   & 0.00 & $+0.048$ & $\blacktriangle$ \\
+R2x     & HmmRegime4Rolling 5c  & 3.79  & 1.66 & 21.47 & 10.25 & +1.15 & $-0.01$ & $+0.069$ & \texttimes \\
+R2      & HmmRegime4Rolling BTC & 0.47  & 0.39 & 7.65  & 4.01  & +0.17 & +0.01  & $+0.010$ & \texttimes \\
+X1      & PairsZScore (1-leg)   & 2.08  & 0.95 & 4.03  & 0.48  & +0.55 & 0.00 & $-0.898$ & \texttimes \\
+X1v2    & PairsZScoreV2 (2-leg) & 0.97  & 0.42 & 2.91  & 0.82  & +0.65 & n/c    & n/c     & \texttimes \\
+C1      & FundingCarry 5c (full)& 1.93  & 1.22 & 15.65 & 5.87  & +0.81 & n/c    & n/c     & \texttimes \\
+R$\wedge$C1 & HmmCarry 5c       & 0.08  & 0.14 & 35.46 & 9.57  & +0.04 & 0.00 & $-0.000$ & \texttimes \\
+R$\wedge$C1$^r$ & HmmCarryReverse 5c & 0.78 & 0.56 & 15.09 & 7.50 & +0.28 & n/c & n/c & \texttimes \\
+F1      & FundingExtremeMR 5c   & $-0.32$& $-0.64$& 33.51 & 15.98 & $-0.14$ & n/c & n/c & \texttimes \\
+T0      & LongOnlyStrategy      & $-0.37$& $-0.58$& 10.17 & 6.26  & $-0.11$& 0.00 & $-0.009$ & $\cdot$ \\
+\bottomrule
+\end{tabular}
+\caption{Common-window leaderboard. Binance perp, 5-coin universe (BTC/ETH/SOL/AVAX/DOGE), 4h or 1h bars, fees $\texttt{--fee 0.00035}$ uniformly. Status: $\star$ admitted to book; $\blacktriangle$ research frontier; $\sim$ look-ahead upper bound; \texttimes\ killed; $\cdot$ baseline. ``n/c'' = not computed (book composition unchanged).}
+\label{tab:leaderboard}
+\end{table*}

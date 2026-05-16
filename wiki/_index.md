@@ -2,7 +2,7 @@
 
 Cross-cutting workspace for two algorithmic-trading subprojects that share methodology, literature, and lessons but live in their own GitHub repos.
 
-**Last updated:** 2026-05-09
+**Last updated:** 2026-05-16
 
 ## Subprojects
 
@@ -21,6 +21,10 @@ A learning lives at root **only if it applies to both subprojects** (e.g., overf
 
 - [PATTERN.md](../PATTERN.md) — original cross-project pattern observations (May 2026)
 - [learnings.md](learnings.md) — confirmed cross-cutting facts, open questions, data-sourcing defaults
+- Public-facing writeups (root, untracked):
+  - `../writeup-2026-05-10.md` / `.pdf` — narrative essay on five-strategy ranking, Pareto frontier, DSR humility
+  - `../writeup-2026-05-16.md` / `.pdf` — principled writeup, layered evaluation stack (L1–L6), candidate book {T3, R∧T2}
+  - `../website-brief.md` — adapted-paper brief for the public site (essay + repo, not paper-shaped)
 - `methodology/`
   - [multi-objective-search.md](methodology/multi-objective-search.md) — design draft for Pareto-front sweep over a bounded primitive grammar
   - [cv-and-deflation.md](methodology/cv-and-deflation.md) — CPCV protocol, DSR/PBO gates, pre-registration template

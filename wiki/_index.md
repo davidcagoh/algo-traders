@@ -28,6 +28,7 @@ A learning lives at root **only if it applies to both subprojects** (e.g., overf
 - `methodology/`
   - [multi-objective-search.md](methodology/multi-objective-search.md) — design draft for Pareto-front sweep over a bounded primitive grammar
   - [cv-and-deflation.md](methodology/cv-and-deflation.md) — CPCV protocol, DSR/PBO gates, pre-registration template
+  - [kill-criteria.md](methodology/kill-criteria.md) — pre-registered retirement rules: four canonical axes, family-specific axis, Davies–Ravagnani continuous shrinkage, calibration discipline
   - [data-sourcing.md](methodology/data-sourcing.md) — default order: subproject downloader → ccxt → direct API → S3 → yfinance → scrapers
 - `references/`
   - [divergence_portfolio_theory.md](references/divergence_portfolio_theory.md) — α-portfolio framing that motivates multi-objective search

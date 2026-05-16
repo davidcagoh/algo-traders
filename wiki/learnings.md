@@ -59,6 +59,8 @@ Facts, hypotheses, and ruled-out directions that apply to **both** subprojects. 
 
 Ordered by how much each would change what we do. Subproject-specific next-steps live in the subproject wikis.
 
+**Status (2026-05-16):** First formal artifacts shipped — `paper/` (14p arXiv LaTeX, 6-layer stack + portfolio-aware K1) and `essays/principled-strategy-evaluation-at-laptop-scale.md` (~5000w practitioner companion). Paper is no longer blocked on implementation — only on time (held-out window 2026-06 → 2026-12 + 30-day live dry-run).
+
 1. **Port the 6-layer evaluation stack into feishu.** Backtesting has L1–L6 wired (MDB-rp + correlation + Ulcer/skew/kurtosis); feishu still ranks on single-metric leaderboards. The methodology is cross-cutting — feishu can drop L4/L6 if N is too small, but L2/L3/L5 are immediately applicable. This is the highest-leverage cross-project move right now.
 2. **Pre-register kill criteria for the next strategy that graduates anywhere.** Pattern is proven in backtesting (`decisions/004` for SmaRegime180, plus the 005/006/007/008 pre-registered kill files for X1/X2/F1 families). The form — hard MDD threshold + continuous-shrinkage size factor — is portable to feishu's `trend_vol_v4` once cross-cycle data exists. Write `methodology/kill-criteria.md` only after the *second* concrete rule is drafted; don't speculate.
 3. **Cross-cycle validation protocol as a generic gate.** Backtesting H7 confirmed venue-tuned strategies need an unchanged run on a wider regime set before paper-trading. Feishu equivalent: hold out a full Chinese A-share bear/bull cycle outside the tuning window. Write up as `methodology/cross-cycle-validation.md` once feishu has run its first such test.

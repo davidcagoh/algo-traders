@@ -1,6 +1,7 @@
 # Subprojects keep their own git history and GitHub remotes
 backtesting/
 feishu/
+live/
 
 # OS / editor
 .DS_Store

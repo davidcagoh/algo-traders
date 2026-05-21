@@ -10,6 +10,7 @@ Cross-cutting workspace for two algorithmic-trading subprojects that share metho
 |------|--------|---------------|------|
 | `backtesting/` | Hyperliquid BTC/USDC perps via Freqtrade | own repo | `backtesting/wiki/_index.md` |
 | `feishu/` | Chinese A-share quant competition | own repo | `feishu/wiki/_index.md` |
+| `live/` | Cross-venue equity generalisation + Hyperliquid 30d dry-run | own repo | `live/wiki/_index.md` |
 
 Both subprojects are gitignored at this root — they retain independent history. This repo only tracks the meta-layer: literature, methodology, cross-cutting learnings.
 

@@ -2,7 +2,7 @@
 
 Cross-cutting workspace for two algorithmic-trading subprojects that share methodology, literature, and lessons but live in their own GitHub repos.
 
-**Last updated:** 2026-05-20
+**Last updated:** 2026-05-21
 
 ## Subprojects
 

@@ -2,7 +2,7 @@
 
 Cross-cutting workspace for the algorithmic-trading subprojects in this repo.
 
-**Last updated:** 2026-06-01
+**Last updated:** 2026-06-01 (repo consolidation session)
 
 ## Subprojects
 
@@ -12,7 +12,7 @@ Cross-cutting workspace for the algorithmic-trading subprojects in this repo.
 | `live/` | Hyperliquid 30d dry-run + cross-venue equity | [`wiki/live/_index.md`](live/_index.md) |
 | `feishu/` | Chinese A-share quant competition | gitignored — own repo |
 
-`backtesting/` and `live/` are tracked in this repo (merged 2026-06-01). Their prior independent git histories are archived at `github.com/davidcagoh/backtesting` and `github.com/davidcagoh/algo-traders-live`. `feishu/` remains in its own repo — different market, different competition context.
+`backtesting/` and `live/` are tracked in this repo (merged 2026-06-01). The prior separate GitHub repos (`davidcagoh/backtesting`, `davidcagoh/algo-traders-live`) have been deleted. `feishu/` remains in its own repo — different market, different competition context.
 
 ## Promotion rule
 

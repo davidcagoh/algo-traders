@@ -28,30 +28,27 @@ The two tracks are independent. Both must pre-register pass/fail criteria before
 
 ```
 live/
-├── wiki/
-│   ├── _index.md
-│   ├── learnings.md            # confirmed cross-track facts only
-│   ├── decisions/              # pre-registered gates (write before code)
-│   ├── methodology/            # protocol docs
-│   └── results/                # dated, immutable result files
 ├── eval/                       # 6-layer eval stack (ported from feishu/eval/)
 ├── tracks/
 │   ├── sgx_idx_trend_vol/      # Track A
 │   └── hl_paper/               # Track B
 ├── ops/                        # hosting, monitoring, Docker, GH Actions
-├── dashboard/                  # public live-tape (Supabase + Vercel + sync sidecar)
-└── scripts/                    # cross-track utilities
+└── dashboard/                  # public live-tape (Supabase + Vercel + sync sidecar)
+
+wiki/live/                      # gates + results (lives in repo wiki/, not here)
+├── decisions/                  # pre-registered gates (write before code)
+└── results/                    # dated, immutable result files
 ```
 
 ## Promotion rule
 
-Same as the root meta wiki. Facts that apply to **both** tracks get promoted to `wiki/learnings.md`. Track-specific findings stay in `tracks/<name>/notes.md`. Cross-project findings (applying to feishu and backtesting too) get promoted further to `../wiki/learnings.md`.
+Same as the root meta wiki. Facts that apply to **both** tracks get promoted to `wiki/live/learnings.md`. Track-specific findings stay in `tracks/<name>/notes.md`. Cross-project findings (applying to feishu and backtesting too) get promoted further to `../wiki/learnings.md`.
 
 ## Pre-registration discipline
 
 Both tracks follow the methodology from `../wiki/methodology/kill-criteria.md` and `../wiki/methodology/cv-and-deflation.md`. Concretely:
 
-1. Write the gate file in `wiki/decisions/` first.
+1. Write the gate file in `wiki/live/decisions/` first.
 2. Implement the strategy.
 3. Run on tuning window.
 4. Run on pre-registered held-out window without modification.

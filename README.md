@@ -24,7 +24,7 @@ Five strategies evaluated on Binance perp history 2020-09 → 2026-05 (5.5 years
 - **Per-strategy report cards:** [`backtesting/wiki/results/`](backtesting/wiki/results/)
 - **Candidate book:** {T3, R∧T2} = `SmaRegime180` (BTC, conservative) + `HmmSmaSlopeV2` (5-coin, high-return). Correlation 0.07, MDB-rp +0.55.
 - **Strategy taxonomy:** [`backtesting/wiki/reference/strategy-taxonomy.md`](backtesting/wiki/reference/strategy-taxonomy.md) — every family built, with status tags (★/▲/~/✗)
-- **Writeup (2026-05-16):** [`writeup-2026-05-16.pdf`](writeup-2026-05-16.pdf) — Pareto frontier + layered evaluation, narrative form
+- **Writeup (2026-05-16):** [`articles/principled-evaluation-worked-example.md`](articles/principled-evaluation-worked-example.md) — Pareto frontier + layered evaluation, narrative form
 
 ### 3. Deployment code
 `HmmSmaSlopeV2` running as a Freqtrade dry-run against live Hyperliquid prices.
@@ -33,7 +33,7 @@ Five strategies evaluated on Binance perp history 2020-09 → 2026-05 (5.5 years
 - **Ops (Docker, VPS, systemd):** [`live/ops/`](live/ops/)
 - **Dashboard (Next.js + Supabase → Vercel):** [`live/dashboard/`](live/dashboard/)
 - **Sync sidecar (SQLite → Supabase, 30s):** [`live/dashboard/sync/`](live/dashboard/sync/)
-- **Pre-registered gate:** [`live/wiki/decisions/002-track-b-gate.md`](live/wiki/decisions/002-track-b-gate.md) — binding pass/fail criteria, written before the clock started
+- **Pre-registered gate:** [`wiki/live/decisions/002-track-b-gate.md`](wiki/live/decisions/002-track-b-gate.md) — binding pass/fail criteria, written before the clock started
 
 ---
 
@@ -56,12 +56,13 @@ algo-traders/
 │   ├── wiki/             ← decisions (pre-registered gates), results, leaderboard
 │   └── user_data/        ← strategy files, data, backtest configs
 ├── live/                 ← production deployment
-│   ├── wiki/             ← pre-registered gates, dry-run results, learnings
 │   ├── dashboard/        ← Next.js frontend + Supabase sync sidecar
 │   ├── ops/              ← Dockerfile, docker-compose, systemd units
 │   └── tracks/           ← Track A (parked), Track B (active)
-├── wiki/                 ← cross-cutting methodology (applies to both subprojects)
-│   └── methodology/      ← 6-layer eval stack, CPCV protocol, kill criteria design
+├── wiki/                 ← top-level wiki (methodology + cross-cutting + live track)
+│   ├── methodology/      ← 6-layer eval stack, CPCV protocol, kill criteria design
+│   └── live/             ← pre-registered gates + dry-run results for live/
+├── articles/             ← narrative and technical writeups
 ├── paper/                ← arXiv preprint (LaTeX, 14pp)
 ├── essays/               ← long-form practitioner essay
 └── literature/           ← shared paper library

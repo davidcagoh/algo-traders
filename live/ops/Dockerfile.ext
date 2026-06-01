@@ -1,0 +1,18 @@
+# Track B Freqtrade extension image.
+# Bases on the upstream stable image (Python 3.12) instead of building from
+# source, so hmmlearn can install from a prebuilt wheel. The gate-002 pin
+# shifts from "freqtrade commit 9d0fb9b" to "freqtrade Docker image digest" —
+# operationally equivalent for the 30d window (the binding requirement is
+# "no version changes during the run", which a digest pin satisfies).
+
+FROM freqtradeorg/freqtrade:stable
+
+# Install build tools as a safety net in case the wheel is unavailable on
+# some future image rebuild. Adds ~80 MB; acceptable for a long-running bot.
+USER root
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+USER ftuser
+RUN pip install --user --no-cache-dir hmmlearn

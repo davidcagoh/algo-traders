@@ -1,0 +1,71 @@
+---
+# Track B — Hyperliquid 30d dry-run.
+# Builds freqtrade from the pinned in-repo source (commit 9d0fb9b) so the
+# container matches the gate-002 version pin. Do not switch to the upstream
+# `freqtradeorg/freqtrade:stable` image during the 30d window — that would
+# break the pin.
+#
+# Run from this directory: `docker compose --env-file .env up -d`.
+# The build context is the repo root so Dockerfile can see backtesting/.
+
+services:
+  freqtrade:
+    build:
+      # Custom extension on top of upstream `freqtradeorg/freqtrade:stable`.
+      # See Dockerfile.ext for the rationale (Python 3.14 has no hmmlearn
+      # wheel; upstream stable uses 3.12 which does).
+      context: .
+      dockerfile: Dockerfile.ext
+    image: algo-traders/freqtrade:hmmlearn
+    container_name: hl_paper_track_b
+    restart: unless-stopped
+    stop_grace_period: 30s
+    volumes:
+      # Harness config + strategy + user_data live in the repo; mount read-write
+      # so freqtrade can write logs, db, and downloaded OHLCV.
+      - ../tracks/hl_paper/freqtrade:/freqtrade/user_data
+      - ../../backtesting/user_data/strategies:/freqtrade/user_data/strategies:ro
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      # Secrets injected from .env (gitignored). Telegram is the operator channel
+      # for the gate's remote-/stop requirement.
+      FT_TELEGRAM_ENABLED: "${FT_TELEGRAM_ENABLED:-true}"
+      FT_TELEGRAM_TOKEN: "${FT_TELEGRAM_TOKEN:?set in .env}"
+      FT_TELEGRAM_CHAT_ID: "${FT_TELEGRAM_CHAT_ID:?set in .env}"
+      FT_API_USERNAME: "${FT_API_USERNAME:?set in .env}"
+      FT_API_PASSWORD: "${FT_API_PASSWORD:?set in .env}"
+    # hmmlearn is baked into the image via Dockerfile.ext; no install-at-start.
+    command: >
+      trade
+      --config /freqtrade/user_data/config.json
+      --config /freqtrade/user_data/config.private.json
+      --strategy HmmSmaSlopeV2
+      --strategy-path /freqtrade/user_data/strategies
+      --logfile /freqtrade/user_data/logs/freqtrade.log
+      --db-url sqlite:////freqtrade/user_data/tradesv3.sqlite
+    logging:
+      driver: json-file
+      options:
+        # Container stderr/stdout rotation. Freqtrade's own log file is
+        # rotated separately (see ops/README §Log rotation).
+        max-size: "10m"
+        max-file: "5"
+
+  healthcheck:
+    # Pings healthchecks.io every 5 minutes if the Freqtrade API answers /ping.
+    # If freqtrade is down (or hung), the ping never fires and healthchecks.io
+    # alerts after its configured grace period.
+    image: alpine:3.20
+    container_name: hl_paper_healthcheck
+    restart: unless-stopped
+    depends_on:
+      - freqtrade
+    environment:
+      HEALTHCHECK_URL: "${HEALTHCHECK_URL:?set in .env}"
+      FT_API_USERNAME: "${FT_API_USERNAME:?set in .env}"
+      FT_API_PASSWORD: "${FT_API_PASSWORD:?set in .env}"
+    volumes:
+      - ./healthcheck.sh:/healthcheck.sh:ro
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["apk add --no-cache curl >/dev/null && while true; do /healthcheck.sh; sleep 300; done"]

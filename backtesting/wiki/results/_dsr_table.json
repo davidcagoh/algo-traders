@@ -1,0 +1,168 @@
+{
+  "daily_wallet": [
+    {
+      "strategy": "HmmRegime4Rolling-multi (bull)",
+      "window": "bull",
+      "sharpe": 1.544234884681299,
+      "skew": 6.717962020623107,
+      "kurt": 67.8569569942231,
+      "n_obs": 792,
+      "dsr": 6.8659509310829e-05
+    },
+    {
+      "strategy": "HmmCarry (bull)",
+      "window": "bull",
+      "sharpe": 0.7491648449623658,
+      "skew": 15.78893721011051,
+      "kurt": 340.80424564470286,
+      "n_obs": 792,
+      "dsr": 4.289048406370132e-13
+    },
+    {
+      "strategy": "FundingCarry (bull)",
+      "window": "bull",
+      "sharpe": 0.7732999373441436,
+      "skew": 1.3184436400423194,
+      "kurt": 33.98200696440189,
+      "n_obs": 731,
+      "dsr": 6.496413289976624e-77
+    },
+    {
+      "strategy": "HmmSmaSlope (bull)",
+      "window": "bull",
+      "sharpe": 1.2734738431961405,
+      "skew": 9.361342574666281,
+      "kurt": 114.52666122469027,
+      "n_obs": 792,
+      "dsr": 6.547683027234962e-07
+    },
+    {
+      "strategy": "HmmSmaSlopeV2 (bull)",
+      "window": "bull",
+      "sharpe": 1.0300866691089847,
+      "skew": 9.70727511808354,
+      "kurt": 133.78165703954193,
+      "n_obs": 792,
+      "dsr": 2.034185852500006e-12
+    },
+    {
+      "strategy": "HmmSmaSlopeV3 (bull)",
+      "window": "bull",
+      "sharpe": 1.1457975021227964,
+      "skew": 9.214723431606068,
+      "kurt": 117.27594474992068,
+      "n_obs": 792,
+      "dsr": 8.128759590670218e-10
+    },
+    {
+      "strategy": "HmmSmaSlope (bear)",
+      "window": "bear",
+      "sharpe": -2.2565407237236186,
+      "skew": 0.20147497751217364,
+      "kurt": 24.802108787863116,
+      "n_obs": 206,
+      "dsr": 3.3258359062372424e-31
+    },
+    {
+      "strategy": "HmmSmaSlopeV2 (bear)",
+      "window": "bear",
+      "sharpe": -1.5477861522920249,
+      "skew": 3.1556705433691343,
+      "kurt": 54.52943937135573,
+      "n_obs": 206,
+      "dsr": 2.190677992439089e-19
+    },
+    {
+      "strategy": "HmmSmaSlopeV3 (bear)",
+      "window": "bear",
+      "sharpe": -1.8022577886037352,
+      "skew": 2.250330102655175,
+      "kurt": 40.91504641746971,
+      "n_obs": 206,
+      "dsr": 4.918134940904309e-22
+    }
+  ],
+  "per_trade": [
+    {
+      "strategy": "HmmRegime4Rolling-multi (bull)",
+      "window": "bull",
+      "sharpe": 1.6165668492292273,
+      "skew": 5.642632107559408,
+      "kurt": 47.68196051231313,
+      "n_obs": 477,
+      "dsr": 0.00517912639152154
+    },
+    {
+      "strategy": "HmmCarry (bull)",
+      "window": "bull",
+      "sharpe": 1.7806056339697864,
+      "skew": 2.192546073568945,
+      "kurt": 8.90340697597685,
+      "n_obs": 158,
+      "dsr": 0.0037028540181745645
+    },
+    {
+      "strategy": "FundingCarry (bull)",
+      "window": "bull",
+      "sharpe": 0.9525413653549846,
+      "skew": 1.5750880274662276,
+      "kurt": 11.463014678149205,
+      "n_obs": 252,
+      "dsr": 1.4024128268199852e-45
+    },
+    {
+      "strategy": "HmmSmaSlope (bull)",
+      "window": "bull",
+      "sharpe": 1.3639649019633608,
+      "skew": 5.131441136726799,
+      "kurt": 36.004652479319695,
+      "n_obs": 259,
+      "dsr": 2.5634838840491503e-05
+    },
+    {
+      "strategy": "HmmSmaSlopeV2 (bull)",
+      "window": "bull",
+      "sharpe": 1.357222258262516,
+      "skew": 5.090661630227964,
+      "kurt": 35.41342881526858,
+      "n_obs": 254,
+      "dsr": 1.9532615762318093e-05
+    },
+    {
+      "strategy": "HmmSmaSlopeV3 (bull)",
+      "window": "bull",
+      "sharpe": 1.363964901959994,
+      "skew": 5.131441136741633,
+      "kurt": 36.00465247943934,
+      "n_obs": 259,
+      "dsr": 2.563483883804684e-05
+    },
+    {
+      "strategy": "HmmSmaSlope (bear)",
+      "window": "bear",
+      "sharpe": -1.554854980377279,
+      "skew": 1.4662637286240376,
+      "kurt": 6.409700001174203,
+      "n_obs": 50,
+      "dsr": 1.0438398934750736e-24
+    },
+    {
+      "strategy": "HmmSmaSlopeV2 (bear)",
+      "window": "bear",
+      "sharpe": -1.1028343575427284,
+      "skew": 1.3520623617190066,
+      "kurt": 5.785064460492983,
+      "n_obs": 44,
+      "dsr": 1.5140958056550068e-27
+    },
+    {
+      "strategy": "HmmSmaSlopeV3 (bear)",
+      "window": "bear",
+      "sharpe": -1.5548549831808074,
+      "skew": 1.466263729080841,
+      "kurt": 6.409700003253526,
+      "n_obs": 50,
+      "dsr": 1.0438399604953896e-24
+    }
+  ]
+}

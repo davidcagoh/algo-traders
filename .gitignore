@@ -1,7 +1,10 @@
-# Subprojects keep their own git history and GitHub remotes
-backtesting/
+# feishu lives in its own repo — separate market, separate context
 feishu/
-live/
+
+# backtesting/ and live/ are tracked here (merged into algo-traders 2026-06-01)
+# Their prior git histories are archived at:
+#   https://github.com/davidcagoh/backtesting (archived)
+#   https://github.com/davidcagoh/algo-traders-live (archived)
 
 # OS / editor
 .DS_Store

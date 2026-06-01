@@ -1,0 +1,12 @@
+[Unit]
+Description=algo-traders live dashboard — push freqtrade state to Supabase
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+EnvironmentFile=/etc/algo-traders-sync.env
+ExecStart=/usr/bin/python3 /opt/algo-traders/sync.py
+# No User= override: needs to read the bind-mounted sqlite owned by docker.
+# Tighten if you move the db to a user-readable location.
+Nice=10

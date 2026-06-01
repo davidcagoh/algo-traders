@@ -1,0 +1,29 @@
+{
+    "$schema": "https://schema.freqtrade.io/schema.json",
+    "max_open_trades": 1,
+    "stake_currency": "USDT",
+    "stake_amount": 1000,
+    "dry_run_wallet": 10000,
+    "tradable_balance_ratio": 0.99,
+    "fiat_display_currency": "USD",
+    "timeframe": "4h",
+    "dry_run": true,
+    "trading_mode": "futures",
+    "margin_mode": "isolated",
+    "cancel_open_orders_on_exit": false,
+    "unfilledtimeout": {"entry": 10, "exit": 10, "unit": "minutes"},
+    "entry_pricing": {"price_side": "same", "use_order_book": true, "order_book_top": 1},
+    "exit_pricing": {"price_side": "same", "use_order_book": true, "order_book_top": 1},
+    "exchange": {
+        "name": "binance",
+        "ccxt_config": {"options": {"defaultType": "swap"}},
+        "ccxt_async_config": {"options": {"defaultType": "swap"}},
+        "pair_whitelist": ["BTC/USDT:USDT"],
+        "pair_blacklist": []
+    },
+    "pairlists": [{"method": "StaticPairList"}],
+    "dataformat_ohlcv": "feather",
+    "bot_name": "backtester",
+    "initial_state": "running",
+    "internals": {"process_throttle_secs": 5}
+}

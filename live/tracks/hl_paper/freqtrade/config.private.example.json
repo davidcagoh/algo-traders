@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.freqtrade.io/schema.json",
+  "telegram": {
+    "enabled": true,
+    "token": "REPLACE_WITH_FT_TELEGRAM_TOKEN",
+    "chat_id": "REPLACE_WITH_FT_TELEGRAM_CHAT_ID",
+    "notification_settings": {
+      "status": "on",
+      "warning": "on",
+      "startup": "on",
+      "entry": "on",
+      "exit": "on",
+      "exit_cancel": "on",
+      "entry_cancel": "on"
+    }
+  },
+  "api_server": {
+    "enabled": true,
+    "listen_ip_address": "0.0.0.0",
+    "listen_port": 8080,
+    "verbosity": "error",
+    "username": "REPLACE_WITH_FT_API_USERNAME",
+    "password": "REPLACE_WITH_FT_API_PASSWORD",
+    "CORS_origins": [],
+    "jwt_secret_key": "GENERATE_WITH_openssl_rand_-hex_32"
+  }
+}

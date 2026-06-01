@@ -5,7 +5,7 @@
 **Substrate:** Freqtrade, USDT-margined futures, `--fee 0.00035` (Hyperliquid taker, applied uniformly for cross-strategy comparison)
 **Sister docs:** `backtesting/wiki/_index.md` (leaderboard), `backtesting/wiki/decisions/005-evaluation-and-diversity-plan.md` (methodology spine), `backtesting/wiki/learnings.md` (cumulative log).
 
-This document replaces `writeup-2026-05-10.pdf`. The earlier writeup was a narrative log of strategy discoveries; this is a principled study of a candidate book under a layered evaluation framework.
+This document replaces `articles/the-ranking-was-the-bug.md`. The earlier writeup was a narrative log of strategy discoveries; this is a principled study of a candidate book under a layered evaluation framework.
 
 ---
 

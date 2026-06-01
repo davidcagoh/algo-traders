@@ -74,7 +74,7 @@ The Davies quote in `wiki/learnings.md` is operative here: *"quant funds survive
 | trend_vol_v4 unhedged on HSI | Parked | Sharpe below buy-and-hold; mechanism's selection layer is venue-sensitive. |
 | trend_vol_v4 hedged on HSI | Parked | Fails gate 006 outright. |
 
-## Cross-project promotion candidates (for `../../wiki/learnings.md`)
+## Cross-project promotion candidates (for `../learnings.md`)
 
 1. **Held-out windows that don't span the strategy's design regime produce passing-but-uninformative gates.** Confirmed by SGX gate-004 pass + HSI gate-006 fail. The pre-reg must specify the *regime characteristics* the held-out window should contain, not just dates.
 2. **Mechanism transplants are venue-sensitive at the selection layer, not just the parameter layer.** The trend_vol mechanism's low-vol selection works on A-shares (feishu) and partially on SGX but not on HSI. Cross-cycle stress catches this where parameter tuning would not.

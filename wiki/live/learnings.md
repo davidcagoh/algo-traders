@@ -2,7 +2,7 @@
 
 Cross-track facts go here. Currently empty — no results yet.
 
-Promotion rule: a learning lives here only if it applies to **both** Track A (SGX+IDX equities) and Track B (Hyperliquid perps). Track-specific findings stay in `../tracks/<name>/notes.md`. Findings that apply to feishu and backtesting too get promoted further to `../../wiki/learnings.md`.
+Promotion rule: a learning lives here only if it applies to **both** Track A (SGX+IDX equities) and Track B (Hyperliquid perps). Track-specific findings stay in `../../live/tracks/<name>/notes.md`. Findings that apply to feishu and backtesting too get promoted further to `../learnings.md`.
 
 ---
 
@@ -13,7 +13,7 @@ Promotion rule: a learning lives here only if it applies to **both** Track A (SG
 - **Track B deployment shape: wrapper repo + external upstream + extension Dockerfile (2026-05-21).** Final working layout: `davidcagoh/algo-traders-live` (this repo) holds ops + strategy harness; `davidcagoh/backtesting` holds the strategy file (`HmmSmaSlopeV2.py`) and wiki; `github.com/freqtrade/freqtrade` (gitignored under `backtesting/freqtrade/`) is cloned upstream during VPS bring-up. The Docker image is **not** built from the local Freqtrade source — it FROMs `freqtradeorg/freqtrade:stable` and an extension Dockerfile in `live/ops/Dockerfile.ext` adds `hmmlearn` + build-essential. Pin mechanism is image digest, snapshotted at clock start. Documented in `decisions/002` Resolved + Revised sections. Replicate this shape for any future strategy that needs deps outside Freqtrade core.
 - **Public observability shape: read-only SQLite → Supabase → Vercel, decoupled from the bot (2026-05-22).** For exposing a paper-trading bot to public visitors without touching its hot path: a systemd timer (30s) on the VPS runs a Python sidecar that opens Freqtrade's `tradesv3.sqlite` with `mode=ro` (so it cannot interfere with the writer), upserts deltas to Supabase `public.at_*` tables via REST using the service-role key, and writes a heartbeat row. The Vercel-hosted Next.js page reads with the *publishable* key under RLS that only permits `SELECT`. The service key never leaves the VPS; the browser cannot mutate state even if the publishable key is exfiltrated. Cost $0 (Supabase free + Vercel hobby) and the observability layer can crash without affecting the bot. Replicate for any future deployed strategy. Code lives in `live/dashboard/`.
 
-## Promoted up (in `../../wiki/learnings.md`)
+## Promoted up (in `../learnings.md`)
 
 The three findings above generalised to cross-project rules:
 1. Held-out windows that don't span design regime → passing-but-uninformative gates.

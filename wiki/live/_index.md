@@ -41,7 +41,7 @@ No tradeable trend_vol-family equity strategy on SGX, IDX, or HSI. The 6-layer +
 
 ## References upward
 
-- Parent meta wiki: [`../../wiki/_index.md`](../../wiki/_index.md)
-- Cross-project learnings: [`../../wiki/learnings.md`](../../wiki/learnings.md)
-- Kill criteria methodology: [`../../wiki/methodology/kill-criteria.md`](../../wiki/methodology/kill-criteria.md)
-- CV and deflation methodology: [`../../wiki/methodology/cv-and-deflation.md`](../../wiki/methodology/cv-and-deflation.md)
+- Parent meta wiki: [`../_index.md`](../_index.md)
+- Cross-project learnings: [`../learnings.md`](../learnings.md)
+- Kill criteria methodology: [`../methodology/kill-criteria.md`](../methodology/kill-criteria.md)
+- CV and deflation methodology: [`../methodology/cv-and-deflation.md`](../methodology/cv-and-deflation.md)

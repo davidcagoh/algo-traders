@@ -1,7 +1,7 @@
 # Track B — 30d Hyperliquid dry-run Day 8 snapshot
 
 **Snapshot timestamp (UTC):** 2026-05-29  
-**Gate:** [live/wiki/decisions/002-track-b-gate.md](../decisions/002-track-b-gate.md)  
+**Gate:** [wiki/live/decisions/002-track-b-gate.md](../decisions/002-track-b-gate.md)  
 **Window:** 2026-05-21T04:44:24Z → 2026-06-20T04:44:24Z (day 8 of 30)
 
 ## Bot health

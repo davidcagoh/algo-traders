@@ -73,7 +73,7 @@ It does **not** license:
 
 ## Cross-project promotion candidates
 
-- **Held-out windows that don't span the regime the strategy is designed for produce passing-but-uninformative gates.** This applies to feishu (whose 2026-06 → 2026-12 held-out is calendar-driven, not regime-driven) and backtesting (whose dry-run windows are 30d, much shorter than a regime cycle). Worth promoting to `../../wiki/learnings.md` as a methodology lesson: pre-register the *regime characteristics* the held-out window should contain, not just the dates.
+- **Held-out windows that don't span the regime the strategy is designed for produce passing-but-uninformative gates.** This applies to feishu (whose 2026-06 → 2026-12 held-out is calendar-driven, not regime-driven) and backtesting (whose dry-run windows are 30d, much shorter than a regime cycle). Worth promoting to `../learnings.md` as a methodology lesson: pre-register the *regime characteristics* the held-out window should contain, not just the dates.
 
 ## Files
 

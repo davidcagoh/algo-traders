@@ -34,7 +34,7 @@ Strategy graduates iff **all** of:
 | L2 — held-out Calmar | > 1.0 | risk-adjusted floor |
 | L2 — held-out Sharpe | > 0.5 | secondary |
 | L3 — independent trade count | N ≥ 100 per market | SQN validity |
-| L4 — DSR (kurtosis-conditional) | DSR ≥ 0.95 IF (excess kurt < 5 AND N > 250); else humility check only | per `../../wiki/learnings.md` DSR carve-out |
+| L4 — DSR (kurtosis-conditional) | DSR ≥ 0.95 IF (excess kurt < 5 AND N > 250); else humility check only | per `../learnings.md` DSR carve-out |
 | L5 — held-out MDD | < 25% per market | tail discipline |
 | L5 — held-out Ulcer Index | < 15 | chronic-drawdown check |
 | L6 — MDB vs `trend_vol_v4` daily wallet | MDB > 0 under all three weightings (eq, rp, mv) | only meaningful if both strategies have positive standalone Sharpe |
@@ -50,7 +50,7 @@ L6 is informational in v1 (would require running `trend_vol_v4` on overlapping c
 
 ## Retirement / kill rule (if it graduates)
 
-Per `../../wiki/methodology/kill-criteria.md`. To be drafted as `decisions/003-kill-track-a.md` only if the strategy passes this gate. Don't speculate.
+Per `../methodology/kill-criteria.md`. To be drafted as `decisions/003-kill-track-a.md` only if the strategy passes this gate. Don't speculate.
 
 ## Reasons this gate could be wrong
 

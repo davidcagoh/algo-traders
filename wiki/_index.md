@@ -1,18 +1,18 @@
 # Algo Traders — Meta Wiki
 
-Cross-cutting workspace for two algorithmic-trading subprojects that share methodology, literature, and lessons but live in their own GitHub repos.
+Cross-cutting workspace for the algorithmic-trading subprojects in this repo.
 
-**Last updated:** 2026-05-21
+**Last updated:** 2026-06-01
 
 ## Subprojects
 
-| Path | Domain | GitHub remote | Wiki |
-|------|--------|---------------|------|
-| `backtesting/` | Hyperliquid BTC/USDC perps via Freqtrade | own repo | `backtesting/wiki/_index.md` |
-| `feishu/` | Chinese A-share quant competition | own repo | `feishu/wiki/_index.md` |
-| `live/` | Cross-venue equity generalisation + Hyperliquid 30d dry-run | own repo | `live/wiki/_index.md` |
+| Path | Domain | Wiki |
+|------|--------|------|
+| `backtesting/` | Hyperliquid BTC/USDC perps via Freqtrade | [`backtesting/wiki/_index.md`](../backtesting/wiki/_index.md) |
+| `live/` | Hyperliquid 30d dry-run + cross-venue equity | [`live/wiki/_index.md`](../live/wiki/_index.md) |
+| `feishu/` | Chinese A-share quant competition | gitignored — own repo |
 
-Both subprojects are gitignored at this root — they retain independent history. This repo only tracks the meta-layer: literature, methodology, cross-cutting learnings.
+`backtesting/` and `live/` are tracked in this repo (merged 2026-06-01). Their prior independent git histories are archived at `github.com/davidcagoh/backtesting` and `github.com/davidcagoh/algo-traders-live`. `feishu/` remains in its own repo — different market, different competition context.
 
 ## Promotion rule
 

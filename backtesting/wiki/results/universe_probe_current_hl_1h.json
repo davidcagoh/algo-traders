@@ -1,0 +1,559 @@
+{
+  "common_window": {
+    "start": "2025-11-05 00:00:00+00:00",
+    "end": "2026-06-01 00:00:00+00:00",
+    "n_days": 209
+  },
+  "coins": [
+    "BTC",
+    "ETH",
+    "HYPE",
+    "XRP",
+    "SOL",
+    "PAXG",
+    "TRX",
+    "BNB",
+    "AAVE",
+    "LINK",
+    "DOGE",
+    "ADA",
+    "FARTCOIN",
+    "PENGU",
+    "IP",
+    "GRASS"
+  ],
+  "ranked_by_low_corr_to_selected": [
+    {
+      "coin": "PAXG",
+      "avg_corr_to_selected_set": 0.286209917439536,
+      "max_corr_to_selected_set": 0.34643732034179614,
+      "avg_corr_to_probe_all": 0.24354259386840155,
+      "total_return_pct": 13.085101022824608,
+      "ann_vol_pct": 32.1827220624676,
+      "median_daily_dollar_volume_est": 8139891.6714,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "TRX",
+      "avg_corr_to_selected_set": 0.31807041495062965,
+      "max_corr_to_selected_set": 0.3990120593042027,
+      "avg_corr_to_probe_all": 0.28001849165164905,
+      "total_return_pct": 19.561679880898808,
+      "ann_vol_pct": 24.790280952051685,
+      "median_daily_dollar_volume_est": 1681401.06678,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "GRASS",
+      "avg_corr_to_selected_set": 0.41291876566507335,
+      "max_corr_to_selected_set": 0.4616320209209109,
+      "avg_corr_to_probe_all": 0.37984949709015836,
+      "total_return_pct": 48.883579895249476,
+      "ann_vol_pct": 147.30664935217428,
+      "median_daily_dollar_volume_est": 394416.588664,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "HYPE",
+      "avg_corr_to_selected_set": 0.4552450784839925,
+      "max_corr_to_selected_set": 0.47877669501981646,
+      "avg_corr_to_probe_all": 0.4145889594345513,
+      "total_return_pct": 76.75475712662299,
+      "ann_vol_pct": 95.24266177155036,
+      "median_daily_dollar_volume_est": 263311377.04725,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "IP",
+      "avg_corr_to_selected_set": 0.4895226720979232,
+      "max_corr_to_selected_set": 0.5709734457158947,
+      "avg_corr_to_probe_all": 0.46394669716439185,
+      "total_return_pct": -87.40520382600774,
+      "ann_vol_pct": 121.61310699409096,
+      "median_daily_dollar_volume_est": 896378.03097,
+      "start": "2025-11-05 10:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5000
+    },
+    {
+      "coin": "FARTCOIN",
+      "avg_corr_to_selected_set": 0.6393669007953482,
+      "max_corr_to_selected_set": 0.7038330652691006,
+      "avg_corr_to_probe_all": 0.5761899785358455,
+      "total_return_pct": -43.97475414648465,
+      "ann_vol_pct": 133.66735178757267,
+      "median_daily_dollar_volume_est": 24051840.938119,
+      "start": "2025-11-05 10:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5000
+    },
+    {
+      "coin": "AAVE",
+      "avg_corr_to_selected_set": 0.6949189180406614,
+      "max_corr_to_selected_set": 0.7727619365114825,
+      "avg_corr_to_probe_all": 0.6265490860283016,
+      "total_return_pct": -60.11299435028249,
+      "ann_vol_pct": 82.08087656769926,
+      "median_daily_dollar_volume_est": 7603123.3842400005,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "PENGU",
+      "avg_corr_to_selected_set": 0.7160886622216814,
+      "max_corr_to_selected_set": 0.8034394754971785,
+      "avg_corr_to_probe_all": 0.6538371673070223,
+      "total_return_pct": -50.140476968311006,
+      "ann_vol_pct": 105.63321844280928,
+      "median_daily_dollar_volume_est": 3413258.7675,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "DOGE",
+      "avg_corr_to_selected_set": 0.7360026904776646,
+      "max_corr_to_selected_set": 0.8266366743423063,
+      "avg_corr_to_probe_all": 0.6658109412326387,
+      "total_return_pct": -40.156726685410064,
+      "ann_vol_pct": 69.67662128788787,
+      "median_daily_dollar_volume_est": 11522332.84614,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "XRP",
+      "avg_corr_to_selected_set": 0.7398731937238545,
+      "max_corr_to_selected_set": 0.8682839512695129,
+      "avg_corr_to_probe_all": 0.6710338345143858,
+      "total_return_pct": -44.43021220272404,
+      "ann_vol_pct": 65.31102290212316,
+      "median_daily_dollar_volume_est": 53920488.6876,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "BNB",
+      "avg_corr_to_selected_set": 0.744269662710284,
+      "max_corr_to_selected_set": 0.840507838867425,
+      "avg_corr_to_probe_all": 0.6422499024224589,
+      "total_return_pct": -28.352262653442217,
+      "ann_vol_pct": 48.00340490168962,
+      "median_daily_dollar_volume_est": 6511921.027600001,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "ADA",
+      "avg_corr_to_selected_set": 0.7706275223887931,
+      "max_corr_to_selected_set": 0.86687532022372,
+      "avg_corr_to_probe_all": 0.6985500909240034,
+      "total_return_pct": -57.573588783674666,
+      "ann_vol_pct": 72.81403612661664,
+      "median_daily_dollar_volume_est": 4142247.49772,
+      "start": "2025-11-05 10:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5000
+    },
+    {
+      "coin": "SOL",
+      "avg_corr_to_selected_set": 0.7779755133836587,
+      "max_corr_to_selected_set": 0.8977420801344157,
+      "avg_corr_to_probe_all": 0.6962064737463615,
+      "total_return_pct": -50.07086080473226,
+      "ann_vol_pct": 65.53471414694614,
+      "median_daily_dollar_volume_est": 279244675.27779,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "ETH",
+      "avg_corr_to_selected_set": 0.7813807821436601,
+      "max_corr_to_selected_set": 0.9159595383260853,
+      "avg_corr_to_probe_all": 0.6892293950887793,
+      "total_return_pct": -41.81149049274177,
+      "ann_vol_pct": 63.82641970505297,
+      "median_daily_dollar_volume_est": 1051684123.78941,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "BTC",
+      "avg_corr_to_selected_set": 0.7821414220780813,
+      "max_corr_to_selected_set": 0.9159595383260853,
+      "avg_corr_to_probe_all": 0.6796023492496291,
+      "total_return_pct": -31.053163338946355,
+      "ann_vol_pct": 47.41211813944408,
+      "median_daily_dollar_volume_est": 2629358789.1929502,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    },
+    {
+      "coin": "LINK",
+      "avg_corr_to_selected_set": 0.8146941174629289,
+      "max_corr_to_selected_set": 0.9273535632832448,
+      "avg_corr_to_probe_all": 0.7173460283762793,
+      "total_return_pct": -39.949638857597236,
+      "ann_vol_pct": 65.58688413529643,
+      "median_daily_dollar_volume_est": 5726338.7737,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "rows": 5001
+    }
+  ],
+  "selected_set_stats": {
+    "coins": [
+      "BTC",
+      "ETH",
+      "HYPE",
+      "XRP",
+      "SOL"
+    ],
+    "avg_pairwise_corr": 0.7073231979626494,
+    "max_pairwise_corr": 0.9159595383260853,
+    "min_pairwise_corr": 0.41027491428146723,
+    "corr": {
+      "BTC": {
+        "BTC": 1.0,
+        "ETH": 0.916,
+        "HYPE": 0.455,
+        "XRP": 0.8683,
+        "SOL": 0.8893
+      },
+      "ETH": {
+        "BTC": 0.916,
+        "ETH": 1.0,
+        "HYPE": 0.4769,
+        "XRP": 0.8349,
+        "SOL": 0.8977
+      },
+      "HYPE": {
+        "BTC": 0.455,
+        "ETH": 0.4769,
+        "HYPE": 1.0,
+        "XRP": 0.4103,
+        "SOL": 0.4788
+      },
+      "XRP": {
+        "BTC": 0.8683,
+        "ETH": 0.8349,
+        "HYPE": 0.4103,
+        "XRP": 1.0,
+        "SOL": 0.8461
+      },
+      "SOL": {
+        "BTC": 0.8893,
+        "ETH": 0.8977,
+        "HYPE": 0.4788,
+        "XRP": 0.8461,
+        "SOL": 1.0
+      }
+    }
+  },
+  "greedy_seed_BTC_HYPE_all_probe": {
+    "coins": [
+      "BTC",
+      "HYPE",
+      "PAXG",
+      "TRX",
+      "GRASS",
+      "IP",
+      "FARTCOIN",
+      "PENGU"
+    ],
+    "avg_pairwise_corr": 0.3667472344651162,
+    "max_pairwise_corr": 0.7431463811281404,
+    "min_pairwise_corr": 0.05274313196322468,
+    "corr": {
+      "BTC": {
+        "BTC": 1.0,
+        "HYPE": 0.455,
+        "PAXG": 0.3309,
+        "TRX": 0.399,
+        "GRASS": 0.3726,
+        "IP": 0.524,
+        "FARTCOIN": 0.6176,
+        "PENGU": 0.7431
+      },
+      "HYPE": {
+        "BTC": 0.455,
+        "HYPE": 1.0,
+        "PAXG": 0.1953,
+        "TRX": 0.1639,
+        "GRASS": 0.4052,
+        "IP": 0.2879,
+        "FARTCOIN": 0.5725,
+        "PENGU": 0.5206
+      },
+      "PAXG": {
+        "BTC": 0.3309,
+        "HYPE": 0.1953,
+        "PAXG": 1.0,
+        "TRX": 0.0527,
+        "GRASS": 0.1921,
+        "IP": 0.1839,
+        "FARTCOIN": 0.1997,
+        "PENGU": 0.2097
+      },
+      "TRX": {
+        "BTC": 0.399,
+        "HYPE": 0.1639,
+        "PAXG": 0.0527,
+        "TRX": 1.0,
+        "GRASS": 0.1224,
+        "IP": 0.211,
+        "FARTCOIN": 0.2316,
+        "PENGU": 0.2963
+      },
+      "GRASS": {
+        "BTC": 0.3726,
+        "HYPE": 0.4052,
+        "PAXG": 0.1921,
+        "TRX": 0.1224,
+        "GRASS": 1.0,
+        "IP": 0.281,
+        "FARTCOIN": 0.4783,
+        "PENGU": 0.4383
+      },
+      "IP": {
+        "BTC": 0.524,
+        "HYPE": 0.2879,
+        "PAXG": 0.1839,
+        "TRX": 0.211,
+        "GRASS": 0.281,
+        "IP": 1.0,
+        "FARTCOIN": 0.4783,
+        "PENGU": 0.5666
+      },
+      "FARTCOIN": {
+        "BTC": 0.6176,
+        "HYPE": 0.5725,
+        "PAXG": 0.1997,
+        "TRX": 0.2316,
+        "GRASS": 0.4783,
+        "IP": 0.4783,
+        "FARTCOIN": 1.0,
+        "PENGU": 0.7393
+      },
+      "PENGU": {
+        "BTC": 0.7431,
+        "HYPE": 0.5206,
+        "PAXG": 0.2097,
+        "TRX": 0.2963,
+        "GRASS": 0.4383,
+        "IP": 0.5666,
+        "FARTCOIN": 0.7393,
+        "PENGU": 1.0
+      }
+    }
+  },
+  "greedy_seed_BTC_HYPE_quality_pool": {
+    "coins": [
+      "BTC",
+      "HYPE",
+      "PAXG",
+      "TRX",
+      "GRASS",
+      "IP",
+      "AAVE",
+      "DOGE"
+    ],
+    "avg_pairwise_corr": 0.3708642448854574,
+    "max_pairwise_corr": 0.7852240768250761,
+    "min_pairwise_corr": 0.05274313196322468,
+    "corr": {
+      "BTC": {
+        "BTC": 1.0,
+        "HYPE": 0.455,
+        "PAXG": 0.3309,
+        "TRX": 0.399,
+        "GRASS": 0.3726,
+        "IP": 0.524,
+        "AAVE": 0.747,
+        "DOGE": 0.7852
+      },
+      "HYPE": {
+        "BTC": 0.455,
+        "HYPE": 1.0,
+        "PAXG": 0.1953,
+        "TRX": 0.1639,
+        "GRASS": 0.4052,
+        "IP": 0.2879,
+        "AAVE": 0.419,
+        "DOGE": 0.4443
+      },
+      "PAXG": {
+        "BTC": 0.3309,
+        "HYPE": 0.1953,
+        "PAXG": 1.0,
+        "TRX": 0.0527,
+        "GRASS": 0.1921,
+        "IP": 0.1839,
+        "AAVE": 0.309,
+        "DOGE": 0.2225
+      },
+      "TRX": {
+        "BTC": 0.399,
+        "HYPE": 0.1639,
+        "PAXG": 0.0527,
+        "TRX": 1.0,
+        "GRASS": 0.1224,
+        "IP": 0.211,
+        "AAVE": 0.2805,
+        "DOGE": 0.3252
+      },
+      "GRASS": {
+        "BTC": 0.3726,
+        "HYPE": 0.4052,
+        "PAXG": 0.1921,
+        "TRX": 0.1224,
+        "GRASS": 1.0,
+        "IP": 0.281,
+        "AAVE": 0.3938,
+        "DOGE": 0.4279
+      },
+      "IP": {
+        "BTC": 0.524,
+        "HYPE": 0.2879,
+        "PAXG": 0.1839,
+        "TRX": 0.211,
+        "GRASS": 0.281,
+        "IP": 1.0,
+        "AAVE": 0.551,
+        "DOGE": 0.5688
+      },
+      "AAVE": {
+        "BTC": 0.747,
+        "HYPE": 0.419,
+        "PAXG": 0.309,
+        "TRX": 0.2805,
+        "GRASS": 0.3938,
+        "IP": 0.551,
+        "AAVE": 1.0,
+        "DOGE": 0.7329
+      },
+      "DOGE": {
+        "BTC": 0.7852,
+        "HYPE": 0.4443,
+        "PAXG": 0.2225,
+        "TRX": 0.3252,
+        "GRASS": 0.4279,
+        "IP": 0.5688,
+        "AAVE": 0.7329,
+        "DOGE": 1.0
+      }
+    }
+  },
+  "greedy_seed_BTC_HYPE_no_beta_dup": {
+    "coins": [
+      "BTC",
+      "HYPE",
+      "PAXG",
+      "TRX",
+      "GRASS",
+      "IP",
+      "FARTCOIN",
+      "PENGU"
+    ],
+    "avg_pairwise_corr": 0.3667472344651162,
+    "max_pairwise_corr": 0.7431463811281404,
+    "min_pairwise_corr": 0.05274313196322468,
+    "corr": {
+      "BTC": {
+        "BTC": 1.0,
+        "HYPE": 0.455,
+        "PAXG": 0.3309,
+        "TRX": 0.399,
+        "GRASS": 0.3726,
+        "IP": 0.524,
+        "FARTCOIN": 0.6176,
+        "PENGU": 0.7431
+      },
+      "HYPE": {
+        "BTC": 0.455,
+        "HYPE": 1.0,
+        "PAXG": 0.1953,
+        "TRX": 0.1639,
+        "GRASS": 0.4052,
+        "IP": 0.2879,
+        "FARTCOIN": 0.5725,
+        "PENGU": 0.5206
+      },
+      "PAXG": {
+        "BTC": 0.3309,
+        "HYPE": 0.1953,
+        "PAXG": 1.0,
+        "TRX": 0.0527,
+        "GRASS": 0.1921,
+        "IP": 0.1839,
+        "FARTCOIN": 0.1997,
+        "PENGU": 0.2097
+      },
+      "TRX": {
+        "BTC": 0.399,
+        "HYPE": 0.1639,
+        "PAXG": 0.0527,
+        "TRX": 1.0,
+        "GRASS": 0.1224,
+        "IP": 0.211,
+        "FARTCOIN": 0.2316,
+        "PENGU": 0.2963
+      },
+      "GRASS": {
+        "BTC": 0.3726,
+        "HYPE": 0.4052,
+        "PAXG": 0.1921,
+        "TRX": 0.1224,
+        "GRASS": 1.0,
+        "IP": 0.281,
+        "FARTCOIN": 0.4783,
+        "PENGU": 0.4383
+      },
+      "IP": {
+        "BTC": 0.524,
+        "HYPE": 0.2879,
+        "PAXG": 0.1839,
+        "TRX": 0.211,
+        "GRASS": 0.281,
+        "IP": 1.0,
+        "FARTCOIN": 0.4783,
+        "PENGU": 0.5666
+      },
+      "FARTCOIN": {
+        "BTC": 0.6176,
+        "HYPE": 0.5725,
+        "PAXG": 0.1997,
+        "TRX": 0.2316,
+        "GRASS": 0.4783,
+        "IP": 0.4783,
+        "FARTCOIN": 1.0,
+        "PENGU": 0.7393
+      },
+      "PENGU": {
+        "BTC": 0.7431,
+        "HYPE": 0.5206,
+        "PAXG": 0.2097,
+        "TRX": 0.2963,
+        "GRASS": 0.4383,
+        "IP": 0.5666,
+        "FARTCOIN": 0.7393,
+        "PENGU": 1.0
+      }
+    }
+  }
+}

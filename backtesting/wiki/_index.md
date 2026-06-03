@@ -2,11 +2,17 @@
 
 Crypto strategy backtesting setup built on [Freqtrade](https://www.freqtrade.io/en/stable/), targeting Hyperliquid (USDC-quoted) markets. Revived 2026-04 as a possible base for actively trading personal crypto holdings.
 
-**Last updated:** 2026-05-16 (evaluation + diversity buildout sprint)
+**Last updated:** 2026-06-02 (Hyperliquid data sanity + universe refresh; signed mean-variance paper dashboard deployed locally)
 
-**Current state:** Full A1 → D2 sprint completed in one session per `decisions/005-evaluation-and-diversity-plan.md`. New evaluation tooling (`scripts/eval_layers.py`) adds Layer-5 metrics (Ulcer, Martin, skew, kurtosis, tail ratio, CVaR-5%) + correlation matrix + 3-flavor MDB. Every strategy re-backtested on Binance common window 2020-09 → 2026-05 (5.5y, 2 bulls + 2 bears, 5-coin universe BTC/ETH/SOL/AVAX/DOGE). Three new strategy families opened: X1 pairs (killed — cointegration absent on crypto majors; two-leg v2 on 2026-05-16 strengthens the verdict and surfaces a Freqtrade framework limit on atomic pair execution), X2 cross-sectional momentum (▲ marginal frontier), F1 funding MR (killed by K1-fmr). **Candidate book is now {T3, R∧T2}** — SmaRegime180 (BTC 4h, conservative) + HmmSmaSlopeV2 (5-coin 4h, high return); correlation 0.07, MDB-rp +0.55 robust against {T3} alone. R∧T1/V2/V3 are statistically one strategy (Pearson 0.96-1.00). Internal writeup at [`articles/principled-evaluation-worked-example.md`](../../articles/principled-evaluation-worked-example.md). Paper deferred per `decisions/010-paper-plan-deferred.md` until forward held-out window runs.
+**Current state:** Full A1 → D2 sprint completed in one session per `decisions/005-evaluation-and-diversity-plan.md`. New evaluation tooling (`scripts/eval_layers.py`) adds Layer-5 metrics (Ulcer, Martin, skew, kurtosis, tail ratio, CVaR-5%) + correlation matrix + 3-flavor MDB. Every strategy re-backtested on Binance common window 2020-09 → 2026-05 (5.5y, 2 bulls + 2 bears, 5-coin universe BTC/ETH/SOL/AVAX/DOGE). Three new strategy families opened: X1 pairs (killed — cointegration absent on crypto majors; two-leg v2 on 2026-05-16 strengthens the verdict and surfaces a Freqtrade framework limit on atomic pair execution), X2 cross-sectional momentum (▲ marginal frontier), F1 funding MR (killed by K1-fmr). **Candidate book is now {T3, R∧T2}** — SmaRegime180 (BTC 4h, conservative) + HmmSmaSlopeV2 (5-coin 4h, high return); correlation 0.07, MDB-rp +0.55 robust against {T3} alone. R∧T1/V2/V3 are statistically one strategy (Pearson 0.96-1.00). Internal writeup at `../writeup-2026-05-16.md`. Paper deferred per `decisions/010-paper-plan-deferred.md` until forward held-out window runs.
 
 **Earlier 2026-05-10 experiments:** (1) **Rolling-window HMM refit** (`HmmRegime4Rolling`) on BTC: SQN 0.59 (vs look-ahead's 1.38), win rate 37.7%, return +1.15%. **Look-ahead absorbed ~50% of the alpha**; demotes HmmRegime4 to upper-bound. (2) **Multi-asset HmmRegime4Rolling** on 7 majors: −5.62%, only HYPE/BTC profitable. HMM does not generalise without per-coin tuning. (3) **FundingCarry** threshold-gated long-only on 7 majors: catastrophic −30.16%, all losers stopped at −10%. Naive carry fails in bear. (4) **HmmCarry conjunction** (HMM bull AND funding-negative) on 7 majors: −19.59%, MDD 23.86%. **Worse than HMM alone** — signals are anti-complementary, not independent (HMM is reactive, funding is forward-looking; intersection picks worst moments). Only HYPE/ETH showed expected tightening; BTC win rate collapsed 41.1% → 7.7%. Open items: (1) Reverse-sign HmmCarry (positive funding as bull confirmation); (2) Per-coin funding-sign learning; (3) Lead-lag conjunction (funding-negative *before* HMM-bull turns on); (4) Per-coin HMM hyperparameter sweep with DSR gate; (5) Bull-window CEX backtest as training-set check.
+
+**Hyperliquid universe sanity (2026-06-02):** refreshed the full locally known 1h Hyperliquid futures universe. There are 190 local 1h symbols; 148 have current/full-ish data through 2026-06-01 18:00 UTC; 43 also pass a $1M median daily dollar-volume estimate after manually excluding TRUMP. Original 5-coin set (`BTC, ETH, HYPE, XRP, SOL`) has avg daily-return correlation 0.70 / max 0.92, confirming ETH/XRP/SOL mostly add beta redundancy. Greedy low-correlation screen seeded with `BTC,HYPE` selected `BTC, HYPE, PAXG, TRX, WLFI, VVV, TON, ZRO, XPL` with avg pairwise correlation 0.30 / max 0.54 over 2025-11-05 → 2026-06-01. Charts: [correlation](assets/universe_selection_corr_current.png), [normalized prices](assets/universe_selection_prices_current.png). JSON: `results/universe_selection_hl_1h_current.json`. Caveat: this is the purely data-driven liquid diversifier set; several names are event/perps-native, so use as a baseline diversification universe, not an endorsement of fundamentals.
+
+**Signed MV paper dashboard (2026-06-02):** `scripts/paper_trading_dashboard.py` is a local paper-only Hyperliquid monitor for the 9-coin signed mean-variance portfolio. It pulls live mids/candles/funding from Hyperliquid, simulates taker fees and funding, rebalances weekly or on manual dashboard command, and stores ignored state under `user_data/paper_trading/`. It never submits exchange orders. Current dashboard screenshot: [paper dashboard](assets/paper_dashboard_current.png).
+
+**Vercel monitor (2026-06-03):** `vercel-paper-dashboard/` is a deployable Next.js monitor that runs itself via Vercel Cron. Vercel cannot host a permanent bot process, so `/api/tick` runs hourly, fetches Hyperliquid mids/candles/funding, updates simulated paper state in Upstash/Vercel KV, and `/api/status` serves the dashboard.
 
 ---
 
@@ -22,6 +28,8 @@ Crypto strategy backtesting setup built on [Freqtrade](https://www.freqtrade.io/
   - [003-baseline-eval.md](decisions/003-baseline-eval.md) — baseline used by `scripts/run_eval.sh` and the Session Start Routine
   - [004-kill-criteria-sma-regime-180.md](decisions/004-kill-criteria-sma-regime-180.md) — pre-registered hard-kill thresholds + continuous-shrinkage formula for SmaRegime180
   - [009-portfolio-aware-k1.md](decisions/009-portfolio-aware-k1.md) — codifies the portfolio-aware K1 exception used to admit R∧T2 (standalone MDD breach OK iff combined-book MDD ≤ 5.5% AND MDB-rp ≥ 0.30 robust AND corr < 0.85, with 11% hard cap)
+  - [011-kill-criteria-mean-variance-portfolio.md](decisions/011-kill-criteria-mean-variance-portfolio.md) — long-only portfolio-construction baseline gates
+  - [012-kill-criteria-signed-mean-variance-portfolio.md](decisions/012-kill-criteria-signed-mean-variance-portfolio.md) — signed-perp portfolio-construction gates with funding
 - `experiments/` — backtest runs and results
 - `results/` — per-strategy report cards (one file per run)
 - `papers/` — summaries of relevant research (populated by the weekly paper-search agent)
@@ -36,6 +44,15 @@ Research summaries added by the weekly paper-search agent. Sorted newest-first. 
 
 | Paper | Venue | Date | Priority addressed | File |
 |-------|-------|------|--------------------|------|
+| Crypto Carry | Management Science 2026 / BIS WP 1087 | 2026 | P1 — CEX carry degradation (Sharpe 6.45 → negative in 2025); regime change confirms DEX-only strategy direction and why conditional entry is mandatory | [crypto-carry-regime-decomposition-2026.md](papers/crypto-carry-regime-decomposition-2026.md) |
+| Order Flow and Cryptocurrency Returns | Journal of Financial Markets (online first Jan 2026) | Jan 2026 | P4 — Daily FX-adjusted OFI → cross-sectional crypto returns; Sharpe 3.63 OOS; sets daily lower-bound for H14 1h question; X2 OFI-ranking variant | [order-flow-cross-sectional-crypto-returns-2026.md](papers/order-flow-cross-sectional-crypto-returns-2026.md) |
+| Return and Volatility Forecasting Using On-Chain Flows in Cryptocurrency Markets | arXiv 2411.06327 | Nov 2024 | P4 — Hourly USDT exchange inflow → BTC 1h returns (strongest horizon); stablecoin inflow channel confirmed; OHLCV NBV proxy is a distinct mechanism | [on-chain-flows-hourly-bitcoin-return-2024.md](papers/on-chain-flows-hourly-bitcoin-return-2024.md) |
+| Temporal Dynamics of Market Microstructure in Cryptocurrency Perpetual Futures | MDPI JRFM 14(5):103 | Apr 2026 | P1+H6 — CEX→DEX Granger causality confirmed hourly; intraday spread peaks 4h post-settlement | [temporal-dynamics-crypto-perp-microstructure-2026.md](papers/temporal-dynamics-crypto-perp-microstructure-2026.md) |
+| Systematic Trend-Following with Adaptive Portfolio Construction | arXiv 2602.11708 | Feb 2026 | P2 — Calmar 3.18 / Sharpe 2.41 on 6h crypto with volatility-regime trailing stop; 6h aligns with funding cycle | [systematic-trend-following-adaptive-portfolio-crypto-2026.md](papers/systematic-trend-following-adaptive-portfolio-crypto-2026.md) |
+| Microstructure Alpha: Hierarchical Learning and Cross-Asset Transfer in Cryptocurrency Markets | Frontiers in Blockchain | May 2026 | P4 — Minute-level OFI killed by fees; spot→futures transfer valid same-asset; 1h aggregation the open question | [microstructure-alpha-hierarchical-learning-crypto-2026.md](papers/microstructure-alpha-hierarchical-learning-crypto-2026.md) |
+| Anatomy of Cryptocurrency Perpetual Futures Returns | SSRN 6365329 | Mar 2026 | P1 — 63/170 perp-return predictors significant; log basis strongest carry gate | [anatomy-perp-futures-returns-2026.md](papers/anatomy-perp-futures-returns-2026.md) |
+| A Novel Approach to Trading Strategy Parameter Optimization Using Double Out-of-Sample and Walk-Forward Techniques | arXiv 2602.10785 | Feb 2026 | P2 — Walk-forward refit cadence: long training + long testing beats frequent refit on crypto 1h | [walk-forward-crypto-intraday-optimization-2026.md](papers/walk-forward-crypto-intraday-optimization-2026.md) |
+| Explainable Patterns in Cryptocurrency Microstructure | arXiv 2602.00776 | Jan 2026 | P4 — OFI monotone with concavity at extremes in Binance Futures perps; VWAP-to-mid asymmetric mean-reversion | [ofi-crypto-microstructure-patterns-2026.md](papers/ofi-crypto-microstructure-patterns-2026.md) |
 | Funding-Aware Optimal Market Making for Perpetual DEXs | arXiv 2605.06405 | May 2026 | P1 — Carry window duration (OU half-life ~8h on Hyperliquid ETH/BTC/SOL) | [funding-aware-market-making-perp-dex-2026.md](papers/funding-aware-market-making-perp-dex-2026.md) |
 | Slippage-at-Risk (SaR): A Forward-Looking Liquidity Risk Framework for Perpetual Futures Exchanges | arXiv 2603.09164 | Mar 2026 | P3 — Slippage on Hyperliquid (real order-book data) | [slippage-at-risk-hyperliquid-2026.md](papers/slippage-at-risk-hyperliquid-2026.md) |
 | Evaluating Structured Strategy Backtests: Peer Benchmarks, Regime Timing, and Live Performance | arXiv 2604.18821 | Apr 2026 | P3 — Backtest-vs-live divergence | [backtest-regime-timing-live-performance-2026.md](papers/backtest-regime-timing-live-performance-2026.md) |
@@ -171,6 +188,8 @@ Sort: **Calmar descending**. Highlighted = top candidates by family.
 | `user_data/strategies/LongOnlyStrategy.py` | SMA-cross placeholder strategy so the original `notes.md` command still runs. Replace with real logic. |
 | `user_data/data/hyperliquid/` | Where `scripts/download_hyperliquid.py` writes Feather OHLCV files (futures land under `futures/`). |
 | `scripts/download_hyperliquid.py` | Custom Hyperliquid OHLCV downloader + funding-rate history collector. Required because freqtrade's built-in `download-data` is disabled for Hyperliquid. Use `--funding --coins BTC` to fetch 8-hourly funding rates. Output: `user_data/data/hyperliquid/funding/<COIN>-funding.parquet`. Supports incremental updates (resumes from last saved timestamp). |
+| `scripts/paper_trading_dashboard.py` | Local signed mean-variance paper bot + dashboard. Paper-only: fetches Hyperliquid data and simulates positions/fees/funding without placing orders. State/logs live in ignored `user_data/paper_trading/`. |
+| `vercel-paper-dashboard/` | Deployable Next.js monitor for Vercel. Uses Vercel Cron + Upstash/Vercel KV to run hourly paper updates without a local machine. |
 | `scripts/generate_leaderboard_chart.py` | Reads `wiki/_index.md` leaderboard table + backtest ZIPs; writes `wiki/assets/leaderboard.png`. Requires `pip install matplotlib`. Auto-called by `run_eval.sh`. |
 | `wiki/assets/leaderboard.png` | Generated chart — Calmar, Sharpe, Win Rate, MDD bars + equity curves. Committed to repo so it renders in `README.md` on GitHub. |
 | `README.md` | Repo root readme. Embeds the leaderboard chart; links to this wiki for full details. |
@@ -215,11 +234,13 @@ Cap: ~5000 candles per (pair, timeframe). That's ~208 days at 1h, ~833 days at 4
   --data-format-ohlcv feather \
   -s LongOnlyStrategy -i 1h \
   -p BTC/USDC:USDC \
+  --fee 0.00035 \
   --eps --max-open-trades 1
 ```
 
 Flag notes:
 - `--data-format-ohlcv feather` — data is stored as Feather.
+- `--fee 0.00035` — required; the config `"fee"` key is ignored by Freqtrade backtesting.
 - `--eps` — `--enable-position-stacking`, allows re-entry.
 - `-p BTC/USDC:USDC` — futures pair notation (base/quote:settle).
 

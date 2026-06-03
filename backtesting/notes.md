@@ -14,5 +14,6 @@ freqtrade backtesting \
   --data-format-ohlcv feather \
   -s LongOnlyStrategy -i 5m \
   -p BTC/USDC:USDC \
+  --fee 0.00035 \
   --eps --max-open-trades 1
 ```

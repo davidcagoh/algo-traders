@@ -1,0 +1,156 @@
+{
+  "universe": [
+    "BTC",
+    "HYPE",
+    "PAXG",
+    "TRX",
+    "WLFI",
+    "VVV",
+    "TON",
+    "ZRO",
+    "XPL"
+  ],
+  "method": {
+    "return_frequency": "daily close-to-close from 1h OHLCV",
+    "funding": "daily sum of Hyperliquid funding_rate; signed position return = price_return - funding_rate",
+    "lookback_days": 60,
+    "rebalance_days": 7,
+    "fee": 0.00035,
+    "max_abs_weight": 0.2,
+    "gross_limit": 1.0,
+    "mean_shrink": 0.5,
+    "risk_aversion": 1.0,
+    "turnover_penalty": 0.05
+  },
+  "window": {
+    "price_start": "2025-11-05 00:00:00+00:00",
+    "price_end": "2026-06-01 00:00:00+00:00",
+    "active_start": "2026-01-05 00:00:00+00:00",
+    "active_end": "2026-06-01 00:00:00+00:00"
+  },
+  "results": {
+    "btc_long": {
+      "days": 148,
+      "total_return_pct": -22.62570630715596,
+      "cagr_pct": -46.88032990848665,
+      "ann_vol_pct": 50.35331201056994,
+      "sharpe": -1.0033055506830497,
+      "sortino": -1.3795452461766384,
+      "max_drawdown_pct": -35.32194603724229,
+      "calmar": -1.327229532004199,
+      "avg_gross_exposure": 1.0002743964502647,
+      "avg_net_exposure": 1.0002743964502647,
+      "avg_effective_assets": 1.0,
+      "avg_turnover_per_rebalance": 0.04622331876695371,
+      "total_fee_drag_pct": 0.03560479741749881,
+      "total_funding_pnl_pct": -1.0080173242453359,
+      "final_weights": {
+        "BTC": 1.0003087958367345
+      }
+    },
+    "equal_weight_long": {
+      "days": 148,
+      "total_return_pct": 42.05206682415259,
+      "cagr_pct": 137.66686478838693,
+      "ann_vol_pct": 56.18745826866615,
+      "sharpe": 1.8228673894406875,
+      "sortino": 2.736618286489006,
+      "max_drawdown_pct": -25.92185978453164,
+      "calmar": 5.310840577516622,
+      "avg_gross_exposure": 0.9997978329726597,
+      "avg_net_exposure": 0.9997978329726597,
+      "avg_effective_assets": 8.985074611086565,
+      "avg_turnover_per_rebalance": 0.1388651129093086,
+      "total_fee_drag_pct": 0.1029365763378702,
+      "total_funding_pnl_pct": 1.235724527095747,
+      "final_weights": {
+        "BTC": 0.1064838308951416,
+        "HYPE": 0.11075820080305311,
+        "PAXG": 0.10841928951143169,
+        "TRX": 0.10782196044439886,
+        "WLFI": 0.11104599102750193,
+        "VVV": 0.10754479222628079,
+        "TON": 0.12773379476965616,
+        "ZRO": 0.1087620927238131,
+        "XPL": 0.11183917838888352
+      }
+    },
+    "inverse_vol_long": {
+      "days": 148,
+      "total_return_pct": 23.41109787093454,
+      "cagr_pct": 67.99611885352918,
+      "ann_vol_pct": 42.993060289232595,
+      "sharpe": 1.4226887867401088,
+      "sortino": 1.9514737738205152,
+      "max_drawdown_pct": -22.31303143028105,
+      "calmar": 3.04737252156834,
+      "avg_gross_exposure": 1.0000495331611319,
+      "avg_net_exposure": 1.0000495331611319,
+      "avg_effective_assets": 7.469163628625926,
+      "avg_turnover_per_rebalance": 0.13773347177229694,
+      "total_fee_drag_pct": 0.10382282409388045,
+      "total_funding_pnl_pct": 0.09548669306646465,
+      "final_weights": {
+        "BTC": 0.1645599611630549,
+        "HYPE": 0.07998252740100309,
+        "PAXG": 0.1975812823739021,
+        "TRX": 0.19649272107087762,
+        "WLFI": 0.08304654760247966,
+        "VVV": 0.05807637492967893,
+        "TON": 0.07214421110242052,
+        "ZRO": 0.07934055425975875,
+        "XPL": 0.06905429363653508
+      }
+    },
+    "minimum_variance_signed": {
+      "days": 148,
+      "total_return_pct": 28.4511578616373,
+      "cagr_pct": 85.42636150485832,
+      "ann_vol_pct": 22.01512836650304,
+      "sharpe": 2.9156513593978435,
+      "sortino": 5.69541168813227,
+      "max_drawdown_pct": -7.042000948756344,
+      "calmar": 12.130978414586139,
+      "avg_gross_exposure": 1.005433655703146,
+      "avg_net_exposure": 0.5343731379183734,
+      "avg_effective_assets": 7.163781447775398,
+      "avg_turnover_per_rebalance": 0.29969621594270834,
+      "total_fee_drag_pct": 0.2297467764086963,
+      "total_funding_pnl_pct": -0.32045877845842685,
+      "final_weights": {
+        "BTC": 0.19518784108936563,
+        "HYPE": 0.0711583575529875,
+        "PAXG": 0.1987355908806319,
+        "TRX": 0.19764066998950736,
+        "WLFI": 0.06458290229822174,
+        "VVV": -0.07281619319803313,
+        "TON": 0.04607789591585552,
+        "ZRO": 0.030681626182099485,
+        "XPL": -0.12549396227385337
+      }
+    },
+    "shrunk_mean_variance_signed": {
+      "days": 148,
+      "total_return_pct": 122.61387250719302,
+      "cagr_pct": 619.6791687415705,
+      "ann_vol_pct": 55.16683275145817,
+      "sharpe": 3.855963301915024,
+      "sortino": 6.613746885520754,
+      "max_drawdown_pct": -17.225418777544476,
+      "calmar": 35.974693953415,
+      "avg_gross_exposure": 1.0108847255337872,
+      "avg_net_exposure": 0.07724972877672373,
+      "avg_effective_assets": 5.423003344389178,
+      "avg_turnover_per_rebalance": 0.5097227371896859,
+      "total_fee_drag_pct": 0.38181094187681636,
+      "total_funding_pnl_pct": 4.715024152172721,
+      "final_weights": {
+        "HYPE": 0.19627052403134207,
+        "WLFI": -0.19678050647737425,
+        "VVV": 0.19057616116956722,
+        "TON": 0.22635234821601802,
+        "ZRO": -0.19273329449984875
+      }
+    }
+  }
+}

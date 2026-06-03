@@ -81,4 +81,4 @@ After step 5, write the paper in 1-2 focused sessions and post to arXiv. Hold co
 - `wiki/decisions/007-kill-criteria-cross-sectional.md`
 - `wiki/decisions/008-kill-criteria-funding-mr.md`
 - `wiki/methodology/correlation-and-mdb.md`
-- `articles/principled-evaluation-worked-example.md` (the dense internal writeup that will serve as the prose substrate for the paper)
+- `writeup-2026-05-16.md` (the dense internal writeup that will serve as the prose substrate for the paper)

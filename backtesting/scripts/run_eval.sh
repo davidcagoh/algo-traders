@@ -5,6 +5,7 @@
 #
 # Primary metric: Calmar (CAGR / |MDD|). Sharpe always shown as sanity check.
 # Freqtrade's backtest summary prints both; scan the "BACKTESTING REPORT" block.
+# Fee must be passed via CLI; config.json's "fee" key is ignored by backtesting.
 
 set -euo pipefail
 
@@ -23,6 +24,7 @@ fi
   --data-format-ohlcv feather \
   -s LongOnlyStrategy -i 1h \
   -p BTC/USDC:USDC \
+  --fee 0.00035 \
   --eps --max-open-trades 1
 
 # Regenerate Pareto chart (non-fatal — requires: pip install matplotlib).

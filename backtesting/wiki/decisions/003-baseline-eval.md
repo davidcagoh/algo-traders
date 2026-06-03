@@ -5,7 +5,7 @@
 
 ## Decision
 
-The Session Start Routine's baseline eval runs **`LongOnlyStrategy` on 1h BTC/USDC:USDC, ~200 days (5000 candles)** via `./scripts/run_eval.sh`.
+The Session Start Routine's baseline eval runs **`LongOnlyStrategy` on 1h BTC/USDC:USDC, ~200 days (5000 candles)** via `./scripts/run_eval.sh`, with the required explicit fee flag `--fee 0.00035`.
 
 Primary metric: **Calmar (CAGR / |MDD|)**. Sharpe is also displayed on every report card as a sanity check.
 

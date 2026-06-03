@@ -1,0 +1,20 @@
+{
+  "strategy": "MeanVariancePortfolio",
+  "universe": [
+    "BTC",
+    "HYPE",
+    "PAXG",
+    "TRX",
+    "WLFI",
+    "VVV",
+    "TON",
+    "ZRO",
+    "XPL"
+  ],
+  "timerange": "20251110-20260601",
+  "timeframe": "1h",
+  "fee_taker_per_side": 0.00035,
+  "pre_cost": {},
+  "post_cost": {},
+  "cost_drag_pct": null
+}

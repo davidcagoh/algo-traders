@@ -1,0 +1,196 @@
+{
+  "coins": [
+    "BTC",
+    "ETH",
+    "HYPE",
+    "XRP",
+    "SOL"
+  ],
+  "summary": [
+    {
+      "coin": "BTC",
+      "timeframe": "1h",
+      "rows": 5001,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "ETH",
+      "timeframe": "1h",
+      "rows": 5001,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "HYPE",
+      "timeframe": "1h",
+      "rows": 5001,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "XRP",
+      "timeframe": "1h",
+      "rows": 5001,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "SOL",
+      "timeframe": "1h",
+      "rows": 5001,
+      "start": "2025-11-05 09:00:00+00:00",
+      "end": "2026-06-01 17:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "BTC",
+      "timeframe": "4h",
+      "rows": 5001,
+      "start": "2024-02-19 08:00:00+00:00",
+      "end": "2026-06-01 16:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "ETH",
+      "timeframe": "4h",
+      "rows": 5001,
+      "start": "2024-02-19 08:00:00+00:00",
+      "end": "2026-06-01 16:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "HYPE",
+      "timeframe": "4h",
+      "rows": 3261,
+      "start": "2024-12-05 08:00:00+00:00",
+      "end": "2026-06-01 16:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "XRP",
+      "timeframe": "4h",
+      "rows": 5001,
+      "start": "2024-02-19 08:00:00+00:00",
+      "end": "2026-06-01 16:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    },
+    {
+      "coin": "SOL",
+      "timeframe": "4h",
+      "rows": 5001,
+      "start": "2024-02-19 08:00:00+00:00",
+      "end": "2026-06-01 16:00:00+00:00",
+      "duplicates": 0,
+      "large_gap_count": 0,
+      "missing_intervals_est": 0,
+      "bad_ohlcv_rows": 0
+    }
+  ],
+  "common_1h_window": {
+    "start": "2025-11-05 09:00:00+00:00",
+    "end": "2026-06-01 17:00:00+00:00",
+    "n_hours": 5001
+  },
+  "daily_return_corr": {
+    "BTC": {
+      "BTC": 1.0,
+      "ETH": 0.916,
+      "HYPE": 0.455,
+      "XRP": 0.8683,
+      "SOL": 0.8893
+    },
+    "ETH": {
+      "BTC": 0.916,
+      "ETH": 1.0,
+      "HYPE": 0.4769,
+      "XRP": 0.8349,
+      "SOL": 0.8977
+    },
+    "HYPE": {
+      "BTC": 0.455,
+      "ETH": 0.4769,
+      "HYPE": 1.0,
+      "XRP": 0.4103,
+      "SOL": 0.4788
+    },
+    "XRP": {
+      "BTC": 0.8683,
+      "ETH": 0.8349,
+      "HYPE": 0.4103,
+      "XRP": 1.0,
+      "SOL": 0.8461
+    },
+    "SOL": {
+      "BTC": 0.8893,
+      "ETH": 0.8977,
+      "HYPE": 0.4788,
+      "XRP": 0.8461,
+      "SOL": 1.0
+    }
+  },
+  "daily_metrics": {
+    "BTC": {
+      "total_return_pct": -31.0532,
+      "annualized_vol_pct": 47.4121,
+      "max_abs_daily_ret_pct": 15.102
+    },
+    "ETH": {
+      "total_return_pct": -41.8115,
+      "annualized_vol_pct": 63.8264,
+      "max_abs_daily_ret_pct": 16.2418
+    },
+    "HYPE": {
+      "total_return_pct": 76.7548,
+      "annualized_vol_pct": 95.2427,
+      "max_abs_daily_ret_pct": 21.2018
+    },
+    "XRP": {
+      "total_return_pct": -44.4302,
+      "annualized_vol_pct": 65.311,
+      "max_abs_daily_ret_pct": 21.9131
+    },
+    "SOL": {
+      "total_return_pct": -50.0709,
+      "annualized_vol_pct": 65.5347,
+      "max_abs_daily_ret_pct": 16.2362
+    }
+  },
+  "charts": {
+    "coverage": "wiki/assets/data_sanity_coverage_selected.png",
+    "normalized_1h": "wiki/assets/data_sanity_normalized_1h_selected.png",
+    "daily_corr": "wiki/assets/data_sanity_daily_corr_selected.png",
+    "return_vol": "wiki/assets/data_sanity_return_vol_selected.png"
+  }
+}

@@ -2,7 +2,7 @@
 
 Crypto strategy backtesting setup built on [Freqtrade](https://www.freqtrade.io/en/stable/), targeting Hyperliquid (USDC-quoted) markets. Revived 2026-04 as a possible base for actively trading personal crypto holdings.
 
-**Last updated:** 2026-06-02 (Hyperliquid data sanity + universe refresh; signed mean-variance paper dashboard deployed locally)
+**Last updated:** 2026-06-03 (PC-neutral alt stat-arb / residual mean-reversion sweep)
 
 **Current state:** Full A1 → D2 sprint completed in one session per `decisions/005-evaluation-and-diversity-plan.md`. New evaluation tooling (`scripts/eval_layers.py`) adds Layer-5 metrics (Ulcer, Martin, skew, kurtosis, tail ratio, CVaR-5%) + correlation matrix + 3-flavor MDB. Every strategy re-backtested on Binance common window 2020-09 → 2026-05 (5.5y, 2 bulls + 2 bears, 5-coin universe BTC/ETH/SOL/AVAX/DOGE). Three new strategy families opened: X1 pairs (killed — cointegration absent on crypto majors; two-leg v2 on 2026-05-16 strengthens the verdict and surfaces a Freqtrade framework limit on atomic pair execution), X2 cross-sectional momentum (▲ marginal frontier), F1 funding MR (killed by K1-fmr). **Candidate book is now {T3, R∧T2}** — SmaRegime180 (BTC 4h, conservative) + HmmSmaSlopeV2 (5-coin 4h, high return); correlation 0.07, MDB-rp +0.55 robust against {T3} alone. R∧T1/V2/V3 are statistically one strategy (Pearson 0.96-1.00). Internal writeup at `../writeup-2026-05-16.md`. Paper deferred per `decisions/010-paper-plan-deferred.md` until forward held-out window runs.
 
@@ -13,6 +13,8 @@ Crypto strategy backtesting setup built on [Freqtrade](https://www.freqtrade.io/
 **Signed MV paper dashboard (2026-06-02):** `scripts/paper_trading_dashboard.py` is a local paper-only Hyperliquid monitor for the 9-coin signed mean-variance portfolio. It pulls live mids/candles/funding from Hyperliquid, simulates taker fees and funding, rebalances weekly or on manual dashboard command, and stores ignored state under `user_data/paper_trading/`. It never submits exchange orders. Current dashboard screenshot: [paper dashboard](assets/paper_dashboard_current.png).
 
 **Vercel monitor (2026-06-03):** `vercel-paper-dashboard/` is a deployable Next.js monitor that runs itself via Vercel Cron. Vercel cannot host a permanent bot process, so `/api/tick` runs hourly, fetches Hyperliquid mids/candles/funding, updates simulated paper state in Upstash/Vercel KV, and `/api/status` serves the dashboard.
+
+**PC-neutral alt sweep (2026-06-03):** `scripts/run_pc_neutral_alt_strategies.py` tested PC-residual mean reversion and cluster-restricted PC-neutral pair stat-arb on requested alt clusters over Hyperliquid 1h data, 2025-12-07 → 2026-06-03. Requested names available on Hyperliquid: COMP, SNX, CRV, NEAR, DOT, ATOM, INJ, SUI, APT, SEI, AXS, SAND, GALA, IMX, LTC, BCH, ETC, ZEC, GMX, DYDX, RUNE, RENDER, FET. Missing: BAL, 1INCH, CVX, MANA, RON, GNS, AKT, GRT, ASI. First-pass result: pair stat-arb is only mildly positive and very sparse (best Sharpe 0.71, +0.38%, active 0.3%); individual PC-residual MR is negative after fees (best Sharpe -0.49, -3.66%). Funding omitted because the broad Hyperliquid funding refresh hit 429 rate limits. Results: `results/pc_neutral_alt_strategies_hl_1h_current.md`; charts: `assets/pc_neutral_alt_{equity_top,scatter,cluster_bars}.png`.
 
 ---
 

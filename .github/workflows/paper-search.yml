@@ -49,18 +49,30 @@ jobs:
           safety-strategy: drop-sudo
           prompt: |
             Read quant-research-agent/paper-search-trigger.md completely and
-            execute Steps 1 through 5. This is an unattended scheduled run.
-            Search only the configured scope and write only the documented
-            knowledge paths. Do not commit or push; the workflow handles the
-            review branch and pull request after your edits.
+            execute Steps 1 through 7. This is an unattended scheduled run.
+            Advance every enabled search thread independently, including
+            zero-result logging, and apply the bounded keyword-refinement
+            policy. Write only under literature/. Do not add durable wiki
+            claims. Do not commit or push; the workflow handles the review
+            branch and pull request after your edits.
           codex-args: '["--search"]'
+
+      - name: Validate literature changes
+        if: ${{ env.HAS_OPENAI_KEY == 'true' }}
+        run: |
+          ruby -e 'require "yaml"; YAML.load_file("literature/search-config.yml")'
+          git diff --check
+          if test -d literature/crypto-markets/sources || test -d literature/crypto-markets/source-dives; then
+            echo "Found a retired crypto-literature subdirectory."
+            exit 1
+          fi
 
       - name: Commit and open pull request
         if: ${{ env.HAS_OPENAI_KEY == 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          git add quant-research-agent/source-dives wiki
+          git add literature
           if git diff --cached --quiet; then
             echo "No research changes produced."
             exit 0
@@ -74,7 +86,7 @@ jobs:
               --base main \
               --head "$PAPER_SEARCH_BRANCH" \
               --title "Weekly paper search ${PAPER_SEARCH_DATE}" \
-              --body "Automated quant paper search. Review sources and claims before merging."
+              --body "Automated multi-thread literature scan. New source notes are drafts: review metadata, PDF access, characterizations, and keyword proposals before merging. Durable wiki synthesis is intentionally deferred."
           fi
 
       - name: Explain skipped run

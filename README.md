@@ -25,8 +25,8 @@ Key paths:
 
 - [Wiki](wiki/) — H3L hot/cold knowledge base with active threads, archives, concepts, and retained artifacts.
 - [Evaluation framework](evaluation-framework/) — reusable metrics package, manuscript, essay, and worked example in one ongoing project.
-- [Literature](literature/) — source PDFs and source-specific notes.
-- [Quant research agent](quant-research-agent/) — research-loop pattern, search automation specification, and thematic source dives.
+- [Literature](literature/) — indexed PDFs, paper notes, surveys, and per-thread search history.
+- [Quant research agent](quant-research-agent/) — reusable research-loop pattern and search automation specification.
 
 ## Layout
 

@@ -27,7 +27,7 @@ Writing now means writing twice. Each of the five items above rewrites at least 
   - First-line: **ICAIF** (ACM AI in Finance) — workshop or main track.
   - Second-line: NeurIPS Workshop on AI in Finance.
   - Fallback: **arXiv preprint** (no venue lock-in; cite-able immediately).
-- **Bibliography**: assembled from `../../../../../quant-research-agent/source-dives/` (≥10 papers already curated).
+- **Bibliography**: assembled from `../../../../../literature/crypto-markets/` (≥10 papers already curated).
 
 ## Structure (when written)
 

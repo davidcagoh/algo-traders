@@ -5,12 +5,14 @@ Reusable workflow material for an autonomous quantitative-research loop.
 - `PATTERN.md` documents the architecture, operating discipline, and failure modes.
 - `paper-search-trigger.md` is the master prompt for the scheduled/manual
   `.github/workflows/paper-search.yml` workflow.
-- `source-dives/` contains agent-produced thematic literature syntheses.
+- [`../literature/search-config.yml`](../literature/search-config.yml) defines
+  independent search threads, budgets, exclusions, and bounded keyword refinement.
 
-The agent reads shared knowledge from `../wiki/`, keeps primary material in
-`../literature/sources/`, records thematic syntheses in `source-dives/`, and hands experiment-specific hypotheses to the relevant project.
-It does not own experiment results, publication manuscripts, or primary-source PDFs.
+The agent reads shared state from `../wiki/`, then writes PDFs, paper notes,
+indexes, and search history under `../literature/`. It does not own literature,
+experiment results, publication manuscripts, or durable wiki claims.
 
 The workflow uses the official OpenAI Codex Action, opens a pull request for
-review, and requires an `OPENAI_API_KEY` repository secret. Without that secret, scheduled runs exit
-without calling the agent.
+review. Each enabled thread is searched on every run; new notes remain drafts
+until reviewed. The workflow requires an `OPENAI_API_KEY` repository secret and
+exits without calling the agent when it is absent.

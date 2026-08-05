@@ -1,116 +1,115 @@
-# Paper Search Trigger — Master Config
+# Literature Search Agent — Master Config
 
 **Former trigger ID:** `trig_013s3hXkiYrSnYh2Qes1KPws` (retired Claude remote trigger)
 **Schedule:** Sundays 4 AM America/Toronto
 **Workflow:** `.github/workflows/paper-search.yml`
+**Search configuration:** `literature/search-config.yml`
 **Last updated:** 2026-08-05
-**Status:** enabled; `OPENAI_API_KEY` repository secret configured 2026-08-05
+**Status:** enabled; PR-gated
 
-> This file is the master prompt. The GitHub Action reads it at runtime; do not
-> duplicate the full prompt in the workflow.
+This is the operating prompt read by the GitHub Action. Root `literature/` owns
+sources, indexes, source notes, and search history. `quant-research-agent/` owns
+only the automation pattern and prompt.
 
----
+## Scheduled-run instructions
 
-## Prompt (message content sent to agent)
+### 1. Detect current state
 
-```
-You are a research assistant maintaining a crypto strategy backtesting wiki. The wiki is in the `wiki/` directory of this repo. The project is built on Freqtrade and targets Hyperliquid (USDC-quoted perps).
+Read completely:
 
-Your task: Find new papers published in the last 2 weeks relevant to this project, summarise them, and add them to the wiki.
+- `literature/search-config.yml`
+- `literature/_index.md`
+- every enabled thread's configured index
+- `literature/search-log.md`
+- `wiki/open-threads.md`
+- `wiki/learnings-archive.md` entries relevant to the configured threads
 
-## Step 1 — Read the current wiki state
-Read `wiki/_index.md`, `wiki/open-threads.md`, and grep `wiki/learnings-archive.md` for related confirmed or ruled-out findings. These are the authoritative guides to what is active and already known.
+Reconcile files on disk against the indexes before searching. Treat this as a
+delta run from the most recent search-log date. Never rediscover or duplicate an
+already indexed paper or alternate version.
 
-**CRITICAL CONTEXT — read before searching:**
-- Primary scoring metric: **Calmar ratio (CAGR / |MDD|)**. Sharpe is always displayed alongside as a sanity check.
-- Execution target: Hyperliquid perpetual swaps, USDC-quoted. 24/7 market, no calendar structure.
-- Data constraint: Hyperliquid API returns at most 5000 candles per call; no bulk OHLCV dump exists. Sub-hour strategies with multi-month history are expensive to reconstruct.
-- Current state: the Freqtrade paper run is stopped and parked after failing its live gate. New papers should feed a genuinely new, pre-registered experiment rather than tune the parked strategy.
+### 2. Search every enabled thread
 
-## Step 2 — Search for new papers
-Search ONLY for topics that advance an item in `wiki/open-threads.md`. The retained crypto priorities are:
+Search each enabled thread independently using its seed terms, accepted candidate
+terms, exclusions, source list, recency window, and budget. Do not spend the
+whole run on the first productive thread. Record zero-result threads too.
 
-1. **Crypto perp-specific factors** — funding-rate carry, perp basis, open-interest imbalance, liquidation-cascade detection
-2. **Regime detection for 24/7 markets** — models adapted to continuous trading; transferability of equity HMM/SJM approaches
-3. **Backtest-realistic execution on perps** — slippage, funding-cost modelling, backtest-vs-live divergence on decentralised perp venues
-4. **Mean-reversion at 1h–4h timeframes in crypto majors** — crypto-specific evidence, retail-overreaction mechanisms
+Use primary sources and authoritative metadata. Prefer recent papers, but admit
+an older foundational source when a new paper reveals that the corpus is missing
+an evaluation method it depends upon.
 
-**Do NOT search for directions recorded as ruled out in `wiki/learnings-archive.md`.** This includes:
-- Hyperliquid bulk OHLCV sources or historical data archives (none exist)
-- Generic SMA-cross or RSI-cross strategy papers (baseline noise, not research)
+### 3. Screen and verify
 
-Search arXiv (q-fin.PM, q-fin.TR, q-fin.ST), SSRN, and Google Scholar. Prefer 2024–2026 papers.
+For each candidate:
 
-## Step 3 — Filter and select
-Select up to 3 papers that are MOST relevant. Discard:
-- Papers on Chinese A-shares / equity markets with no obvious crypto transfer
-- Papers requiring fundamental data unavailable in crypto (earnings, book value)
-- Papers already indexed in `wiki/_index.md` or `quant-research-agent/source-dives/`
+- verify title, authors, date, identifier, maturity, and version;
+- distinguish peer-reviewed work, working papers, and preprints;
+- read beyond the abstract before making any claim about the paper's stance or
+  relationship to another source;
+- reject papers that merely report a headline return without a reusable method,
+  realistic execution bridge, or direct open-thread relevance;
+- deduplicate across all root literature indexes, not just the current thread.
 
-Prioritise papers with: (a) crypto-native evidence, (b) actionable modifications to a Freqtrade strategy, (c) empirical results on Calmar/Sharpe/MDD tradeoffs (or CAGR + MDD that let us compute Calmar ourselves).
+Select no more than the configured per-thread and total budgets.
 
-## Step 4 — Write paper summaries
-For each selected paper, create a new file in `quant-research-agent/source-dives/` using this template:
+### 4. Retrieve and validate primary material
 
-```
-# [Full Title]
+For every selected source, attempt a legal PDF download into its configured
+`collection_dir` when present, otherwise its `source_dir`, using
+`<stable-id>-<descriptive-slug>.pdf`.
 
-**Authors:** ...
-**Venue/Source:** ...
-**arXiv/DOI:** ...
-**Date:** ...
+A successful HTTP response is insufficient. Validate with `file`, `pdfinfo`, and
+first-page `pdftotext`. If retrieval fails or the paper is paywalled, do not use
+an unofficial bypass. Add a record to the thread index with the canonical URL
+and exact access status.
 
----
+### 5. Write records and review drafts
 
-## Core Claim
-[1-2 sentences: what is the main contribution]
+Update the configured thread index for every selected source, including sources
+without PDFs. For threads with `write_notes: true`, create a same-directory
+Markdown note beside the PDF, sharing its filename stem where possible, with:
 
----
+- title, authors, venue, identifier, date, maturity;
+- `Local PDF` or explicit `Access status`;
+- method, sample period/universe, evaluation protocol, reported results;
+- limitations and concrete relevance to an active thread;
+- an evidence note distinguishing abstract-level metadata from sections actually
+  read.
 
-## Method
-[Key technique or strategy construction approach]
+Scheduled runs must label new interpretive source notes `Review status: draft`.
+Do not promote new claims into the durable wiki during an unattended run. The
+pull request is the mandatory human characterization checkpoint. Wiki synthesis
+may be added in a later reviewed session.
 
----
+### 6. Refine keywords conservatively
 
-## Results
-[Performance metrics: Calmar, Sharpe, CAGR, MDD if reported. Include sample period and universe.]
+Follow `keyword_policy` in `literature/search-config.yml`:
 
----
+- never delete or rewrite seed terms;
+- add at most the configured number of candidate terms to that thread's
+  `adaptive_terms` list;
+- require support from the configured number of relevant sources or a direct
+  root-wiki open thread;
+- record the proposed term, supporting sources, target thread, and reason in
+  `literature/search-log.md`;
+- let a human-reviewed pull request decide whether the term remains.
 
-## Relevance to this project
-[Concrete actionable ideas. How would this become a Freqtrade strategy or feed a signal? Include code sketch if the modification is simple.]
+Do not optimize keywords merely to increase hit count. A term is useful only if
+it improves relevant, non-duplicate retrieval.
 
----
+### 7. Log the run
 
-## Concepts
-→ [[concept1]] | [[concept2]]
-```
+Append a dated search-log section containing each thread, exact queries,
+candidates screened, selected sources, rejection reasons, PDF/access outcomes,
+and keyword changes. If nothing is selected, still record the search and why.
 
-Use kebab-case filenames, e.g. `quant-research-agent/source-dives/funding-rate-carry-perps-2025.md`.
+Do not commit, push, or open a pull request. The workflow handles the dated
+branch, commit, and PR after validating the changed paths.
 
-## Step 5 — Update the H3L wiki
-- Add a reusable synthesis to `wiki/concepts/` only when the paper supports a durable concept beyond its source dive; inventory it in `wiki/_index.md`.
-- Update `wiki/open-threads.md` when a paper advances, closes, or raises an actionable question.
-- Append a confirmed or ruled-out finding to `wiki/learnings-archive.md` when evidence warrants it; include the mechanism and source-dive path.
+## Change log
 
-## Step 6 — Open a reviewable pull request
-The GitHub workflow creates or updates
-`research/weekly-paper-search-YYYY-MM-DD`, stages only the documented knowledge
-paths, and commits with message `chore: weekly paper search YYYY-MM-DD`.
-
-Push that branch and open one pull request targeting `main`. Never push generated
-research directly to `main`. If a pull request for the same dated branch already
-exists, update that branch rather than opening a duplicate.
-
-If you find no new relevant papers, add a short dated entry to `wiki/session-log.md` noting what you searched and why nothing was added. Still commit and push — the log is useful signal.
-```
-
----
-
-## Change Log
-
-| Date | Change | Who |
-|------|--------|-----|
-| 2026-08-05 | Replaced retired remote trigger with scheduled/manual OpenAI Codex Action and PR review gate | Codex |
-| 2026-08-05 | Updated paths and write targets for the H3L wiki structure | Codex |
-| 2026-04-24 | Initial creation — ported structure from feishu repo, adapted topics to crypto/Hyperliquid | Claude |
+| Date | Change |
+|---|---|
+| 2026-08-05 | Unified all source ownership under root literature; added per-thread delta scans, PDF validation, records for inaccessible sources, draft review status, and bounded keyword refinement. |
+| 2026-08-05 | Replaced retired remote trigger with scheduled/manual OpenAI Codex Action and PR review gate. |
+| 2026-04-24 | Initial crypto/Hyperliquid adaptation. |

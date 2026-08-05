@@ -10,6 +10,9 @@ its manuscript and practitioner-facing explanations:
   and a Portfolio-Aware Kill Criterion*.
 - [`essay.md`](essay.md) — practitioner-oriented synthesis.
 - [`worked-example.md`](worked-example.md) — detailed crypto-perpetual worked example.
+- [`../literature/strategy-evaluation/_index.md`](../literature/strategy-evaluation/_index.md)
+  — screened evaluation literature, local PDFs, unavailable-source records, and
+  implementation implications.
 - [`archive/ranking-narrative.md`](archive/ranking-narrative.md) — superseded discovery
   narrative retained for provenance.
 

@@ -23,7 +23,7 @@ May 28 2026, submission deadline June 1 2026). Score formula:
 `0.45 × CAGR_pct + 0.30 × SR_pct + 0.25 × MDD_pct`.
 
 **What the agent did autonomously:**
-- Indexed 20 academic papers; wrote structured summaries now retained in `source-dives/`
+- Indexed 20 academic papers; their retained source notes belong under root `literature/`
 - Built 7 concept articles (`wiki/concepts/`) and 6 course articles (`wiki/course/`)
 - Catalogued 31 signal ideas; implemented 24 of them in `signals/`
 - Built a full competition-mechanics backtester (`eval/backtest.py`) with T+1, lot-size, costs
@@ -59,7 +59,7 @@ asserted here.
 Freqtrade as the backtesting engine. Targeting personal crypto holdings; revived April 2026.
 
 **What the agent did autonomously:**
-- Indexed 6 papers; wrote summaries now retained in `source-dives/`
+- Indexed 6 papers; their retained source notes now live in `literature/crypto-markets/`
 - Built a custom Hyperliquid OHLCV downloader (`scripts/download_hyperliquid.py`) because
   Freqtrade's built-in `download-data` is disabled for Hyperliquid (`ohlcv_has_history=False`)
 - Implemented 4 Freqtrade strategies with full result cards
@@ -198,12 +198,13 @@ Leaderboard is a pointer, not a data store. Each row links to a dated result car
 `results/`. The leaderboard stays readable; full detail lives in the card. This separation
 makes it easy to add new strategies without the index bloating.
 
-### Scheduled paper search with curated scope and review
+### Scheduled paper search with per-thread scope and review
 
-The root paper-search prompt has an explicit "Do NOT search for" section covering
-directions that are ruled out or already addressed. The current GitHub Action
-uses native Codex web search, limits writes to shared knowledge paths, and opens
-a pull request so source quality and claims are reviewed before merge.
+The root search configuration defines independent threads, seed terms,
+exclusions, budgets, and bounded candidate-keyword refinement. The GitHub Action
+uses Codex web search, advances every enabled thread, limits writes to
+`literature/`, and opens a pull request so sources, draft notes, and keyword
+proposals are reviewed before merge.
 
 ---
 
@@ -216,10 +217,15 @@ workspace/
     open-threads.md
     session-log.md
     concepts/
-  literature/sources/          # Primary-source PDFs
+  literature/                  # Sources, notes, indexes, and search history
+    _index.md
+    search-config.yml
+    search-log.md
+    crypto-markets/            # Flat paper-centric PDF + Markdown collection
+    strategy-evaluation/       # Methods, audits, foundations, surveys
   quant-research-agent/
     paper-search-trigger.md     # Master search prompt
-    source-dives/              # Source-specific syntheses
+    PATTERN.md                  # Reusable architecture and lessons
   evaluation-framework/
     evaluation/                # Importable metrics package
     paper/                     # Evolving manuscript

@@ -1,0 +1,111 @@
+version: 1
+updated: 2026-08-05
+defaults:
+  recency_days: 21
+  max_selected_per_thread: 2
+  max_selected_total: 8
+  preferred_years: "2024-2026"
+  sources:
+    - arXiv
+    - SSRN
+    - Crossref
+    - Google Scholar
+    - publisher sites
+
+keyword_policy:
+  seed_terms_are_immutable: true
+  candidate_term_min_relevant_sources: 2
+  max_candidate_terms_added_per_run: 2
+  require_reason_in_search_log: true
+  retire_only_by_human_review: true
+
+threads:
+  crypto_funding_perps:
+    enabled: true
+    index: literature/crypto-markets/_index.md
+    collection_dir: literature/crypto-markets
+    write_notes: true
+    seed_terms:
+      - cryptocurrency perpetual futures funding rate
+      - crypto carry basis cross-exchange
+      - perpetual DEX market making
+      - open interest liquidation cascade
+      - Hyperliquid liquidity slippage
+    adaptive_terms: []
+    exclusions:
+      - generic spot-only technical indicators
+      - token price prediction without executable evaluation
+
+  crypto_regimes_trend_reversion:
+    enabled: true
+    index: literature/crypto-markets/_index.md
+    collection_dir: literature/crypto-markets
+    write_notes: true
+    seed_terms:
+      - cryptocurrency regime detection hidden Markov causal
+      - crypto trend following out-of-sample
+      - crypto mean reversion intraday 1h 4h
+      - regime label stability duration dependence
+      - cross-asset parameter transfer cryptocurrency
+    adaptive_terms: []
+    exclusions:
+      - generic SMA crossover
+      - look-ahead regime classification
+
+  crypto_microstructure_execution:
+    enabled: true
+    index: literature/crypto-markets/_index.md
+    collection_dir: literature/crypto-markets
+    write_notes: true
+    seed_terms:
+      - cryptocurrency order flow imbalance execution costs
+      - perpetual futures market microstructure maker taker
+      - crypto slippage market impact latency queue position
+      - crypto flash crash liquidity stress
+      - on-chain flow intraday return forecasting
+    adaptive_terms: []
+    exclusions:
+      - prediction accuracy without a trading or execution bridge
+
+  strategy_evaluation_validation:
+    enabled: true
+    index: literature/strategy-evaluation/_index.md
+    source_dir: literature/strategy-evaluation/methods
+    seed_terms:
+      - trading strategy purged walk-forward double out-of-sample
+      - backtest overfitting multiple testing deflated Sharpe PBO
+      - dependent bootstrap Sharpe HAC trading panel
+      - model confidence set strategy selection
+      - backtest live performance decay regime benchmark
+    adaptive_terms: []
+    exclusions:
+      - strategy papers reporting only headline return or Sharpe
+
+  strategy_evaluation_execution_risk:
+    enabled: true
+    index: literature/strategy-evaluation/_index.md
+    source_dir: literature/strategy-evaluation/empirical-audits
+    seed_terms:
+      - transaction cost aware trading strategy evaluation
+      - slippage capacity turnover market impact backtest
+      - paper trading live trading reconciliation
+      - evidence audit reproducible quantitative trading
+      - funding cost perpetual futures backtest
+    adaptive_terms: []
+    exclusions:
+      - execution models without empirical validation
+
+  quant_research_agents:
+    enabled: true
+    index: literature/_index.md
+    source_dir: literature/ai-methods
+    seed_terms:
+      - LLM quantitative research agent evaluation
+      - automated alpha research audit provenance
+      - agentic backtesting benchmark temporal leakage
+      - hypothesis generation trading multiple testing
+      - conversational history strategy ideation bias
+    adaptive_terms: []
+    exclusions:
+      - generic LLM finance sentiment papers
+      - autonomous trading claims without audit artifacts

@@ -29,7 +29,7 @@ completed Hyperliquid/Freqtrade experiment.
 - `../hmm-slope-experiment/research/data/` and `../hmm-slope-experiment/research/.venv/` — shared market data and Freqtrade environment.
 - `../../evaluation-framework/evaluation/` — reusable evaluation package.
 - `../../wiki/` — shared H3L knowledge base; reusable methodology lives in `concepts/`.
-- `../../quant-research-agent/` — paper-search workflow and source dives.
+- `../../quant-research-agent/` — paper-search automation; indexed sources and notes live in `../../literature/`.
 
 **Project state:** Read `README.md`, `LEARNINGS.md`, and `../hmm-slope-experiment/EXPERIMENT.md`. Do not duplicate status here.
 

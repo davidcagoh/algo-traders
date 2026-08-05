@@ -13,6 +13,7 @@ Mutable. Active cross-project questions and next steps only.
 - Write a generic cross-cycle validation protocol after a second project completes the gate.
 - Revisit DSR as a binding gate only after a strategy has more than roughly 200 observations with bounded kurtosis, or after PBO/CSCV is compared directly.
 - Run the first bounded-grammar Pareto sweep only when a project has enough independent trades per fold for meaningful purged cross-validation.
+- Review the first multi-thread literature-search pull request before accepting its source characterizations or adaptive keyword proposals.
 
 ## Open Questions
 

@@ -55,7 +55,7 @@ With `decisions/006`:
 - Cost: one extra backtest run on HSI.
 - Outcome: SGX hedged correctly parked. Methodology learned the lesson at zero monetary cost.
 
-The Davies quote in `wiki/learnings.md` is operative here: *"quant funds survive in the long term because of fundamentally non-quantitative attributes of their managers; it is a very rare person indeed [who] combines the common sense to turn the model off when it is breaking down."* The cross-cycle gate is the mechanical version of common sense — it turns off the model *before* it breaks live.
+The Davies quote in `wiki/learnings-archive.md` is operative here: *"quant funds survive in the long term because of fundamentally non-quantitative attributes of their managers; it is a very rare person indeed [who] combines the common sense to turn the model off when it is breaking down."* The cross-cycle gate is the mechanical version of common sense — it turns off the model *before* it breaks live.
 
 ## What's now confirmed
 
@@ -84,5 +84,5 @@ The Davies quote in `wiki/learnings.md` is operative here: *"quant funds survive
 
 - Pre-reg gate: [`../decisions/006-cross-cycle-stress-test.md`](../decisions/006-cross-cycle-stress-test.md)
 - Prior SGX held-out result: [`2026-05-20-hedged-mechanism-heldout-BINDING.md`](2026-05-20-hedged-mechanism-heldout-BINDING.md)
-- Strategy: [`../../tracks/sgx_idx_trend_vol/strategy.py`](../../tracks/sgx_idx_trend_vol/strategy.py)
-- Universe (HSI added): [`../../tracks/sgx_idx_trend_vol/universe.py`](../../tracks/sgx_idx_trend_vol/universe.py)
+- Strategy: parked equity source (removed during cleanup)
+- Universe (HSI added): parked equity source (removed during cleanup)

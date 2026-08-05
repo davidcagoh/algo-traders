@@ -14,7 +14,7 @@ The mechanism is ported; the parameters are re-tuned on SGX+IDX data. This is a 
 
 - **SGX:** STI 30 constituents + ~50 most-liquid mid-caps by ADV.
 - **IDX:** LQ45 constituents.
-- **Data source:** yfinance daily OHLC. Cached parquet under `tracks/sgx_idx_trend_vol/data/`.
+- **Data source:** yfinance daily OHLC. Cached parquet under parked equity source (removed during cleanup).
 - **Currency:** local (SGD for SGX, IDR for IDX). Per-market returns; no FX overlay in v1.
 - **Calendar:** per-market trading days. No cross-market alignment in v1.
 

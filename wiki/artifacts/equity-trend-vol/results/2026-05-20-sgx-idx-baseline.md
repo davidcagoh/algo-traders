@@ -77,6 +77,6 @@ Pre-register the CPCV protocol (`decisions/003-cpcv-protocol.md`) before running
 ## Files
 
 - Raw wallet curves: not yet persisted (smoke-test script only). Persist in `tune.py` runs.
-- Strategy code: `../../tracks/sgx_idx_trend_vol/strategy.py`
-- Backtest harness: `../../tracks/sgx_idx_trend_vol/backtest.py`
+- Strategy code: parked equity source (removed during cleanup)
+- Backtest harness: parked equity source (removed during cleanup)
 - Eval stack: `../../eval/`

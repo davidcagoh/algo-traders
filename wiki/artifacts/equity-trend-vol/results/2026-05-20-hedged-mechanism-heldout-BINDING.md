@@ -62,7 +62,7 @@ IDX hedged on held-out: CAGR +0.24%, Sharpe 0.07, MDD 14.5%. The hedge cut drawd
 
 Per pre-reg, **SGX hedged graduates to:**
 
-1. **Pre-registration of kill criteria** (`decisions/005-kill-track-a-hedged.md`) before any further use. Pattern from `../../backtesting/wiki/decisions/004-kill-criteria-sma-regime-180.md` is portable: hard MDD threshold (e.g. 1.5× held-out MDD = 16%), continuous-shrinkage size factor on hedge SMA distance, six-straight-stops kill, rolling-365d-return floor.
+1. **Pre-registration of kill criteria** (`decisions/005-kill-track-a-hedged.md`) before any further use. Pattern from `../../freqtrade-experiment/research/analysis/reports/2026-05-10-decision-004-kill-criteria-sma-regime-180.md` is portable: hard MDD threshold (e.g. 1.5× held-out MDD = 16%), continuous-shrinkage size factor on hedge SMA distance, six-straight-stops kill, rolling-365d-return floor.
 2. **Paper-trade eligibility** — once the kill rule is written and a 30d daily-signal log validates the live wiring.
 3. **A v2 experiment** that asks the *honest* question: does the hedge add value over the unhedged mechanism *across* regimes? This needs a second held-out window containing a bear regime, or a synthetic stress test on cross-cycle equity venues (e.g. KOSPI 2018–2020, FTSE 100 2015–2016).
 
@@ -79,4 +79,4 @@ It does **not** license:
 
 - Gate: [`../decisions/004-track-a-hedged-mechanism.md`](../decisions/004-track-a-hedged-mechanism.md)
 - Tuning result: [`2026-05-20-hedged-mechanism-tuning.md`](2026-05-20-hedged-mechanism-tuning.md)
-- Strategy: [`../../tracks/sgx_idx_trend_vol/strategy.py`](../../tracks/sgx_idx_trend_vol/strategy.py)
+- Strategy: parked equity source (removed during cleanup)

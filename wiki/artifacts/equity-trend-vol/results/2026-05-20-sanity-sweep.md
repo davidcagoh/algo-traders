@@ -70,5 +70,5 @@ The v1 gate stands as written for the v1 mechanism. A v2 gate must be pre-regist
 
 ## Files
 
-- Strategy + backtest: `../../tracks/sgx_idx_trend_vol/`
+- Strategy + backtest: parked equity source (removed during cleanup)
 - Sanity sweep was an inline script; not persisted. If we proceed to CPCV, persist all runs.

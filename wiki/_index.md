@@ -1,41 +1,62 @@
-# Algo Traders — Meta Wiki
+# Algo Traders Wiki
 
-Cross-cutting workspace for the algorithmic-trading subprojects in this repo.
+Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
-**Last updated:** 2026-06-01 (repo consolidation session)
+> **Now:** The Freqtrade paper run is stopped, evaluated, and parked; no trading experiment is active.
+> **Queue:** Decide whether a new strategy merits a pre-registered experiment.
 
-## Subprojects
+---
 
-| Path | Domain | Wiki |
-|------|--------|------|
-| `backtesting/` | Hyperliquid BTC/USDC perps via Freqtrade | [`backtesting/wiki/_index.md`](../backtesting/wiki/_index.md) |
-| `live/` | Hyperliquid 30d dry-run + cross-venue equity | [`wiki/live/_index.md`](live/_index.md) |
-| `feishu/` | Chinese A-share quant competition | gitignored — own repo |
+## Routing Table
 
-`backtesting/` and `live/` are tracked in this repo (merged 2026-06-01). The prior separate GitHub repos (`davidcagoh/backtesting`, `davidcagoh/algo-traders-live`) have been deleted. `feishu/` remains in its own repo — different market, different competition context.
+| If you need to… | Read |
+|---|---|
+| Know what is actionable or unresolved | [`open-threads.md`](open-threads.md) |
+| Understand the latest workspace changes | [`session-log.md`](session-log.md) |
+| Find confirmed findings or ruled-out directions | [`learnings-archive.md`](learnings-archive.md) (grep) |
+| Find a committed cross-project decision | [`decisions-archive.md`](decisions-archive.md) (grep) |
+| Read reusable methodology or reference material | [`concepts/`](concepts/) |
+| Inspect retained historical evidence | [`artifacts/`](artifacts/) |
 
-## Promotion rule
+## File Inventory
 
-A learning lives at root **only if it applies to both subprojects** (e.g., overfitting at scale, multi-objective design, deflation rules). Subproject-specific facts (Hyperliquid 5000-candle cap, Feishu vwap_0930_0935 execution) stay in the subproject wikis.
+### Hot state
 
-## Contents
+- [`open-threads.md`](open-threads.md)
+- [`session-log.md`](session-log.md)
+- [`learnings-archive.md`](learnings-archive.md)
+- [`decisions-archive.md`](decisions-archive.md)
 
-- [PATTERN.md](../PATTERN.md) — original cross-project pattern observations (May 2026)
-- [learnings.md](learnings.md) — confirmed cross-cutting facts, open questions, data-sourcing defaults
-- Articles ([`../articles/`](../articles/)):
-  - [`the-ranking-was-the-bug.md`](../articles/the-ranking-was-the-bug.md) — narrative: five-strategy ranking, Pareto frontier, DSR humility
-  - [`principled-evaluation-worked-example.md`](../articles/principled-evaluation-worked-example.md) — technical companion: layered evaluation stack (L1–L6), candidate book {T3, R∧T2}
-- `../website-brief.md` — adapted-paper brief for the public site (essay + repo, not paper-shaped)
-- Formal artifacts (root):
-  - [`../paper/`](../paper/) — arXiv preprint, 14 pages single-column LaTeX; six-layer evaluation stack + portfolio-aware K1 as load-bearing contributions. Build: `cd paper && make`.
-  - [`../essays/principled-strategy-evaluation-at-laptop-scale.md`](../essays/principled-strategy-evaluation-at-laptop-scale.md) — long-form practitioner essay, ~5000 words, five principles for laptop-scale strategy evaluation.
-- `methodology/`
-  - [multi-objective-search.md](methodology/multi-objective-search.md) — design draft for Pareto-front sweep over a bounded primitive grammar
-  - [cv-and-deflation.md](methodology/cv-and-deflation.md) — CPCV protocol, DSR/PBO gates, pre-registration template
-  - [kill-criteria.md](methodology/kill-criteria.md) — pre-registered retirement rules: four canonical axes, family-specific axis, Davies–Ravagnani continuous shrinkage, calibration discipline
-  - [data-sourcing.md](methodology/data-sourcing.md) — default order: subproject downloader → ccxt → direct API → S3 → yfinance → scrapers
-- `references/`
-  - [divergence_portfolio_theory.md](references/divergence_portfolio_theory.md) — α-portfolio framing that motivates multi-objective search
-- `ideas/` — parked ideas not yet attached to an experiment
-  - [random-projection-stability.md](ideas/random-projection-stability.md) — sliced/projection-based stability tests for regime robustness; pull off shelf when the first Pareto front exists
-- `../literature/` — shared paper library (PDFs)
+### Concepts
+
+- [`concepts/correlation-and-mdb.md`](concepts/correlation-and-mdb.md)
+- [`concepts/cv-and-deflation.md`](concepts/cv-and-deflation.md)
+- [`concepts/data-sourcing.md`](concepts/data-sourcing.md)
+- [`concepts/divergence_portfolio_theory.md`](concepts/divergence_portfolio_theory.md)
+- [`concepts/kill-criteria.md`](concepts/kill-criteria.md)
+- [`concepts/live-execution.md`](concepts/live-execution.md)
+- [`concepts/multi-objective-search.md`](concepts/multi-objective-search.md)
+- [`concepts/random-projection-stability.md`](concepts/random-projection-stability.md)
+- [`concepts/strategy-archetypes.md`](concepts/strategy-archetypes.md)
+
+### Artifacts
+
+- [`artifacts/equity-trend-vol/README.md`](artifacts/equity-trend-vol/README.md)
+- [`artifacts/equity-trend-vol/decisions/001-track-a-gate.md`](artifacts/equity-trend-vol/decisions/001-track-a-gate.md)
+- [`artifacts/equity-trend-vol/decisions/004-track-a-hedged-mechanism.md`](artifacts/equity-trend-vol/decisions/004-track-a-hedged-mechanism.md)
+- [`artifacts/equity-trend-vol/decisions/006-cross-cycle-stress-test.md`](artifacts/equity-trend-vol/decisions/006-cross-cycle-stress-test.md)
+- [`artifacts/equity-trend-vol/results/2026-05-20-cross-cycle-hsi-BINDING.md`](artifacts/equity-trend-vol/results/2026-05-20-cross-cycle-hsi-BINDING.md)
+- [`artifacts/equity-trend-vol/results/2026-05-20-hedged-mechanism-heldout-BINDING.md`](artifacts/equity-trend-vol/results/2026-05-20-hedged-mechanism-heldout-BINDING.md)
+- [`artifacts/equity-trend-vol/results/2026-05-20-hedged-mechanism-tuning.md`](artifacts/equity-trend-vol/results/2026-05-20-hedged-mechanism-tuning.md)
+- [`artifacts/equity-trend-vol/results/2026-05-20-sanity-sweep.md`](artifacts/equity-trend-vol/results/2026-05-20-sanity-sweep.md)
+- [`artifacts/equity-trend-vol/results/2026-05-20-sgx-idx-baseline.md`](artifacts/equity-trend-vol/results/2026-05-20-sgx-idx-baseline.md)
+
+## Related Stores
+
+- [`../freqtrade-experiment/`](../freqtrade-experiment/) — completed crypto experiment and evidence.
+- [`../evaluation/`](../evaluation/) — reusable evaluation code.
+- [`../literature/`](../literature/) — primary sources.
+- [`../quant-research-agent/`](../quant-research-agent/) — reusable research loop and source dives.
+- [`../publications/`](../publications/) — public outputs grouped by intellectual project.
+
+Promotion rule: only reusable conclusions belong here. Experiment-specific facts remain with their experiment and are linked as evidence.

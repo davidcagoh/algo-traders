@@ -27,7 +27,7 @@ A strategy that is **Pareto-non-dominated across multiple negatively-correlated 
 | Regime | HMM state, SMA-regime, vol-regime | n_states, lookback |
 | Flow | OI imbalance, liquidation cascade, taker imbalance | window, threshold |
 
-Strategies are compositions: `(regime_filter) AND (entry_signal) → (exit_rule)`. ~6 families × 2–3 hyperparams each → ~10³ configs, not 10⁶. Auditable, finite, covers the archetypes from `backtesting/wiki/reference/strategy-archetypes.md`.
+Strategies are compositions: `(regime_filter) AND (entry_signal) → (exit_rule)`. ~6 families × 2–3 hyperparams each → ~10³ configs, not 10⁶. Auditable, finite, covers the archetypes from `wiki/concepts/strategy-archetypes.md`.
 
 ### 2. Pareto objectives that are negatively correlated under noise
 
@@ -74,7 +74,7 @@ Once 1–4 are settled, the search algorithm matters less than people think:
 
 ## Data preconditions (must clear before running)
 
-Documented separately in `learnings.md` and `backtesting/wiki/learnings.md`:
+Documented separately in `learnings.md` and `freqtrade-experiment/research/analysis/reports/learnings.md`:
 
 - ≥250–500 independent trades per CV fold (multi-asset multiplies sample; correlation deflates effective N)
 - Each fold spans at least one bull and one bear sub-window

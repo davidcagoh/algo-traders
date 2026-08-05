@@ -59,6 +59,6 @@ For IDX hedged: the tuning gate failed; per the pre-reg, IDX hedged does *not* g
 ## Files
 
 - Pre-reg gate: [`../decisions/004-track-a-hedged-mechanism.md`](../decisions/004-track-a-hedged-mechanism.md)
-- Strategy code: [`../../tracks/sgx_idx_trend_vol/strategy.py`](../../tracks/sgx_idx_trend_vol/strategy.py) (added `hedged_weights`)
+- Strategy code: parked equity source (removed during cleanup) (added `hedged_weights`)
 - Prior baseline: [`2026-05-20-sgx-idx-baseline.md`](2026-05-20-sgx-idx-baseline.md)
 - Prior sanity sweep: [`2026-05-20-sanity-sweep.md`](2026-05-20-sanity-sweep.md)

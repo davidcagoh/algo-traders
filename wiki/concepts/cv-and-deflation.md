@@ -8,7 +8,7 @@ How to validate strategy results once you're running more than one configuration
 
 ## Why this matters
 
-If you try N strategy configurations and pick the winner by max-Sharpe, the expected max Sharpe under the null (no real edge) grows with √log(N). At N=100 random configs on 32 trades, you can expect a "winner" with Sharpe ~1.5 that has zero true edge. This is the structural source of the backtest-to-live deterioration documented in Liu 2026 (`backtesting/wiki/papers/backtest-regime-timing-live-performance-2026.md`).
+If you try N strategy configurations and pick the winner by max-Sharpe, the expected max Sharpe under the null (no real edge) grows with √log(N). At N=100 random configs on 32 trades, you can expect a "winner" with Sharpe ~1.5 that has zero true edge. This is the structural source of the backtest-to-live deterioration documented in Liu 2026 (`../../quant-research-agent/source-dives/backtest-regime-timing-live-performance-2026.md`).
 
 The fix is two-part: **proper cross-validation** (so each tested config gets honest OOS scores) + **deflation** (so the act of testing many configs is accounted for in the final claim).
 

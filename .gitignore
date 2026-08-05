@@ -5,8 +5,8 @@ feishu-competition/
 # Local agent scheduler state
 .claude/scheduled_tasks.lock
 
-# Research, execution, monitoring, and evaluation are tracked here as one
-# experiment (consolidated 2026-06-01).
+# The HMM/slope and mean-variance projects are tracked as siblings in the
+# Freqtrade experiment collection (consolidated 2026-08-05).
 # Their prior git histories are archived at:
 #   https://github.com/davidcagoh/backtesting (archived)
 #   https://github.com/davidcagoh/algo-traders-live (archived)
@@ -31,12 +31,14 @@ venv/
 *.sqlite-wal
 
 # Execution secrets and runtime artefacts
-freqtrade-experiment/execution/ops/.env
-freqtrade-experiment/execution/config.private.json
-freqtrade-experiment/execution/.env.infra
-freqtrade-experiment/execution/dryrun/*.log
-freqtrade-experiment/execution/logs/
-freqtrade-experiment/execution/user_data/logs/
-freqtrade-experiment/execution/tradesv3.sqlite*
-freqtrade-experiment/execution/data/
+freqtrade-experiment/hmm-slope-experiment/execution/ops/.env
+freqtrade-experiment/hmm-slope-experiment/execution/config.private.json
+freqtrade-experiment/hmm-slope-experiment/execution/.env.infra
+freqtrade-experiment/hmm-slope-experiment/execution/dryrun/*.log
+freqtrade-experiment/hmm-slope-experiment/execution/logs/
+freqtrade-experiment/hmm-slope-experiment/execution/user_data/logs/
+freqtrade-experiment/hmm-slope-experiment/execution/tradesv3.sqlite*
+freqtrade-experiment/hmm-slope-experiment/execution/data/
 freqtrade-experiment/mean-variance-paper/state/
+
+.env

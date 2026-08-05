@@ -3,7 +3,7 @@
 Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
 > **Now:** Consolidation is complete; concurrent signed-MV and PC-neutral research was preserved, with no confirmed active paper deployment.
-> **Queue:** Cross-cycle validate signed MV or park it before opening another pre-registered run.
+> **Queue:** Choose the evaluation framework's primary deliverable; separately, cross-cycle validate signed MV or park it before another paper run.
 
 ---
 
@@ -54,9 +54,8 @@ Shared knowledge distilled from trading experiments; concrete results remain wit
 ## Related Stores
 
 - [`../freqtrade-experiment/`](../freqtrade-experiment/) — completed crypto experiment and evidence.
-- [`../evaluation/`](../evaluation/) — reusable evaluation code.
+- [`../evaluation-framework/`](../evaluation-framework/) — reusable evaluation code and its evolving manuscript/essays.
 - [`../literature/`](../literature/) — primary sources.
 - [`../quant-research-agent/`](../quant-research-agent/) — reusable research loop and source dives.
-- [`../publications/`](../publications/) — public outputs grouped by intellectual project.
 
 Promotion rule: only reusable conclusions belong here. Experiment-specific facts remain with their experiment and are linked as evidence.

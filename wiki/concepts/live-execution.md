@@ -26,4 +26,4 @@ API username, and pointers to credentials without committing secrets.
 ## Source evidence
 
 The concrete gate and dated records live in
-`freqtrade-experiment/execution/records/`.
+`freqtrade-experiment/hmm-slope-experiment/execution/records/`.

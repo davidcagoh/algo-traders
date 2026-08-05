@@ -31,17 +31,17 @@ Every new strategy that graduates from research to evaluation gets a kill-criter
 
 Lift this as a cross-project methodology rule:
 
-- **Freqtrade experiment:** decision docs live at `freqtrade-experiment/research/analysis/reports/YYYY-MM-DD-decision-00N-kill-criteria-<strategy>.md`.
+- **Freqtrade experiment:** decision docs live at `freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/YYYY-MM-DD-decision-00N-kill-criteria-<strategy>.md`.
 - **Feishu competition:** decision docs live with that project's dated reports under `feishu-competition/analysis/reports/`.
 - **Naming:** the strategy name in the filename must match the strategy file in code exactly.
 - **Timing:** the doc is committed before any backtest result that would inform threshold-setting is logged. This is the only way to keep thresholds from being silently moved after seeing the result.
 
 Worked examples (backtesting subproject):
 
-- [`004-kill-criteria-sma-regime-180.md`](../../freqtrade-experiment/research/analysis/reports/2026-05-10-decision-004-kill-criteria-sma-regime-180.md) — T3 (SmaRegime180), the template for the four canonical axes plus continuous shrinkage.
-- [`006-kill-criteria-pairs.md`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-006-kill-criteria-pairs.md) — pairs / cointegration-conditional family.
-- [`007-kill-criteria-cross-sectional.md`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-007-kill-criteria-cross-sectional.md) — cross-sectional momentum.
-- [`008-kill-criteria-funding-mr.md`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-008-kill-criteria-funding-mr.md) — funding-rate mean-reversion.
+- [`004-kill-criteria-sma-regime-180.md`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-10-decision-004-kill-criteria-sma-regime-180.md) — T3 (SmaRegime180), the template for the four canonical axes plus continuous shrinkage.
+- [`006-kill-criteria-pairs.md`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-006-kill-criteria-pairs.md) — pairs / cointegration-conditional family.
+- [`007-kill-criteria-cross-sectional.md`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-007-kill-criteria-cross-sectional.md) — cross-sectional momentum.
+- [`008-kill-criteria-funding-mr.md`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-008-kill-criteria-funding-mr.md) — funding-rate mean-reversion.
 
 ---
 
@@ -80,7 +80,7 @@ The four canonical axes are necessary but not sufficient. Every strategy family 
 
 The principle: **for any strategy whose premise depends on a measurable structural property of the market** (cointegration, dispersion, OU half-life, funding sign, regime persistence), the kill rule monitors that property directly. The four canonical axes catch the equity-curve consequences; the family axis catches the mechanism breaking.
 
-Worked examples in the backtesting subproject ([`006`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-006-kill-criteria-pairs.md), [`007`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-007-kill-criteria-cross-sectional.md), [`008`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-008-kill-criteria-funding-mr.md)). The same template applies to feishu: an A-share pairs strategy would still monitor cointegration p-value; an A-share factor-rotation strategy would still monitor factor-return dispersion.
+Worked examples in the backtesting subproject ([`006`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-006-kill-criteria-pairs.md), [`007`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-007-kill-criteria-cross-sectional.md), [`008`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-008-kill-criteria-funding-mr.md)). The same template applies to feishu: an A-share pairs strategy would still monitor cointegration p-value; an A-share factor-rotation strategy would still monitor factor-return dispersion.
 
 ---
 
@@ -102,7 +102,7 @@ size_factor ∈ [0, 1]
 realised_size = base_capital × size_factor
 ```
 
-Worked example from T3 ([`004-kill-criteria-sma-regime-180.md`](../../freqtrade-experiment/research/analysis/reports/2026-05-10-decision-004-kill-criteria-sma-regime-180.md)):
+Worked example from T3 ([`004-kill-criteria-sma-regime-180.md`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-10-decision-004-kill-criteria-sma-regime-180.md)):
 
 ```
 size_multiplier = min(1.0,
@@ -161,7 +161,7 @@ A threshold breach **triggers a review, not an automatic kill**, when *any* of:
 
 1. **Within 1σ of the threshold.** A breach by 0.1pp on a metric whose monthly noise is 0.3pp is not a structural break; it is sampling variance. The review re-evaluates with one more window of data before acting.
 2. **Single-event breach.** One catastrophic day vs sustained underperformance. The review identifies whether the day was a tail event (slippage spike, exchange outage, untracked news) or the start of a regime change.
-3. **Portfolio-justified.** The strategy is breaching its standalone threshold but the portfolio combining it with other live strategies still has positive marginal contribution under all weighting schemes (MDB > 0 robust). The cross-reference is the upcoming `freqtrade-experiment/research/analysis/reports/2026-05-16-decision-009-portfolio-aware-k1.md` (being written in parallel) as the worked example.
+3. **Portfolio-justified.** The strategy is breaching its standalone threshold but the portfolio combining it with other live strategies still has positive marginal contribution under all weighting schemes (MDB > 0 robust). The cross-reference is the upcoming `freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-009-portfolio-aware-k1.md` (being written in parallel) as the worked example.
 
 All three are **review triggers**, not auto-overrides. The review's output is one of:
 
@@ -215,4 +215,4 @@ The cadence is **quarterly** because shorter windows are noise-dominated at typi
 - `learnings.md` "Six-layer evaluation stack" entry (2026-05-16) — L1–L6 layered evaluation. Kill criteria operate at L1–L3 (hard thresholds) and L6 (portfolio-additive review), with L4–L5 informing calibration of the underlying metrics.
 - [`methodology/cv-and-deflation.md`](cv-and-deflation.md) — pre-registration discipline applied to sweep gating; same anti-tinker principle.
 - [`methodology/multi-objective-search.md`](multi-objective-search.md) — Pareto-front frame; kill criteria are how a Pareto-frontier strategy gets demoted off the frontier.
-- Backtesting decision docs [`004`](../../freqtrade-experiment/research/analysis/reports/2026-05-10-decision-004-kill-criteria-sma-regime-180.md), [`006`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-006-kill-criteria-pairs.md), [`007`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-007-kill-criteria-cross-sectional.md), [`008`](../../freqtrade-experiment/research/analysis/reports/2026-05-16-decision-008-kill-criteria-funding-mr.md) — concrete worked examples of the four canonical axes + family axis + continuous shrinkage.
+- Backtesting decision docs [`004`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-10-decision-004-kill-criteria-sma-regime-180.md), [`006`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-006-kill-criteria-pairs.md), [`007`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-007-kill-criteria-cross-sectional.md), [`008`](../../freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-05-16-decision-008-kill-criteria-funding-mr.md) — concrete worked examples of the four canonical axes + family axis + continuous shrinkage.

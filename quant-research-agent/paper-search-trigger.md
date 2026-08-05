@@ -1,13 +1,13 @@
 # Paper Search Trigger — Master Config
 
-**Trigger ID:** `trig_013s3hXkiYrSnYh2Qes1KPws`
-**Schedule:** Sundays 4 AM ET (cron: `0 8 * * 0` UTC — review twice a year for DST drift, or pin to `America/New_York` if the trigger supports named timezones)
-**Last updated:** 2026-04-24
-**Status:** enabled
+**Former trigger ID:** `trig_013s3hXkiYrSnYh2Qes1KPws` (retired Claude remote trigger)
+**Schedule:** Sundays 4 AM America/Toronto
+**Workflow:** `.github/workflows/paper-search.yml`
+**Last updated:** 2026-08-05
+**Status:** enabled; `OPENAI_API_KEY` repository secret configured 2026-08-05
 
-> This file is the master copy. When updating the trigger prompt, edit this file first,
-> then apply the same text to the remote trigger via `RemoteTrigger(action="update", ...)`.
-> Never edit the remote trigger directly without updating this file to match.
+> This file is the master prompt. The GitHub Action reads it at runtime; do not
+> duplicate the full prompt in the workflow.
 
 ---
 
@@ -93,9 +93,14 @@ Use kebab-case filenames, e.g. `quant-research-agent/source-dives/funding-rate-c
 - Update `wiki/open-threads.md` when a paper advances, closes, or raises an actionable question.
 - Append a confirmed or ruled-out finding to `wiki/learnings-archive.md` when evidence warrants it; include the mechanism and source-dive path.
 
-## Step 6 — Commit and push
-Stage all changes and commit with message: `chore: weekly paper search YYYY-MM-DD`
-Then push to origin main.
+## Step 6 — Open a reviewable pull request
+The GitHub workflow creates or updates
+`research/weekly-paper-search-YYYY-MM-DD`, stages only the documented knowledge
+paths, and commits with message `chore: weekly paper search YYYY-MM-DD`.
+
+Push that branch and open one pull request targeting `main`. Never push generated
+research directly to `main`. If a pull request for the same dated branch already
+exists, update that branch rather than opening a duplicate.
 
 If you find no new relevant papers, add a short dated entry to `wiki/session-log.md` noting what you searched and why nothing was added. Still commit and push — the log is useful signal.
 ```
@@ -106,5 +111,6 @@ If you find no new relevant papers, add a short dated entry to `wiki/session-log
 
 | Date | Change | Who |
 |------|--------|-----|
+| 2026-08-05 | Replaced retired remote trigger with scheduled/manual OpenAI Codex Action and PR review gate | Codex |
 | 2026-08-05 | Updated paths and write targets for the H3L wiki structure | Codex |
 | 2026-04-24 | Initial creation — ported structure from feishu repo, adapted topics to crypto/Hyperliquid | Claude |

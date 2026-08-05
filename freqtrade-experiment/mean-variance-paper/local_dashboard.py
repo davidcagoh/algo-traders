@@ -6,7 +6,7 @@ The bot never places exchange orders. It pulls Hyperliquid market data, maintain
 paper perp positions, applies taker fees and funding, and exposes a dashboard.
 
 Run from the repository root:
-  freqtrade-experiment/research/.venv/bin/python \
+  freqtrade-experiment/hmm-slope-experiment/research/.venv/bin/python \
     freqtrade-experiment/mean-variance-paper/local_dashboard.py
 """
 from __future__ import annotations
@@ -30,14 +30,14 @@ import pandas as pd
 import requests
 
 EXPERIMENT = Path(__file__).resolve().parents[1]
-RESEARCH = EXPERIMENT / "research"
-sys.path.insert(0, str(RESEARCH / "analysis"))
+RESEARCH = EXPERIMENT / "hmm-slope-experiment" / "research"
+sys.path.insert(0, str(EXPERIMENT / "mean-variance-paper" / "analysis"))
 
 from run_portfolio_baselines import load_universe
 from run_portfolio_short_funding import target_weights
 
 
-UNIVERSE_JSON = RESEARCH / "analysis" / "reports" / "universe_selection_hl_1h_current.json"
+UNIVERSE_JSON = EXPERIMENT / "mean-variance-paper" / "analysis" / "results" / "universe_selection_hl_1h_current.json"
 FUNDING_DIR = RESEARCH / "data" / "hyperliquid" / "funding"
 STATE_DIR = Path(__file__).resolve().parent / "state"
 STATE_PATH = STATE_DIR / "signed_mv_state.json"

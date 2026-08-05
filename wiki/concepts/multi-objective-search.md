@@ -74,7 +74,7 @@ Once 1–4 are settled, the search algorithm matters less than people think:
 
 ## Data preconditions (must clear before running)
 
-Documented separately in `learnings.md` and `freqtrade-experiment/research/analysis/reports/learnings.md`:
+Documented separately in `learnings.md` and `freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/learnings.md`:
 
 - ≥250–500 independent trades per CV fold (multi-asset multiplies sample; correlation deflates effective N)
 - Each fold spans at least one bull and one bear sub-window

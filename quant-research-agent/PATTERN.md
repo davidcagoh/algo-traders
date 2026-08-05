@@ -1,9 +1,14 @@
 # Autonomous Quant Research Loop — Pattern Notes
 
-Observed across two independent projects (`feishu-competition/`, `freqtrade-experiment/research/`) using research agents
-and scheduled tasks. Both were quant trading tasks. Both converged on the same structural
-pattern without being designed together, and both independently discovered the same failure
-modes and solutions. Written May 2026.
+Observed across two independent projects (`feishu-competition/` and the project
+now at `freqtrade-experiment/hmm-slope-experiment/`) using research agents and
+scheduled tasks. Both were quant-trading tasks and converged on the same
+structural pattern without being designed together.
+
+The project details below are historical May 2026 snapshots, not claims about
+current deployment state. The current reusable implementation is the root H3L
+`wiki/`, this `quant-research-agent/`, and
+`.github/workflows/paper-search.yml`.
 
 ---
 
@@ -25,7 +30,7 @@ May 28 2026, submission deadline June 1 2026). Score formula:
 - Ran parameter sweeps (N, threshold, window, weighting) and documented all results
 - Wrote result cards, updated the leaderboard, flagged ruled-out directions
 
-**Current best (IS):** `trend_vol_v4` — Score=0.4024, CAGR=11.75%, SR=1.207, MDD=7.98%.
+**May 2026 IS snapshot:** `trend_vol_v4` — Score=0.4024, CAGR=11.75%, SR=1.207, MDD=7.98%.
 Primary signal: 60d min-vol selection + 35d trend filter (negative screen) + ERC weights (1/σᵢ).
 OOS contingency: `trend_vol_v5` — regime-adaptive wrapper (N=30, threshold=0.00 on detected
 bull days; v4 defaults otherwise). Score=0.4026.
@@ -42,11 +47,13 @@ bull days; v4 defaults otherwise). Score=0.4026.
   +1.1% Score, MDD 11%→8%) are the two substantive improvements above the baseline.
 - IS parameter space is now exhausted. Further tuning is overfitting risk.
 
-**Weekly paper-search agent:** `trig_0172Cps6UTTyFq5uSKY3e5UP` (Wednesdays 5pm ET).
+**Historical automation:** remote trigger `trig_0172Cps6UTTyFq5uSKY3e5UP`.
+Its current status belongs to the separate nested Feishu repository and is not
+asserted here.
 
 ---
 
-### freqtrade-experiment/research/ — Hyperliquid crypto perps
+### freqtrade-experiment/hmm-slope-experiment/ — Hyperliquid crypto perps
 
 **Task:** Build and validate crypto trading strategies on Hyperliquid BTC perpetuals using
 Freqtrade as the backtesting engine. Targeting personal crypto holdings; revived April 2026.
@@ -61,8 +68,14 @@ Freqtrade as the backtesting engine. Targeting personal crypto holdings; revived
   per-trade to all 32 SmaRegime180 trades
 - Discovered and documented the fee config bug (see below)
 
-**Current best:** `SmaRegime180` — 4h SMA180 + slope gate. Post-all-costs: +5.18% return,
-est. Calmar ~7.2, SQN 1.02, 32 trades, MDD 1.74%, win rate 21.9%.
+**Research progression:** `SmaRegime180` established the low-risk/slope-gate
+pattern. The final deployed candidate was `HmmSmaSlopeV2`, combining a causal
+HMM regime filter with continuous SMA-slope sizing.
+
+**Final state (2026-08-05):** the paper run is stopped and parked. Across the
+extended run, 21 trades closed for -3.54%, with a 4.8% win rate and an
+eleven-loss streak. It did not graduate to live capital. See
+[`../freqtrade-experiment/hmm-slope-experiment/EXPERIMENT.md`](../freqtrade-experiment/hmm-slope-experiment/EXPERIMENT.md).
 
 **Key discoveries:**
 - Freqtrade silently ignores the `"fee"` key in `config.json`'s exchange block. The backtester
@@ -77,7 +90,11 @@ est. Calmar ~7.2, SQN 1.02, 32 trades, MDD 1.74%, win rate 21.9%.
 - `SmaRegime720` (30-day SMA + slope gate, 1h) → Calmar 28.96, but N=6 — statistically
   meaningless. SmaRegime180 (30-day equivalent on 4h) with N=32 is the real data point.
 
-**Weekly paper-search agent:** `trig_013s3hXkiYrSnYh2Qes1KPws` (Sundays 4am ET).
+**Current automation:** the retired remote trigger
+`trig_013s3hXkiYrSnYh2Qes1KPws` has been replaced by the scheduled/manual
+OpenAI Codex workflow at [`.github/workflows/paper-search.yml`](../.github/workflows/paper-search.yml).
+It runs Sundays at 4 AM America/Toronto, requires the `OPENAI_API_KEY` repository
+secret, and opens a pull request rather than writing directly to `main`.
 
 ---
 
@@ -143,7 +160,7 @@ Both projects converged on 2–3 co-primary metrics rather than optimising a sin
 
 ### 6. Regime detection is the shared open problem
 
-As of May 2026:
+As of the May 2026 research snapshot:
 - feishu: OOS D485+ is likely a bull period (Chinese A-share "slow bull" since mid-2025).
   `trend_vol_v5` adds a regime-adaptive layer but the IS bull sample is only 46 days (9.5%).
 - backtesting: `HmmRegime4` (4-state GaussianHMM) just implemented. Win rate of SmaRegime180
@@ -171,9 +188,9 @@ re-exploring variants.
 
 ### Session Start Routine as a forcing function
 
-Both CLAUDE.md files mandate: `git pull → read wiki → run baseline eval → report status`
-before any substantive work. This catches drift (e.g. the paper-search agent pushing new
-content overnight) and ensures the agent's first action is orientation, not assumption.
+Both historical project instruction files mandated: `git pull → read state → run
+baseline eval → report status` before substantive work. The portable lesson is
+the routine, not a particular `CLAUDE.md` filename or directory layout.
 
 ### Leaderboard with co-primary metrics + dated result cards
 
@@ -181,41 +198,53 @@ Leaderboard is a pointer, not a data store. Each row links to a dated result car
 `results/`. The leaderboard stays readable; full detail lives in the card. This separation
 makes it easy to add new strategies without the index bloating.
 
-### Scheduled paper-search agents with curated search scope
+### Scheduled paper search with curated scope and review
 
-Both paper-search agents have explicit "Do NOT search for" sections in their prompts —
-directions that are ruled out or already addressed. This prevents the agent from retreading
-ground and keeps each weekly run genuinely incremental.
+The root paper-search prompt has an explicit "Do NOT search for" section covering
+directions that are ruled out or already addressed. The current GitHub Action
+uses native Codex web search, limits writes to shared knowledge paths, and opens
+a pull request so source quality and claims are reviewed before merge.
 
 ---
 
 ## Reusable skeleton for a new project
 
 ```
-project/
-  CLAUDE.md                    # Session Start Routine + behavioral guidelines
-  wiki/
-    _index.md                  # State dashboard + leaderboard
-    learnings.md               # Confirmed / hypotheses / ruled-out + next priorities
-    strategy-archetypes.md     # Stable synthesized reference
-    kill-criteria.md           # Shared methodology
+workspace/
+  wiki/                        # Cross-project H3L state and durable concepts
+    _index.md
+    open-threads.md
+    session-log.md
+    concepts/
   literature/sources/          # Primary-source PDFs
   quant-research-agent/
-    source-dives/              # Agent-produced thematic paper summaries
-  project/analysis/reports/     # Dated experiment cards and decisions
-  scripts/                     # Data fetching, eval runners
-  signals/ (or strategies/)    # Implemented strategies
-  eval/                        # Backtester / scoring infrastructure
+    paper-search-trigger.md     # Master search prompt
+    source-dives/              # Source-specific syntheses
+  evaluation-framework/
+    evaluation/                # Importable metrics package
+    paper/                     # Evolving manuscript
+  experiments/
+    project-a/
+      EXPERIMENT.md             # Canonical project state
+      research/
+        strategies/
+        scripts/                # Acquisition/setup entrypoints
+        analysis/               # Evaluation drivers
+          reports/              # Dated decisions and evidence
+      execution/
+      monitoring/
+  .github/workflows/
+    paper-search.yml            # Scheduled/manual agent, PR-gated
 ```
 
-**Key CLAUDE.md instructions:**
+**Key project-instruction rules:**
 1. Session Start Routine: git pull → read wiki → run baseline eval → report status
-2. Read the project index and learnings before substantive work; update them
+2. Read the project record and shared open threads before substantive work; update them
    when facts change
 3. Add a result card in the owning experiment's `analysis/reports/` before updating the leaderboard
 4. Update `learnings.md` "Ruled Out" whenever a direction is closed — include the mechanism
 
-**Key learnings.md structure:**
+**Key project-learning structure:**
 - Confirmed Facts (infrastructure, data, scoring discoveries)
 - Open Hypotheses (ordered by how much the answer changes next action)
 - Ruled Out (mechanism required, not just metric)

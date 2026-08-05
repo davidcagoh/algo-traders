@@ -8,7 +8,7 @@ Default order of preference for market data, with the rationale for each. Goal: 
 
 ## Default order
 
-1. **Subproject's existing downloader** — if a subproject already has a verified path (e.g. `freqtrade-experiment/research/scripts/download_hyperliquid.py`), use it. Don't reimplement.
+1. **Subproject's existing downloader** — if a subproject already has a verified path (e.g. `freqtrade-experiment/hmm-slope-experiment/research/scripts/download_hyperliquid.py`), use it. Don't reimplement.
 2. **`ccxt`** — unified Python library wrapping ~100+ exchanges. Free, no auth for public endpoints. Covers OHLCV, funding rates, order book snapshots, public trades. First choice for any new exchange.
 3. **Direct exchange REST API** — when ccxt's wrapper is missing a specific endpoint or imposes overhead you don't want. Binance, Bybit, OKX, Coinbase all publish documented free public APIs.
 4. **Exchange S3 archives** — for bulk historical data that REST APIs cap (e.g., Hyperliquid L2 snapshots at `s3://hyperliquid-archive/market_data/`). Massive; only ingest when a specific hypothesis needs it.
@@ -19,7 +19,7 @@ Default order of preference for market data, with the rationale for each. Goal: 
 
 ### Crypto OHLCV
 
-- Hyperliquid: custom downloader exists (`freqtrade-experiment/research/scripts/download_hyperliquid.py`); 5000-candle hard cap per (pair, timeframe). 4h ≈ 833d, 1h ≈ 208d. See `freqtrade-experiment/research/analysis/reports/2026-04-24-decision-002-hyperliquid-deep-history.md`.
+- Hyperliquid: custom downloader exists (`freqtrade-experiment/hmm-slope-experiment/research/scripts/download_hyperliquid.py`); 5000-candle hard cap per (pair, timeframe). 4h ≈ 833d, 1h ≈ 208d. See `freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/2026-04-24-decision-002-hyperliquid-deep-history.md`.
 - Binance / Bybit / OKX perps: ccxt covers all. Binance BTC perp data goes back to ~2019 — useful for *training* regime models with more cycles, **not** for *evaluating* a Hyperliquid strategy (microstructure differs).
 - Coinbase / Kraken spot: ccxt covers; useful for spot vs perp basis signals.
 
@@ -27,14 +27,14 @@ Default order of preference for market data, with the rationale for each. Goal: 
 
 - Binance: `/fapi/v1/fundingRate` — free, no auth, paginated, years of history.
 - Bybit: `/v5/market/funding/history` — same.
-- Hyperliquid: covered by `freqtrade-experiment/research/scripts/download_hyperliquid.py --funding`; 8-hourly periods, incremental update support.
-- Use case: CEX→DEX funding lead-lag (see `freqtrade-experiment/research/analysis/reports/learnings.md` open #6); funding-aligned HMM covariate (open #9); threshold-gated carry strategy (next experiment #2).
+- Hyperliquid: covered by `freqtrade-experiment/hmm-slope-experiment/research/scripts/download_hyperliquid.py --funding`; 8-hourly periods, incremental update support.
+- Use case: CEX→DEX funding lead-lag (see `freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/learnings.md` open #6); funding-aligned HMM covariate (open #9); threshold-gated carry strategy (next experiment #2).
 
 ### Order book / microstructure
 
 - Hyperliquid: REST `/info l2Book` for live snapshot; S3 archive for historical L2 (large, not yet ingested).
 - Binance: WebSocket depth stream + REST snapshot; `python-binance` or ccxt pro for sustained capture.
-- Use case: SaR slippage proxy (`freqtrade-experiment/research/analysis/reports/learnings.md` open #8); OFI as 1h mean-reversion signal (open #10).
+- Use case: SaR slippage proxy (`freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/learnings.md` open #8); OFI as 1h mean-reversion signal (open #10).
 
 ### Equities / A-shares (feishu)
 

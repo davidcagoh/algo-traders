@@ -1,10 +1,30 @@
-# Signed MV Paper Dashboard for Vercel
+# Signed Mean-Variance Paper Project
 
-Self-contained Vercel paper monitor for the signed mean-variance Hyperliquid portfolio.
+Collaborator-owned research, strategy, results, and paper-monitor implementation
+for the signed mean-variance Hyperliquid portfolio.
 
 This is a collaborator-owned research side project. It is intentionally kept
-beside `research/`, `execution/`, and `monitoring/`; it is not part of the
+beside `hmm-slope-experiment/`; it is not part of that project's
 stopped Freqtrade live-deployment monitor.
+
+## Research state
+
+The short 2026 window produced a promising signed result: +122.61% return,
+3.86 Sharpe, 35.97 Calmar, and 17.23% maximum drawdown. It remains a research
+candidate until it survives cross-cycle validation. The PC-neutral alternative
+was sparse or negative after fees and is parked.
+
+- [`LEARNINGS.md`](LEARNINGS.md) — detailed findings and caveats.
+- [`analysis/`](analysis/) — universe selection, baselines, parameter sweeps,
+  signed-funding evaluation, and PC-neutral alternatives.
+- [`analysis/results/`](analysis/results/) — decisions, result cards, JSON, and charts.
+- [`strategies/`](strategies/) and [`configs/`](configs/) — Freqtrade strategy and universe configuration.
+- `app/`, `lib/`, and `local_dashboard.py` — paper-only monitoring implementations.
+
+The code reads shared market data from `../hmm-slope-experiment/research/data/`
+and uses the ignored Freqtrade environment at
+`../hmm-slope-experiment/research/.venv/`. It does not own the original
+strategy-selection or live-deployment monitor.
 
 Vercel cannot run a permanent process, so the app uses Vercel Cron instead:
 

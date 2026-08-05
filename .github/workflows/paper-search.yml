@@ -1,0 +1,82 @@
+name: Weekly quant paper search
+
+on:
+  schedule:
+    - cron: "0 4 * * 0"
+      timezone: America/Toronto
+  workflow_dispatch:
+
+concurrency:
+  group: weekly-quant-paper-search
+  cancel-in-progress: false
+
+jobs:
+  search:
+    runs-on: ubuntu-latest
+    env:
+      HAS_OPENAI_KEY: ${{ secrets.OPENAI_API_KEY != '' }}
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Prepare dated research branch
+        if: ${{ env.HAS_OPENAI_KEY == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          search_date="$(TZ=America/Toronto date +%F)"
+          branch="research/weekly-paper-search-${search_date}"
+          echo "PAPER_SEARCH_DATE=${search_date}" >> "$GITHUB_ENV"
+          echo "PAPER_SEARCH_BRANCH=${branch}" >> "$GITHUB_ENV"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+            git fetch origin "$branch"
+            git checkout -B "$branch" "origin/$branch"
+          else
+            git checkout -b "$branch"
+          fi
+
+      - name: Run paper-search agent
+        if: ${{ env.HAS_OPENAI_KEY == 'true' }}
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          sandbox: workspace-write
+          safety-strategy: drop-sudo
+          prompt: |
+            Read quant-research-agent/paper-search-trigger.md completely and
+            execute Steps 1 through 5. This is an unattended scheduled run.
+            Search only the configured scope and write only the documented
+            knowledge paths. Do not commit or push; the workflow handles the
+            review branch and pull request after your edits.
+          codex-args: '["--search"]'
+
+      - name: Commit and open pull request
+        if: ${{ env.HAS_OPENAI_KEY == 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git add quant-research-agent/source-dives wiki
+          if git diff --cached --quiet; then
+            echo "No research changes produced."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: weekly paper search ${PAPER_SEARCH_DATE}"
+          git push --set-upstream origin "$PAPER_SEARCH_BRANCH"
+          if ! gh pr list --head "$PAPER_SEARCH_BRANCH" --state open --json number --jq 'length > 0' | grep -q true; then
+            gh pr create \
+              --base main \
+              --head "$PAPER_SEARCH_BRANCH" \
+              --title "Weekly paper search ${PAPER_SEARCH_DATE}" \
+              --body "Automated quant paper search. Review sources and claims before merging."
+          fi
+
+      - name: Explain skipped run
+        if: ${{ env.HAS_OPENAI_KEY != 'true' }}
+        run: echo "Skipped because the OPENAI_API_KEY repository secret is not configured."

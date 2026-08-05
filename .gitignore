@@ -1,7 +1,12 @@
-# feishu lives in its own repo — separate market, separate context
+# Feishu lives in its own nested repo — separate market, separate context.
 feishu/
+feishu-competition/
 
-# backtesting/ and live/ are tracked here (merged into algo-traders 2026-06-01)
+# Local agent scheduler state
+.claude/scheduled_tasks.lock
+
+# Research, execution, monitoring, and evaluation are tracked here as one
+# experiment (consolidated 2026-06-01).
 # Their prior git histories are archived at:
 #   https://github.com/davidcagoh/backtesting (archived)
 #   https://github.com/davidcagoh/algo-traders-live (archived)
@@ -24,3 +29,14 @@ venv/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+
+# Execution secrets and runtime artefacts
+freqtrade-experiment/execution/ops/.env
+freqtrade-experiment/execution/config.private.json
+freqtrade-experiment/execution/.env.infra
+freqtrade-experiment/execution/dryrun/*.log
+freqtrade-experiment/execution/logs/
+freqtrade-experiment/execution/user_data/logs/
+freqtrade-experiment/execution/tradesv3.sqlite*
+freqtrade-experiment/execution/data/
+freqtrade-experiment/monitoring/mean-variance-paper/state/

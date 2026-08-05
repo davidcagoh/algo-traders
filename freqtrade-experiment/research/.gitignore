@@ -1,0 +1,8 @@
+.DS_Store
+.venv/
+data/
+analysis/backtests/
+
+__pycache__/
+*.pyc
+.claude/

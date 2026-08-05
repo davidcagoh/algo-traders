@@ -2,8 +2,8 @@
 
 Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
-> **Now:** The Freqtrade paper run is stopped, evaluated, and parked; no trading experiment is active.
-> **Queue:** Decide whether a new strategy merits a pre-registered experiment.
+> **Now:** Consolidation is complete; concurrent signed-MV and PC-neutral research was preserved, with no confirmed active paper deployment.
+> **Queue:** Cross-cycle validate signed MV or park it before opening another pre-registered run.
 
 ---
 

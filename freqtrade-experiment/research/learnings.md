@@ -30,7 +30,7 @@ This file is the self-correction mechanism for the project. Entries in `Ruled Ou
 - **Hyperliquid uses USDC as the quote currency.** Freqtrade pair notation for futures is `BTC/USDC:USDC` (base/quote:settle).
 - **Freqtrade now ships a Hyperliquid adapter** (`freqtrade/exchange/hyperliquid.py` on current main). Last year when Ethan set this up, it didn't exist — that's why he had to source data externally.
 - **Default data format in this repo is Feather.** Backtests must pass `--data-format-ohlcv feather` (also set in `config.json` as `dataformat_ohlcv`).
-- **Signed MV paper dashboard deployed locally.** `../monitoring/mean-variance-paper/local_dashboard.py` runs a paper-only Hyperliquid monitor for the 9-coin signed mean-variance portfolio. It tracks live mids, paper positions, taker fees, funding PnL, equity/drawdown, and target weights; state/logs are ignored under `../monitoring/mean-variance-paper/state/`. It never places exchange orders.
+- **Signed MV paper dashboard deployed locally.** `../mean-variance-paper/local_dashboard.py` runs a collaborator-owned, paper-only Hyperliquid monitor for the 9-coin signed mean-variance portfolio. It tracks live mids, paper positions, taker fees, funding PnL, equity/drawdown, and target weights; state/logs are ignored under `../mean-variance-paper/state/`. It never places exchange orders.
 
 ### Data sourcing
 - **Freqtrade's `download-data` is fully disabled for Hyperliquid**, not just capped. `ohlcv_has_history=False` in the adapter triggers a hard refusal: "Hyperliquid does not support downloading trades or ohlcv data." Confirmed 2026-04-24.

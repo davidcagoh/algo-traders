@@ -10,9 +10,9 @@ Crypto strategy backtesting setup built on [Freqtrade](https://www.freqtrade.io/
 
 **Hyperliquid universe sanity (2026-06-02):** refreshed the full locally known 1h Hyperliquid futures universe. There are 190 local 1h symbols; 148 have current/full-ish data through 2026-06-01 18:00 UTC; 43 also pass a $1M median daily dollar-volume estimate after manually excluding TRUMP. Original 5-coin set (`BTC, ETH, HYPE, XRP, SOL`) has avg daily-return correlation 0.70 / max 0.92, confirming ETH/XRP/SOL mostly add beta redundancy. Greedy low-correlation screen seeded with `BTC,HYPE` selected `BTC, HYPE, PAXG, TRX, WLFI, VVV, TON, ZRO, XPL` with avg pairwise correlation 0.30 / max 0.54 over 2025-11-05 → 2026-06-01. Charts: [correlation](analysis/reports/universe_selection_corr_current.png), [normalized prices](analysis/reports/universe_selection_prices_current.png). JSON: `analysis/reports/universe_selection_hl_1h_current.json`. Caveat: this is the purely data-driven liquid diversifier set; several names are event/perps-native, so use as a baseline diversification universe, not an endorsement of fundamentals.
 
-**Signed MV paper dashboard (2026-06-02):** `../monitoring/mean-variance-paper/local_dashboard.py` is a local paper-only Hyperliquid monitor for the 9-coin signed mean-variance portfolio. It pulls live mids/candles/funding from Hyperliquid, simulates taker fees and funding, and never submits exchange orders. Current screenshot: [paper dashboard](analysis/reports/paper_dashboard_current.png).
+**Signed MV paper dashboard (2026-06-02):** `../mean-variance-paper/local_dashboard.py` is a local paper-only Hyperliquid monitor for the 9-coin signed mean-variance portfolio. It pulls live mids/candles/funding from Hyperliquid, simulates taker fees and funding, and never submits exchange orders. Current screenshot: [paper dashboard](analysis/reports/paper_dashboard_current.png).
 
-**Vercel monitor (2026-06-03):** `../monitoring/mean-variance-paper/` contains the deployable Next.js monitor. Vercel Cron calls `/api/tick`, state lives in Upstash/Vercel KV, and `/api/status` serves the dashboard. Deployment status is not asserted by this repository.
+**Vercel monitor (2026-06-03):** `../mean-variance-paper/` contains the collaborator-owned deployable Next.js monitor. Vercel Cron calls `/api/tick`, state lives in Upstash/Vercel KV, and `/api/status` serves the dashboard. Deployment status is not asserted by this repository.
 
 **PC-neutral alt sweep (2026-06-03):** `analysis/run_pc_neutral_alt_strategies.py` tested PC-residual mean reversion and cluster-restricted PC-neutral pair stat-arb on Hyperliquid 1h data, 2025-12-07 → 2026-06-03. Pair stat-arb was mildly positive but extremely sparse (best Sharpe 0.71, +0.38%, active 0.3%); individual residual mean reversion was negative after fees (best Sharpe -0.49, -3.66%). Funding was omitted after rate limiting. See [`analysis/reports/pc_neutral_alt_strategies_hl_1h_current.md`](analysis/reports/pc_neutral_alt_strategies_hl_1h_current.md).
 
@@ -26,7 +26,7 @@ Crypto strategy backtesting setup built on [Freqtrade](https://www.freqtrade.io/
 - `analysis/reports/` — dated decisions, result cards, JSON tables, and generated charts.
 - `configs/` — Freqtrade and portfolio-universe configurations.
 - `strategies/` — Freqtrade strategy implementations.
-- [`../monitoring/mean-variance-paper/`](../monitoring/mean-variance-paper/) — local and Vercel paper-monitor implementations.
+- [`../mean-variance-paper/`](../mean-variance-paper/) — collaborator-owned local and Vercel paper-monitor implementations.
 - Agent-produced paper summaries live in [`quant-research-agent/source-dives/`](../../quant-research-agent/source-dives/); the search workflow and logs live in that same root project.
 
 ---
@@ -182,7 +182,7 @@ Sort: **Calmar descending**. Highlighted = top candidates by family.
 | `scripts/` | Data downloads and baseline entrypoint. |
 | `analysis/` | Evaluation, universe selection, and portfolio experiment drivers. |
 | `analysis/reports/` | Dated decisions, result cards, JSON tables, and generated charts. |
-| `../monitoring/mean-variance-paper/` | Paper-only local monitor and deployable Vercel/Upstash dashboard. |
+| `../mean-variance-paper/` | Collaborator-owned paper-only local monitor and deployable Vercel/Upstash dashboard. |
 | `.venv/` | Ignored local environment; recreate from the official Freqtrade distribution. |
 
 The old `freqtrade_hyperliquid_download-data` gitlink was removed — see `decision 001`.

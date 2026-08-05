@@ -26,11 +26,11 @@ Missing on Hyperliquid: `BAL, 1INCH, CVX, MANA, RON, GNS, AKT, GRT, ASI`
 
 ## Charts
 
-![equity](../assets/pc_neutral_alt_equity_top.png)
+![equity](pc_neutral_alt_equity_top.png)
 
-![scatter](../assets/pc_neutral_alt_scatter.png)
+![scatter](pc_neutral_alt_scatter.png)
 
-![clusters](../assets/pc_neutral_alt_cluster_bars.png)
+![clusters](pc_neutral_alt_cluster_bars.png)
 
 ## Method
 

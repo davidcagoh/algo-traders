@@ -7,7 +7,7 @@ paper perp positions, applies taker fees and funding, and exposes a dashboard.
 
 Run from the repository root:
   freqtrade-experiment/research/.venv/bin/python \
-    freqtrade-experiment/monitoring/mean-variance-paper/local_dashboard.py
+    freqtrade-experiment/mean-variance-paper/local_dashboard.py
 """
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ import numpy as np
 import pandas as pd
 import requests
 
-EXPERIMENT = Path(__file__).resolve().parents[2]
+EXPERIMENT = Path(__file__).resolve().parents[1]
 RESEARCH = EXPERIMENT / "research"
 sys.path.insert(0, str(RESEARCH / "analysis"))
 

@@ -2,6 +2,10 @@
 
 Self-contained Vercel paper monitor for the signed mean-variance Hyperliquid portfolio.
 
+This is a collaborator-owned research side project. It is intentionally kept
+beside `research/`, `execution/`, and `monitoring/`; it is not part of the
+stopped Freqtrade live-deployment monitor.
+
 Vercel cannot run a permanent process, so the app uses Vercel Cron instead:
 
 - `/api/tick` runs hourly from `vercel.json`.
@@ -48,7 +52,7 @@ curl -H "Authorization: Bearer <CRON_SECRET>" \
 ## Local Development
 
 ```bash
-cd freqtrade-experiment/monitoring/mean-variance-paper
+cd freqtrade-experiment/mean-variance-paper
 npm install
 npm run dev
 ```

@@ -119,7 +119,7 @@ its short-window research gate (+122.61% return, 3.86 Sharpe, 35.97 Calmar,
 the signed result in research until it survives cross-cycle validation; it was
 not promoted to live capital. Code is in `analysis/` and `strategies/`, results
 are in `analysis/reports/`, and the local monitor is in
-`../monitoring/mean-variance-paper/`.
+`../mean-variance-paper/`.
 
 ---
 

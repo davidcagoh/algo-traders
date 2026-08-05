@@ -8,6 +8,7 @@ organised by function rather than by separate projects:
 | Research | `research/` | Data, strategy variants, backtests, validation, selection |
 | Execution | `execution/` and `execution/ops/` | Freqtrade configuration, Docker, and VPS deployment |
 | Monitoring | `monitoring/` and `execution/ops/healthcheck.sh` | Read-only tape, liveness, and operator alerts |
+| Collaborator paper project | `mean-variance-paper/` | Signed mean-variance local/Vercel paper monitor; separate from the live-deployment monitor |
 | Evaluation | `../evaluation/`, `research/analysis/`, `../wiki/` | Shared metrics, experiment adapters, reports, and cross-cutting records |
 
 The active strategy is `HmmSmaSlopeV2`, a long-only Hyperliquid perpetuals

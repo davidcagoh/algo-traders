@@ -20,6 +20,7 @@ Key paths:
 - [Research](freqtrade-experiment/research/) — strategies, configs, data, backtests, and reports.
 - [Execution records](freqtrade-experiment/execution/records/) — binding gate, checkpoints, final evaluation, and shutdown.
 - [Monitoring](freqtrade-experiment/monitoring/) — read-only SQLite → Supabase → Vercel tape.
+- [Mean-variance paper project](freqtrade-experiment/mean-variance-paper/) — collaborator-owned signed-MV paper monitor, separate from live monitoring.
 
 ## Shared material
 

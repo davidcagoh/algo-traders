@@ -39,4 +39,4 @@ freqtrade-experiment/execution/logs/
 freqtrade-experiment/execution/user_data/logs/
 freqtrade-experiment/execution/tradesv3.sqlite*
 freqtrade-experiment/execution/data/
-freqtrade-experiment/monitoring/mean-variance-paper/state/
+freqtrade-experiment/mean-variance-paper/state/

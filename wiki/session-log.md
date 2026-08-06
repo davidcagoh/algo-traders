@@ -4,6 +4,35 @@ Append-only daily log. Newest entry at the top.
 
 ---
 
+## 2026-08-06 — Extended TrialRecord with cross-project registry fields; backfilled hmm-slope-experiment
+
+- Extended `evaluation-framework/evaluation/ledger.py`'s `TrialRecord` with
+  four optional fields toward the cross-project trial registry:  `project`,
+  `venue`, `evidence_stage` (`backtest`/`paper`/`live`), `gate_outcome`
+  (`passed`/`killed`/`pending`/`n/a`). All default to `None`, so existing
+  ledger files (schema_version 1) still load without a migration step;
+  `SCHEMA_VERSION` bumped to 2 for new records. Added `TrialLedger.scope()`
+  filters for the new fields and a `registry_groups()` method that buckets
+  trials by `(evidence_stage, venue)` — deliberately not a single ranked
+  leaderboard, per the explicit warning in `open-threads.md`: killed
+  IS-backtests and live-tested strategies aren't comparable, and Sharpe
+  scales differ by venue.
+- Backfilled the new fields onto the existing 10-record + gap-marker
+  `hmm-slope-experiment` ledger (`research/analysis/backfill_ledger.py`),
+  reading gate outcomes off the bear-window MDD-vs-5.5%-threshold
+  comparisons already on record in `learnings-archive.md`: V1 and V3 killed
+  (bear MDD 8.65% and 5.72%, both breach), V2 passed (4.44%), the short and
+  long-short variants killed (ruled out on net P&L, not the MDD axis).
+- Not done: the `mean-variance-paper` project (part of the ~34-report-card
+  backfill target) has no `TrialLedger` or backfill script yet — its result
+  cards live at
+  `freqtrade-experiment/mean-variance-paper/analysis/results/*.md` and
+  haven't been reconstructed into ledger records. This is the next step for
+  a real cross-project registry; right now the registry has one project in
+  it.
+
+---
+
 ## 2026-08-06 — Built evaluation-framework as an installable package; fixed a second DSR bug; migrated dsr_analysis.py
 
 - Decided `evaluation-framework/` priority: reusable package first, methods

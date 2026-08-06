@@ -106,6 +106,57 @@ def test_scope_filters_by_family_and_dataset(tmp_path):
     assert ledger.n_trials(dataset_id="d1") == 2
 
 
+def test_scope_filters_by_registry_fields(tmp_path):
+    ledger = TrialLedger(tmp_path / "trials.jsonl")
+    ledger.append(
+        _record(
+            "t1",
+            project="hmm-slope-experiment",
+            venue="hyperliquid",
+            evidence_stage="backtest",
+            gate_outcome="killed",
+        )
+    )
+    ledger.append(
+        _record(
+            "t2",
+            params={"sma_period": 1, "hmm_states": 3},
+            project="mean-variance-paper",
+            venue="hyperliquid",
+            evidence_stage="live",
+            gate_outcome="passed",
+        )
+    )
+    assert ledger.n_trials(venue="hyperliquid") == 2
+    assert ledger.n_trials(project="hmm-slope-experiment") == 1
+    assert ledger.n_trials(evidence_stage="live") == 1
+    assert ledger.n_trials(gate_outcome="killed") == 1
+
+
+def test_registry_groups_separates_by_stage_and_venue(tmp_path):
+    ledger = TrialLedger(tmp_path / "trials.jsonl")
+    ledger.append(_record("t1", evidence_stage="backtest", venue="hyperliquid"))
+    ledger.append(
+        _record(
+            "t2",
+            params={"sma_period": 1, "hmm_states": 3},
+            evidence_stage="backtest",
+            venue="hyperliquid",
+        )
+    )
+    ledger.append(
+        _record(
+            "t3",
+            params={"sma_period": 2, "hmm_states": 3},
+            evidence_stage="live",
+            venue="binance",
+        )
+    )
+    groups = ledger.registry_groups()
+    assert groups[("backtest", "hyperliquid")] == [r for r in ledger.load() if r.trial_id != "t3"]
+    assert len(groups[("live", "binance")]) == 1
+
+
 def test_validate_flags_missing_fields(tmp_path):
     path = tmp_path / "trials.jsonl"
     path.write_text('{"trial_id": "t1"}\n')

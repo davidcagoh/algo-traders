@@ -29,8 +29,10 @@ import numpy as np
 import pandas as pd
 
 Status = Literal["completed", "aborted", "discarded"]
+EvidenceStage = Literal["backtest", "paper", "live"]
+GateOutcome = Literal["passed", "killed", "pending", "n/a"]
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 
 
 def _canonical_param_hash(params: Mapping[str, Any]) -> str:
@@ -56,6 +58,10 @@ class TrialRecord:
     n_obs: int | None = None
     returns_artifact: str | None = None
     notes: str = ""
+    project: str | None = None
+    venue: str | None = None
+    evidence_stage: EvidenceStage | None = None
+    gate_outcome: GateOutcome | None = None
     param_hash: str = field(default="")
 
     def __post_init__(self) -> None:
@@ -151,6 +157,10 @@ class TrialLedger:
         family: str | None = None,
         dataset_id: str | None = None,
         since: str | None = None,
+        project: str | None = None,
+        venue: str | None = None,
+        evidence_stage: str | None = None,
+        gate_outcome: str | None = None,
     ) -> list[TrialRecord]:
         rows = self.load()
         if family is not None:
@@ -159,7 +169,31 @@ class TrialLedger:
             rows = [r for r in rows if r.dataset_id == dataset_id]
         if since is not None:
             rows = [r for r in rows if r.created_at >= since]
+        if project is not None:
+            rows = [r for r in rows if r.project == project]
+        if venue is not None:
+            rows = [r for r in rows if r.venue == venue]
+        if evidence_stage is not None:
+            rows = [r for r in rows if r.evidence_stage == evidence_stage]
+        if gate_outcome is not None:
+            rows = [r for r in rows if r.gate_outcome == gate_outcome]
         return rows
+
+    def registry_groups(
+        self, **scope_kwargs: Any
+    ) -> dict[tuple[str | None, str | None], list[TrialRecord]]:
+        """Group trials by (evidence_stage, venue).
+
+        Deliberately not a single ranked leaderboard: killed IS-backtests and
+        live-tested strategies are not comparable, and Sharpe scales differ
+        by venue. Grouping by (evidence_stage, venue) keeps only
+        like-for-like comparisons within a group.
+        """
+        groups: dict[tuple[str | None, str | None], list[TrialRecord]] = {}
+        for row in self.scope(**scope_kwargs):
+            key = (row.evidence_stage, row.venue)
+            groups.setdefault(key, []).append(row)
+        return groups
 
     def n_trials(self, **scope_kwargs: Any) -> int:
         """Total trial count, including discarded/aborted ones."""
@@ -185,6 +219,10 @@ class TrialLedger:
                     "status",
                     "sharpe",
                     "n_obs",
+                    "project",
+                    "venue",
+                    "evidence_stage",
+                    "gate_outcome",
                     "param_hash",
                 ]
             )

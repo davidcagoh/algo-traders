@@ -2,8 +2,8 @@
 
 Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
-> **Now:** `evaluation-framework/evaluation/` is built out as an installable, tested package (ledger, PBO, purged splits, sealed holdout, costs, live reconciliation — 155 tests, 96% coverage) per `evaluation-framework/PLAN.md`. The cross-project trial registry (`project`/`venue`/`evidence_stage`/`gate_outcome` on `TrialRecord`) now spans both `hmm-slope-experiment` and `mean-variance-paper`. All `hmm-slope-experiment` analysis drivers are migrated onto the package (formula duplication removed); doing so surfaced and fixed a real annualisation bug in `run_correlation_mdb.py` (was silently using 252 instead of crypto's 365).
-> **Queue:** A liquid-majors proxy backtest found signed MV does not reproduce its headline edge in a bull or chop window — ask Ethan whether he wants cross-cycle validation to actually gate this project (that requirement was inherited from hmm-slope-experiment's methodology by an earlier Claude session, not decided by him) and whether the Vercel paper monitor is deployed anywhere he hasn't pushed. Manually triggered the literature-search workflow 2026-08-06 (its first-ever run, `gh run 31125217798`) — check for its PR next session.
+> **Now:** New project `aurora-forecaster/` — a multimodal forecasting archetype (`DecisionIntelligence/Aurora`, arXiv:2509.22295), genuinely different from every existing archetype (predicts forward returns directly vs. trading a current mispricing to an anchor). Target securities BTC/SPY, chosen for domain-fit with Aurora's TimeMMD pretraining rather than the actual illiquid book. Full multimodal forward pass confirmed working end-to-end locally (Apple Silicon MPS) with all four text sources (GDELT, Alpha Vantage, Currents, Guardian) smoke-tested against live endpoints. Found and fixed a real bug in `aurora-model==0.2.0` along the way (batch-collapsing `.squeeze(0)` in its `generate(text_inputs=...)` path).
+> **Queue:** Next for aurora-forecaster: align the four text sources into one per-timestep input and run the actual unimodal-vs-multimodal comparison. Separately: Ethan confirmed his Vercel paper monitor is deployed but not working, corroborating the proxy-backtest doubt on signed MV's edge — still need his call on whether cross-cycle validation should formally gate `mean-variance-paper`. Also check for the literature-search workflow's first-ever PR (`gh run 31125217798`, triggered 2026-08-06).
 
 ---
 
@@ -54,6 +54,7 @@ Shared knowledge distilled from trading experiments; concrete results remain wit
 ## Related Stores
 
 - [`../freqtrade-experiment/`](../freqtrade-experiment/) — completed crypto experiment and evidence.
+- [`../aurora-forecaster/`](../aurora-forecaster/) — new forecasting-archetype experiment (multimodal generative forecaster, DecisionIntelligence/Aurora); smoke-tested locally, text-context design still open.
 - [`../evaluation-framework/`](../evaluation-framework/) — reusable evaluation code and its evolving manuscript/essays.
 - [`../literature/`](../literature/) — primary sources, paper notes, and literature indexes.
 - [`../quant-research-agent/`](../quant-research-agent/) — reusable search and research-loop automation.

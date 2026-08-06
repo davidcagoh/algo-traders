@@ -4,6 +4,199 @@ Append-only daily log. Newest entry at the top.
 
 ---
 
+## 2026-08-06 — Session wrap: aurora-forecaster stood up end-to-end (data + model + text sources)
+
+- Full session summary (see detailed entries below for each step): scaffolded
+  new top-level project `aurora-forecaster/` for a forecasting archetype
+  genuinely different from the mean-reversion-style archetypes everywhere
+  else in this repo; TDD'd device selection, price clients (BTC via
+  ccxt/Binance, SPY via yfinance), and four text-context clients (GDELT,
+  Alpha Vantage, Currents API, Guardian Open Platform); got a real
+  multimodal forward pass running end-to-end on local Apple Silicon (MPS);
+  found and fixed a genuine bug in the published `aurora-model==0.2.0`
+  package. All four text sources and both price sources are now confirmed
+  working against live endpoints — see `aurora-forecaster/README.md` for
+  the full technical record (version pins, the library bug and its fix,
+  per-source rate limits).
+- Ethan separately confirmed his Vercel paper monitor is deployed
+  (undocumented locally because never pushed) but not working —
+  corroborates this session's earlier proxy-backtest doubt about signed
+  MV's edge.
+- Noted (git status) unrelated uncommitted changes in
+  `evaluation-framework/` (PLAN.md, STATUS.md, new `spa.py`/`test_spa.py`)
+  and `literature/strategy-evaluation/` (two new PDFs, updated `_index.md`)
+  that predate this session and weren't touched here — left alone, not
+  part of this commit. Worth checking their origin next session (possibly
+  the literature-search workflow's first run landing changes, or leftover
+  unstaged work from an earlier session).
+
+**Next:** Align the four text sources into one per-timestep text-context
+input for Aurora's multimodal path, then run the actual unimodal vs.
+GDELT vs. Alpha Vantage vs. Currents comparison — the feasibility question
+this whole build has been aiming at. Guardian stays built-but-unwired until
+that comparison shows a need for it. Separately, investigate the unrelated
+uncommitted `evaluation-framework`/`literature` changes noted above.
+
+---
+
+## 2026-08-06 — Currents and Guardian smoke-tested; all four text sources confirmed working
+
+- User added `CURRENTS_API_KEY` and `GUARDIAN_API_KEY` to root `.env`.
+  Confirmed present via `grep -oE '^[A-Z_]+='` (names only, values never
+  read), then ran both smoke scripts the same way as Alpha Vantage's (key
+  loaded via `python-dotenv`, never printed). Both work: Currents returned
+  20 real articles each for `bitcoin` and `S&P 500` keyword queries;
+  Guardian returned 10 real, on-topic business-section articles each for
+  the same two queries.
+- All four text sources (GDELT, Alpha Vantage, Currents, Guardian) and both
+  price sources (BTC, SPY) are now confirmed working against real,
+  live endpoints. Guardian remains explicitly unwired per standing
+  decision — verified working, not yet used in any pipeline.
+- Fast test suite: 18/18 passing, no network required.
+
+---
+
+## 2026-08-06 — Added Currents API and Guardian text clients; four-source comparison now scoped
+
+- User surfaced a comparison table + a second corroborating source (a blog
+  post, treated with mild skepticism given its unrelated origin domain, but
+  its claims matched both the table and this session's own GDELT/Alpha
+  Vantage findings). Consensus read: Alpha Vantage's 25 req/day cap is a
+  hard ceiling no caching strategy fixes, not a throttle to design around;
+  Currents API (1,000/day, no card, commercial-ok) and Guardian Open
+  Platform (5,000/day, non-commercial, single-publisher but
+  professionally-curated business/economics coverage closer to TimeMMD's
+  domain) are the credible alternatives.
+- Decision: try all four rather than swap. TDD'd
+  `aurora_forecaster/data/text_currents.py` and
+  `aurora_forecaster/data/text_guardian.py` (build-URL + fetch, dependency
+  injected, no network in tests — 18/18 passing total now). Neither
+  smoke-tested yet — both need free API keys (Currents: currentsapi.services,
+  Guardian: open-platform.theguardian.com) not yet in `.env`. Guardian is
+  explicitly "verify it works, don't use it yet" per standing decision not
+  to commit to a source before the comparison runs.
+- `.env` var names checked via `grep -oE '^[A-Z_]+='` (names only, values
+  never read) — confirmed only `OPENAI_API_KEY` and `ALPHA_VANTAGE_API_KEY`
+  present; `CURRENTS_API_KEY` and `GUARDIAN_API_KEY` still needed.
+
+---
+
+## 2026-08-06 — First real multimodal Aurora forward pass; found and fixed a batch-collapsing bug in aurora-model==0.2.0
+
+- Got a real end-to-end multimodal forward pass working: real BTC OHLCV
+  (528-step lookback, ccxt/Binance) + real/fallback text through
+  `AuroraForPrediction.generate(...)`, output shape `(1, 10, 96)` matching
+  the unimodal baseline. Confirmed via
+  `aurora-forecaster/scripts/multimodal_smoke_test.py`.
+- Found a real bug in the published `aurora-model==0.2.0` package along the
+  way: its `generate(text_inputs=...)` convenience path
+  (`aurora/ts_generation_mixin.py`) calls `.squeeze(0)` on the tokenizer
+  output, which collapses the batch dimension whenever batch size is 1 —
+  our case, since forecasting is per-asset. Crashes downstream BERT encoding
+  with `not enough values to unpack (expected 2, got 1)`. Not an environment
+  or usage mistake — reproduced with real data, root-caused by reading the
+  installed package source, confirmed by an isolated bypass test.
+- Fix: pre-tokenize ourselves and pass `text_input_ids`/`text_attention_mask`/
+  `text_token_type_ids` directly (the `generate()` signature accepts these
+  and only hits the buggy path when `text_inputs` is set). Landed as
+  `aurora_forecaster/multimodal.py::tokenize_text_context`, TDD'd (3 tests,
+  no network — uses the model's bundled local BERT tokenizer files), wired
+  into the smoke script with a comment explaining why.
+- Both live text sources hit rate limits during testing: GDELT returned 429
+  twice (undocumented limit, no backoff yet); Alpha Vantage confirmed at its
+  stated 25 req/day, 1/sec free-tier cap (see earlier entry below). Neither
+  is fatal — the smoke script now degrades to fallback text on GDELT failure
+  — but a real walk-forward loop will need caching/backoff design for both.
+- User flagged a third possible text source for later: a personal Straits
+  Times Opinion Forum scraper at
+  `/Users/davidgoh/LocalFiles/Post-Duke/st_forum_scraper/` (Selenium,
+  non-headless by design — needs manual popup dismissal — targets
+  `opinion/forum`'s specific markup). Not adapted or wired in this session;
+  logged as a candidate, not built, per the standing decision not to add
+  more sources before GDELT vs. Alpha Vantage vs. unimodal baseline actually
+  runs. Would need de-babysitting (headless-capable) and re-verified
+  selectors for Business/Finance/Wealth sections before it could feed an
+  unattended backtest.
+
+---
+
+## 2026-08-06 — Chose BTC/SPY as aurora-forecaster targets; built and smoke-tested price/text data clients
+
+- Decided target securities: BTC and SPY, not the actual Hyperliquid book.
+  Rationale traced to Aurora's own pretraining domain — its primary
+  multimodal benchmark, TimeMMD, pairs time series with macro/economy-style
+  expert reports across 9 domains (Agriculture, Climate, Economy, Energy,
+  Environment, Health, Security, SocialGood, Traffic), not asset-specific
+  headline chatter. `WLFI`/`VVV`/`XPL` etc. would fail this test twice —
+  they already lack price history (2026-08-06 proxy-backtest finding) and
+  would have near-zero text coverage in Aurora's pretraining distribution.
+  `evaluation-framework`'s metrics were confirmed *not* a constraint here —
+  already asset-class-agnostic (spans SGX 252-day and crypto 365-day
+  annualisation).
+- TDD-built (tests first, dependency-injected fakes, no network in the fast
+  suite — 10/10 passing) three data clients in `aurora-forecaster/`:
+  `data/price.py` (BTC via ccxt/Binance, SPY via yfinance — reusing existing
+  repo conventions per `wiki/concepts/data-sourcing.md`, no new tooling
+  needed there), `data/text_gdelt.py` (GDELT DOC 2.0, free/keyless),
+  `data/text_alphavantage.py` (Alpha Vantage `NEWS_SENTIMENT`, free tier,
+  needs an API key).
+- User chose to keep and compare both text sources rather than commit to one
+  upfront (GDELT's domain-alignment vs. Alpha Vantage's ticker-tagging is
+  itself part of the feasibility question). Real-endpoint smoke tests
+  confirmed working for BTC, SPY, and GDELT; Alpha Vantage untested pending
+  an API key (documented in `aurora-forecaster/README.md`).
+- Added a "News / text (multimodal forecasting)" section to
+  `wiki/concepts/data-sourcing.md` — first time this repo has sourced text
+  data rather than only price/funding/order-book.
+
+---
+
+## 2026-08-06 — Scaffolded aurora-forecaster/, a new forecasting-archetype project
+
+- New top-level project `aurora-forecaster/`, separate from
+  `freqtrade-experiment/` because [DecisionIntelligence/Aurora](https://huggingface.co/DecisionIntelligence/Aurora)
+  ([arXiv:2509.22295](https://arxiv.org/abs/2509.22295)) is a pretrained
+  multimodal generative forecasting foundation model (time series + text +
+  image inputs, flow-matching decoder), not a Freqtrade strategy — it
+  predicts forward returns directly rather than trading a current
+  mispricing back to an anchor, which is a genuinely new archetype relative
+  to everything in `wiki/concepts/strategy-archetypes.md`.
+- TDD-built device selection (`aurora_forecaster/device.py`, tests written
+  first) and confirmed real pretrained weights load and run end-to-end on
+  local Apple Silicon (M3, MPS backend) via `scripts/smoke_test.py` — output
+  shape `(1, 10, 96)` for a synthetic unimodal input. Model is small (0.2B
+  params, ~800MB F32); local CPU/MPS is sufficient for now.
+- Two real compatibility issues surfaced and fixed: (1) the model card's
+  `torch==2.4.0` pin has no Python 3.13 wheel — relaxed to `torch>=2.6`;
+  (2) that pulled in `transformers>=5`, whose internal weight-tying API
+  change (`all_tied_weights_keys`) breaks `aurora-model==0.2.0`'s
+  `from_pretrained` — pinned `transformers<5,>=4.44` instead, confirmed
+  working. Both documented in `aurora-forecaster/README.md`.
+- User confirmed a UofT CSLab Slurm GPU cluster is available (personal use
+  permitted as a full-time grad student, underused over summer) but decided
+  to hold off — local is sufficient for the model's size, cluster use is
+  deferred until an actual compute bottleneck appears (e.g. sweeping
+  text-context variants at scale).
+- Open design gap, not yet started: no text-context data source exists in
+  this repo for the multimodal path, and `evaluation-framework`'s metrics
+  assume realized returns, not a probabilistic forecast — both need design
+  work before this can produce a comparable backtest result.
+
+---
+
+## 2026-08-06 — Ethan confirmed Vercel paper monitor deployed but non-functional
+
+- Ethan confirmed he deployed his own paper monitor at
+  https://vercel-paper-dashboard.vercel.app/ directly (never pushed the
+  `.vercel` config to the repo, which is why no local evidence of it existed
+  — see prior entry below). He also confirmed it is **not working**, which
+  corroborates this session's cross-cycle proxy-backtest finding casting
+  doubt on `shrunk_mean_variance_signed`'s edge. Still unresolved: whether
+  he wants cross-cycle validation to formally gate this project (see
+  `open-threads.md`).
+
+---
+
 ## 2026-08-06 — Cross-cycle proxy test for signed mean-variance; traced the "cross-cycle validation required" requirement's origin
 
 - Investigated why `mean-variance-paper`'s signed MV result can't be

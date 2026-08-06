@@ -8,7 +8,7 @@ Multi-strategy backtest harness for crypto perpetual futures, built on [Freqtrad
 
 ## Paper
 
-**A Six-Layer Evaluation Stack and a Portfolio-Aware Kill Criterion** — local [PDF](../../../evaluation-framework/paper/main.pdf) · single-column LaTeX, 14 pages.
+**A Six-Layer Evaluation Stack and a Portfolio-Aware Kill Criterion** — local [PDF](../../../evaluation-framework/archive/manuscript-2026-05/paper/main.pdf) · single-column LaTeX, 14 pages. Archived 2026-08-06, stale (see [`evaluation-framework/STATUS.md`](../../../evaluation-framework/STATUS.md)); package work now takes priority.
 
 Contribution is the methodology, not the strategies. The strategies below are the worked example.
 
@@ -110,6 +110,16 @@ The chart and DSR tables read directly from `analysis/backtests/*.zip`. Freqtrad
 
 The dated files in `analysis/reports/` are the canonical experiment record.
 The root wiki holds only cross-cutting knowledge. This README is a snapshot.
+
+## Sealed forward window
+
+The precommitted 2026-06-01 → 2026-12-31 Binance held-out window (decision
+005) is sealed at `analysis/holdout_seals.jsonl` via
+`evaluation.holdout.seal_holdout`/`guard` — see `analysis/seal_forward_window.py`.
+No downloader for this window exists yet; when one is written, it must call
+`evaluation.holdout.guard(data, "hmm-sma-slope-forward-2026H2", "analysis/holdout_seals.jsonl")`
+before any inspection of the loaded data, so a partial peek raises
+`HoldoutViolation` instead of silently spending the one-shot gate.
 
 ## Later portfolio research
 

@@ -30,12 +30,12 @@ import pandas as pd
 from scipy import stats
 
 # Annualisation factors per venue. Pick the one that matches your data.
-ASHARES_ANNUAL = 242.0   # Chinese A-share trading days/yr (feishu)
-SGX_ANNUAL = 252.0       # SGX trading days/yr
-IDX_ANNUAL = 245.0       # IDX trading days/yr (more national holidays)
-HSI_ANNUAL = 247.0       # Hong Kong trading days/yr
-FTSE_ANNUAL = 252.0      # LSE trading days/yr (parity with SGX)
-CRYPTO_ANNUAL = 365.0    # 24/7 markets
+ASHARES_ANNUAL = 242.0  # Chinese A-share trading days/yr (feishu)
+SGX_ANNUAL = 252.0  # SGX trading days/yr
+IDX_ANNUAL = 245.0  # IDX trading days/yr (more national holidays)
+HSI_ANNUAL = 247.0  # Hong Kong trading days/yr
+FTSE_ANNUAL = 252.0  # LSE trading days/yr (parity with SGX)
+CRYPTO_ANNUAL = 365.0  # 24/7 markets
 
 DEFAULT_ANNUAL = SGX_ANNUAL
 

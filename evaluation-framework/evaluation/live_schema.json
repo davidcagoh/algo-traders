@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LiveRunArtifacts",
+  "description": "Minimum artifact set a live run must emit for a later evaluation.live.reconcile() to be possible. See evaluation/live.py and 2026-08-05-hl-paper-evaluation.md for the failure mode this schema prevents recurring: uptime, signal fidelity, slippage, funding, and exceptions being unreconstructable after the fact.",
+  "type": "object",
+  "required": [
+    "trade_ledger",
+    "signal_log",
+    "fill_log",
+    "funding_payments",
+    "uptime_samples",
+    "exception_log"
+  ],
+  "properties": {
+    "trade_ledger": {
+      "type": "array",
+      "description": "One row per closed trade: entry/exit time, pair, side, realized P/L.",
+      "items": { "type": "object" }
+    },
+    "signal_log": {
+      "type": "array",
+      "description": "Per-bar signal state, so 'same-OHLC signal fidelity' is checkable after the fact.",
+      "items": { "type": "object" }
+    },
+    "fill_log": {
+      "type": "array",
+      "description": "Fill price vs. signal price per execution, for realized slippage.",
+      "items": { "type": "object" }
+    },
+    "funding_payments": {
+      "type": "array",
+      "description": "Funding events with rate and notional, for realized funding impact.",
+      "items": { "type": "object" }
+    },
+    "uptime_samples": {
+      "type": "array",
+      "description": "Periodic bot-alive heartbeats, for uptime percentage.",
+      "items": { "type": "object" }
+    },
+    "exception_log": {
+      "type": "array",
+      "description": "All raised exceptions during the run, for a complete exception audit.",
+      "items": { "type": "object" }
+    }
+  }
+}

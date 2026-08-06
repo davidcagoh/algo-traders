@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TrialRecord",
+  "type": "object",
+  "required": [
+    "trial_id",
+    "created_at",
+    "family",
+    "strategy",
+    "params",
+    "dataset_id",
+    "split_id",
+    "status",
+    "param_hash",
+    "schema_version"
+  ],
+  "properties": {
+    "trial_id": { "type": "string" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "family": { "type": "string" },
+    "strategy": { "type": "string" },
+    "params": { "type": "object" },
+    "param_hash": { "type": "string" },
+    "dataset_id": { "type": "string" },
+    "split_id": { "type": "string" },
+    "status": { "type": "string", "enum": ["completed", "aborted", "discarded"] },
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "code_ref": { "type": ["string", "null"] },
+    "cost_model_id": { "type": ["string", "null"] },
+    "sharpe": { "type": ["number", "null"] },
+    "n_obs": { "type": ["integer", "null"] },
+    "returns_artifact": { "type": ["string", "null"] },
+    "notes": { "type": "string" }
+  }
+}

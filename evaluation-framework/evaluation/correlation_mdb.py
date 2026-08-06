@@ -33,7 +33,6 @@ import pandas as pd
 
 from evaluation.layers import DEFAULT_ANNUAL
 
-
 # ─── Returns matrix ───────────────────────────────────────────────────────────
 
 
@@ -53,9 +52,7 @@ def returns_matrix(wallets: dict[str, pd.Series]) -> pd.DataFrame:
     return df
 
 
-def correlation_matrix(
-    returns: pd.DataFrame, method: str = "pearson"
-) -> pd.DataFrame:
+def correlation_matrix(returns: pd.DataFrame, method: str = "pearson") -> pd.DataFrame:
     return returns.corr(method=method)
 
 
@@ -90,11 +87,7 @@ def _risk_parity_weights(
 ) -> dict[str, float]:
     vols: dict[str, float] = {}
     for s in strategies:
-        recent = (
-            returns[s].iloc[-vol_window:]
-            if len(returns) > vol_window
-            else returns[s]
-        )
+        recent = returns[s].iloc[-vol_window:] if len(returns) > vol_window else returns[s]
         sd = recent.std()
         vols[s] = sd if sd > 0 else 1e-9
     inv = {s: 1.0 / v for s, v in vols.items()}
@@ -102,9 +95,7 @@ def _risk_parity_weights(
     return {s: x / total for s, x in inv.items()}
 
 
-def _mean_variance_weights(
-    returns: pd.DataFrame, strategies: list[str]
-) -> dict[str, float]:
+def _mean_variance_weights(returns: pd.DataFrame, strategies: list[str]) -> dict[str, float]:
     """Long-only tangency-portfolio weights. Numerically unstable at small N."""
     sub = returns[strategies].dropna(how="any")
     if len(sub) < 30:
@@ -147,9 +138,8 @@ def marginal_diversification_benefit(
         we = _mean_variance_weights(returns, extended)
     else:
         raise ValueError(f"unknown MDB scheme: {scheme!r}")
-    return (
-        _portfolio_sharpe(returns, we, annualisation)
-        - _portfolio_sharpe(returns, wb, annualisation)
+    return _portfolio_sharpe(returns, we, annualisation) - _portfolio_sharpe(
+        returns, wb, annualisation
     )
 
 
@@ -179,15 +169,9 @@ def mdb_table(
     """Rows = candidates; columns = eq/rp/mv MDB + robust flag."""
     rows: list[dict] = []
     for c in candidates:
-        eq = marginal_diversification_benefit(
-            returns, book, c, "eq", annualisation=annualisation
-        )
-        rp = marginal_diversification_benefit(
-            returns, book, c, "rp", annualisation=annualisation
-        )
-        mv = marginal_diversification_benefit(
-            returns, book, c, "mv", annualisation=annualisation
-        )
+        eq = marginal_diversification_benefit(returns, book, c, "eq", annualisation=annualisation)
+        rp = marginal_diversification_benefit(returns, book, c, "rp", annualisation=annualisation)
+        mv = marginal_diversification_benefit(returns, book, c, "mv", annualisation=annualisation)
         rows.append(
             {
                 "candidate": c,

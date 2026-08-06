@@ -1,0 +1,28 @@
+name: evaluation-framework CI
+
+on:
+  push:
+    paths:
+      - "evaluation-framework/**"
+      - ".github/workflows/evaluation-framework-ci.yml"
+  pull_request:
+    paths:
+      - "evaluation-framework/**"
+
+defaults:
+  run:
+    working-directory: evaluation-framework
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[dev,freqtrade]"
+      - run: ruff check evaluation tests
+      - run: black --check evaluation tests
+      - run: mypy evaluation
+      - run: pytest --cov=evaluation --cov-report=term-missing --cov-fail-under=80

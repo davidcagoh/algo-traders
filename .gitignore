@@ -21,6 +21,8 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+.coverage
+*.egg-info/
 
 # Data and backtest outputs
 *.parquet

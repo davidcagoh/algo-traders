@@ -38,7 +38,8 @@ def load_trade_returns(zip_path: Path) -> pd.Series:
     """Load per-trade profit ratios from a Freqtrade backtest ZIP."""
     with zipfile.ZipFile(zip_path) as archive:
         result_files = [
-            name for name in archive.namelist()
+            name
+            for name in archive.namelist()
             if name.endswith(".json") and "config" not in name and "meta" not in name
         ]
         if not result_files:
@@ -53,4 +54,6 @@ def load_trade_returns(zip_path: Path) -> pd.Series:
 
 def build_returns_matrix(zip_paths: dict[str, Path]) -> pd.DataFrame:
     """Join daily log returns from multiple ZIPs on a common date index."""
-    return pd.DataFrame({code: load_daily_returns(path) for code, path in zip_paths.items()}).fillna(0.0)
+    return pd.DataFrame(
+        {code: load_daily_returns(path) for code, path in zip_paths.items()}
+    ).fillna(0.0)

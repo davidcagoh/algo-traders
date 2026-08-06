@@ -1,11 +1,18 @@
 # Track B Freqtrade extension image.
-# Bases on the upstream stable image (Python 3.12) instead of building from
-# source, so hmmlearn can install from a prebuilt wheel. The gate-002 pin
-# shifts from "freqtrade commit 9d0fb9b" to "freqtrade Docker image digest" —
-# operationally equivalent for the 30d window (the binding requirement is
-# "no version changes during the run", which a digest pin satisfies).
-
-FROM freqtradeorg/freqtrade:stable
+# Pinned by digest (freqtradeorg/freqtrade:2025.9, Python 3.13) rather than
+# the floating "stable" tag. "stable" drifted to Python 3.14 sometime after
+# this pin was first written, which has no prebuilt hmmlearn wheel — the
+# from-source fallback compiles but produces a broken .so (undefined C++ ABI
+# symbol) that only surfaces at runtime as a silent _HMM_AVAILABLE=False in
+# the strategy, not as a build failure. Found 2026-08-06 while backtesting a
+# short-side strategy variant against this same image lineage.
+#
+# The gate-002 pin shifts from "freqtrade commit 9d0fb9b" to "freqtrade
+# Docker image digest" — operationally equivalent for the 30d window (the
+# binding requirement is "no version changes during the run", which a
+# digest pin satisfies). Bumping this digest is a deliberate act: re-verify
+# the hmmlearn import (see build-time check below) before changing it.
+FROM freqtradeorg/freqtrade@sha256:55ed7118ab09fe1732bfb45f57ad19d1cd64f02180d53339324bbfe31982d1dd
 
 # Install build tools as a safety net in case the wheel is unavailable on
 # some future image rebuild. Adds ~80 MB; acceptable for a long-running bot.
@@ -15,4 +22,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 USER ftuser
-RUN pip install --user --no-cache-dir hmmlearn
+RUN pip install --user --no-cache-dir hmmlearn \
+    # ccxt shipped with 2025.9 fails to load Hyperliquid markets (a spot-market
+    # entry with a null base/quote crashes the parser) — upgrade to pick up
+    # the fix. Found alongside the hmmlearn issue above.
+    && pip install --user --no-cache-dir -U ccxt \
+    # Fail the build, not a live/backtest run, if the base image ever drifts
+    # to a Python version without an hmmlearn wheel again.
+    && python -c "from hmmlearn.hmm import GaussianHMM"

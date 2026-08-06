@@ -4,6 +4,30 @@ Append-only daily log. Newest entry at the top.
 
 ---
 
+## 2026-08-06 — Ruled out HmmSmaSlopeV2 short-side; fixed recurring Docker base-image drift
+
+- Drafted `HmmSmaSlopeV2Short` (short-side mirror of V2's HMM/slope signal) and
+  `HmmSmaSlopeV2LongShort` (V2's long entries + the short entries combined), both in
+  `freqtrade-experiment/hmm-slope-experiment/research/strategies/`.
+- Backtested both on the same bull (Binance, market +190.83%) and bear (Hyperliquid,
+  market -38.61%) windows V2 used. Short-only lost even in the bear window (-13.12%,
+  MDD 16.07%, 3x the 5.5% kill threshold) — no edge, not a regime-timing problem.
+  Combined long+short was worse than either half alone in both windows (bull +26.79%
+  vs V2's +33.44% with MDD more than doubled; bear -14.70% vs V2's -1.58%). Full
+  writeup: `research/analysis/reports/2026-08-06-hmm-sma-slope-v2-short-and-longshort.md`.
+- Rebuilding the backtest image surfaced a recurrence of the 2026-05-21 Track B
+  bring-up issue: `execution/ops/Dockerfile.ext`'s `FROM freqtradeorg/freqtrade:stable`
+  had drifted to Python 3.14, which has no hmmlearn wheel — compiles but produces a
+  silently-broken `.so`. Fixed by digest-pinning to the `2025.9` tag (Python 3.13, has
+  a wheel), upgrading `ccxt` (fixes a separate Hyperliquid market-load crash), and
+  adding a build-time `python -c "from hmmlearn.hmm import GaussianHMM"` assertion so
+  future drift fails `docker build` instead of failing silently at deploy time.
+
+**Next:** Choose the evaluation framework's primary deliverable and review the
+first automated multi-thread literature PR before accepting adaptive keywords.
+
+---
+
 ## 2026-08-05 — Unified literature and rebuilt recurring discovery
 
 - Consolidated all cross-project PDFs and source notes under root `literature/`; created authoritative crypto-market and strategy-evaluation indexes, including explicit records for unavailable PDFs.

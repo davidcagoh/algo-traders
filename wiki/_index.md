@@ -2,7 +2,7 @@
 
 Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
-> **Now:** Literature is unified and its six-thread weekly scan is PR-gated; the blocker is choosing the evaluation framework's deliverable and reconciling it with the failed live run.
+> **Now:** HmmSmaSlopeV2's short and combined long+short variants backtested and ruled out (no edge even in a favorable bear window); the blocker is still choosing the evaluation framework's deliverable and reconciling it with the failed live run.
 > **Queue:** Review the first adaptive-keyword literature PR; separately cross-cycle validate signed MV or park it before another paper run.
 
 ---

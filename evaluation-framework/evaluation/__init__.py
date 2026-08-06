@@ -96,6 +96,7 @@ from evaluation.live import (
 )
 from evaluation.pbo import PBOResult, cscv_pbo, format_pbo_table
 from evaluation.regimes import label_regimes, regime_metrics, regime_stability
+from evaluation.spa import SPAResult, format_spa_table, spa_test
 from evaluation.splits import (
     DoubleOOSSplit,
     FoldSpec,
@@ -134,6 +135,7 @@ __all__ = [
     "PurgedKFold",
     "PurgedWalkForward",
     "ReconciliationReport",
+    "SPAResult",
     "SlippageAtRisk",
     "TrialLedger",
     "TrialRecord",
@@ -169,6 +171,7 @@ __all__ = [
     "format_markdown_table_with_ci",
     "format_pbo_table",
     "format_reconciliation_report",
+    "format_spa_table",
     "guard",
     "is_dsr_binding",
     "label_regimes",
@@ -192,6 +195,7 @@ __all__ = [
     "risk_parity_weights",
     "seal_holdout",
     "slippage_at_risk",
+    "spa_test",
     "stationary_bootstrap",
     "turnover",
 ]

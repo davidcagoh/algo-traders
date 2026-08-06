@@ -4,6 +4,69 @@ Append-only daily log. Newest entry at the top.
 
 ---
 
+## 2026-08-06 — evaluation-framework cleanup + Phase 7 (SPA/Reality Check) implemented
+
+- Cleaned up `evaluation-framework/` and root build junk: deleted untracked
+  `.venv`, `.mypy_cache`, `.pytest_cache`, `.ruff_cache`, `.coverage`,
+  `algo_eval_stack.egg-info` (~481M, none git-tracked); added
+  `.mypy_cache/`, `.pytest_cache/`, `.ruff_cache/` to root `.gitignore`
+  (they were missing despite `.venv/`/`.coverage`/`*.egg-info/` already
+  being covered). Confirmed `PLAN.md`/`STATUS.md`/`README.md`/
+  `pyproject.toml` were NOT stale despite the user's suspicion — all 6
+  original phases were genuinely complete per `STATUS.md`.
+- Investigated why SPA/Reality Check (Hansen 2005, White 2000) were listed
+  as "record only" in `literature/strategy-evaluation/_index.md`: Hansen
+  hit a TLS download failure against the DOI resolver, White is behind an
+  Econometrica-adjacent paywall — not a research gap, a fetch/access
+  failure. User supplied both PDFs directly; relocated into
+  `literature/strategy-evaluation/foundational/` with descriptive
+  filenames matching the directory's existing convention, and read both
+  in full (30 + 17 pages).
+- Wrote an implementation plan as **Phase 7** in
+  `evaluation-framework/PLAN.md`, matching the existing phase format
+  (literature citation, concrete deliverables, test list, exit criteria),
+  then implemented it fully in the same session: `evaluation/spa.py`
+  (Hansen's studentized SPA test with three null-recentering variants
+  `l`/`c`/`u`, plus White's unstudentized RC as `SPAResult.rc_p_value`
+  computed from the same bootstrap resamples), 7 new tests in
+  `tests/test_spa.py`, de-privatized
+  `bootstrap.py::stationary_bootstrap_indices` so `spa.py` reuses it
+  instead of reimplementing resampling, wired into `__init__.py` and
+  `evaluation/README.md`'s module map + worked example.
+- **Correction to my own Phase 7 plan, caught during implementation**: I
+  had written a test asserting `p_value_liberal` (Hansen's `μ̂ˡ` null
+  variant) numerically equals White's RC p-value, reasoning "μ̂ˡ is by
+  construction the RC's null." That's wrong — `μ̂ᵘ=0` (not `μ̂ˡ`) is the
+  RC-equivalent null *philosophy* (both assume every model's population
+  mean is exactly 0), and even then literal RC is unstudentized while all
+  three SPA variants are studentized, so they're related in spirit but
+  not numerically equal. Replaced with a p-value ordering test
+  (`liberal <= consistent <= upper`, which Hansen's `μ̂ˡ ≤ μ̂ᶜ ≤ μ̂ᵘ`
+  ordering does guarantee) and a direct power-comparison test
+  (`p_value_consistent <= rc_p_value` on a known-edge fixture,
+  reproducing the paper's actual headline claim).
+- Verified: full suite 162/162 passing (150 prior + 12, including the 7
+  new SPA tests and bootstrap.py rename fallout), `spa.py` at 96% line
+  coverage, ruff/black/mypy clean across the whole package. Updated
+  `PLAN.md` (0-6 → 0-7 complete), `STATUS.md`, and the literature index's
+  read-status flags to close out the phase. Deleted the venv/caches again
+  after verification, consistent with the earlier cleanup.
+- Discussed the real order-book capture item (`stress.py`'s
+  `depth_from_ohlcv` OHLCV proxy) — decided to skip it for now rather than
+  build a rushed version: no strategy is currently live-paper-trading, so
+  there is nothing to capture real book depth against yet. A genuinely
+  quick forward-only capture stub (poll Hyperliquid's order-book endpoint
+  going forward, no historical backfill) was scoped as the option if this
+  becomes relevant later.
+- Confirmed with the user that `evaluation-framework/PLAN.md` and
+  `STATUS.md` should stay as project-local docs rather than being folded
+  into the wiki's H3L structure — they're a phase-by-phase build spec with
+  literature citations, not ephemeral cross-project state; the wiki's
+  `_index.md` already routes to them correctly via the `Now:` pointer.
+
+**Next:** Optional order-book capture item is deliberately parked, not
+forgotten — revisit once a strategy is actually live-paper-trading.
+
 ## 2026-08-06 — Session wrap: aurora-forecaster stood up end-to-end (data + model + text sources)
 
 - Full session summary (see detailed entries below for each step): scaffolded

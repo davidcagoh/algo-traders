@@ -4,13 +4,16 @@ Package-first (see `STATUS.md`). Every phase below maps to a source in
 `../literature/strategy-evaluation/_index.md`; cite it in code comments and
 docstrings as each module is written.
 
-**Status (2026-08-06): Phases 0-6 complete.** 150 tests, 96% coverage,
-clean ruff/black/mypy. The DSR standalone fix (originally part of Phase 1 /
-6.1) landed first — see `../wiki/decisions-archive.md` (2026-08-06 entry)
-and `evaluation/dsr.py`. See `evaluation/README.md` for the module map,
-worked example, and design notes. Not built: SPA/Reality Check (stretch
-item, sources inaccessible) and real order-book capture (`stress.py`'s
-`depth_from_ohlcv` remains an explicitly-labeled OHLCV proxy).
+**Status (2026-08-06): Phases 0-7 complete.** 162 tests, clean
+ruff/black/mypy. The DSR standalone fix (originally part of Phase 1 / 6.1)
+landed first — see `../wiki/decisions-archive.md` (2026-08-06 entry) and
+`evaluation/dsr.py`. See `evaluation/README.md` for the module map, worked
+example, and design notes. Phase 7 (SPA/Reality Check) closed the one
+remaining stretch item once its blocking sources (White 2000, Hansen 2005
+— TLS failure / paywall) were acquired directly and read in full. Not
+built: real order-book capture (`stress.py`'s `depth_from_ohlcv` remains an
+explicitly-labeled OHLCV proxy) — this was never blocked on source access,
+just out of scope for the original 6 phases.
 
 ## Phase 0 — Package foundation (blocks everything)
 - `pyproject.toml`: PEP 621 metadata, distribution name `algo-eval-stack`,
@@ -175,6 +178,85 @@ survey (factor controls, survivorship bias, deployment realism); Jadouli
 - If/when the archived manuscript resumes: start from `STATUS.md` and the
   current literature index, not from `archive/manuscript-2026-05/` — those
   files are stale by construction (see their README).
+
+## Phase 7 — SPA / Reality Check (closes the Phase 2 stretch item) — done 2026-08-06
+Lit: White 2000, *A Reality Check for Data Snooping*
+(`../literature/strategy-evaluation/foundational/white-reality-check-data-snooping.pdf`,
+read in full 2026-08-06); Hansen 2005, *A Test for Superior Predictive
+Ability* (`../literature/strategy-evaluation/foundational/hansen-test-superior-predictive-ability.pdf`,
+read in full 2026-08-06). Both were previously "record only" (TLS download
+failure / paywalled) — see `../literature/strategy-evaluation/_index.md`.
+Acquired directly by the user and relocated into the literature tree; now
+readable, so the stretch item is unblocked. Hansen's SPA is a strict
+power improvement on White's RC (studentized statistic + data-dependent
+null vs. the LFC-based null) — see Hansen §2.4 and Table 2-4 Monte Carlo
+results (~15%→53% power in the paper's worked example). Build SPA as the
+primary test; RC falls out for free since it reuses the same bootstrap
+resampling, just unstudentized with `μ=0`.
+
+- `evaluation/spa.py`:
+  - `SPAResult` frozen dataclass: `p_value_liberal`, `p_value_consistent`,
+    `p_value_upper` (Hansen's `μ̂ˡ/μ̂ᶜ/μ̂ᵘ` three-null-variant p-values),
+    `t_stat_best`, `best_trial`, `n_trials`, `n_boot`, `rc_p_value`
+    (White's unstudentized RC p-value, for comparison).
+  - `spa_test(trial_returns: pd.DataFrame, benchmark: pd.Series, n_boot=10_000, block_len=None, seed=None) -> SPAResult`.
+    Same `(T periods x N trials)` input shape as `pbo.py::cscv_pbo`, so it
+    slots into the same call sites. Per-trial relative performance
+    `d_{k,t} = L(benchmark_t) - L(trial_k,t)` (Hansen Table 1 notation);
+    default loss `L = -returns` (i.e. compare mean returns) to match the
+    project's existing Sharpe-style metrics, but accept a `loss` callable
+    for MSE/other criteria per Hansen Examples 2.1-2.3.
+  - Studentized statistic `T^SPA_k = max(n^0.5 * d̄_k / ω̂_k, 0)` (Hansen
+    p.368). `ω̂_k` from the same block-bootstrap population-variance
+    estimator already implemented for `bootstrap.py`'s block-length
+    logic — reuse `_stationary_bootstrap_indices`, do not reimplement
+    resampling.
+  - Three recentering estimators per Hansen §2.4 p.368-371:
+    `μ̂ˡ_k = min(d̄_k, 0)` (liberal = RC), `μ̂ᶜ_k = d̄_k * 1[n^0.5 d̄_k/ω̂_k <= -sqrt(2*log(log(n)))]`
+    (consistent, Hansen's recommended default), `μ̂ᵘ_k = 0` (upper = old
+    LFC/RC null). Bootstrap p-value construction mirrors
+    `bootstrap.py::paired_bootstrap_test`'s resampling pattern, applied to
+    the max-statistic instead of a pairwise difference.
+  - `format_spa_table(result: SPAResult, label: str = "") -> str`, same
+    convention as `pbo.py::format_pbo_table`.
+- `bootstrap.py::stationary_bootstrap_indices` — de-privatized (was
+  `_stationary_bootstrap_indices`) so `spa.py` reuses the resampling
+  scheme instead of reimplementing it. Existing call sites updated.
+- `tests/test_spa.py`, mirroring `tests/test_pbo.py`'s structure — 7
+  tests: known-null (p_value_consistent > 0.05 against a zero benchmark),
+  known-edge (p_value_consistent < 0.1, correct best_trial), SPA-more-
+  powerful-than-RC on the known-edge fixture (`p_value_consistent <=
+  rc_p_value`, reproducing the paper's headline claim), p-value ordering
+  (`liberal <= consistent <= upper`, per Hansen's `μ̂ˡ ≤ μ̂ᶜ ≤ μ̂ᵘ`),
+  mismatched-index guard, too-few-observations guard, and table
+  formatting. **Correction to the original plan**: a
+  `test_spa_p_liberal_matches_reality_check` test was planned on the
+  premise that `μ̂ˡ` "is by construction the RC's null" — that's wrong.
+  `μ̂ᵘ=0` is the RC-equivalent *null philosophy* (both assume every model's
+  population mean is exactly 0), but literal RC is unstudentized while all
+  three SPA variants (`l`/`c`/`u`) are studentized, so `p_value_upper` and
+  `rc_p_value` are related in spirit but not numerically equal. Replaced
+  with the p-value ordering test instead, which is the property the paper
+  actually guarantees.
+- `evaluation/__init__.py`: `SPAResult`, `spa_test`, `format_spa_table`
+  added to imports and `__all__`. No separate `reality_check_p_value`
+  function — RC's p-value ships as `SPAResult.rc_p_value`, computed from
+  the same bootstrap resamples as SPA (no separate bootstrap pass needed).
+- `evaluation/README.md`: `spa.py` row added to the module map; worked
+  example now runs `cscv_pbo` and `spa_test` side by side (step 5) with a
+  note that SPA is a direct beat-the-benchmark test, not a deflator like
+  DSR/PBO.
+- `_index.md`'s two White/Hansen rows updated: "read in full and
+  implemented 2026-08-06" instead of "not yet read past record".
+- `STATUS.md`'s "Next up" updated — SPA/Reality Check removed from the
+  blocked list; only real order-book capture for `stress.py` remains open.
+- Exit — all met: `spa_test` returns p_value_consistent=0.081 (> 0.05, no
+  false rejection) on 20 pure-noise trials vs. a zero benchmark;
+  p_value_consistent < 0.1 with the correct trial identified on an
+  injected-edge fixture; `p_value_consistent <= rc_p_value` and the
+  liberal/consistent/upper ordering both hold on that fixture; full suite
+  (162 tests, including 7 new in `test_spa.py`) passes; ruff/black/mypy
+  clean.
 
 ## Independently deliverable slices
 | Slice | Ships |

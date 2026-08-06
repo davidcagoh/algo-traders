@@ -4,6 +4,51 @@ Append-only daily log. Newest entry at the top.
 
 ---
 
+## 2026-08-06 — Cross-cycle proxy test for signed mean-variance; traced the "cross-cycle validation required" requirement's origin
+
+- Investigated why `mean-variance-paper`'s signed MV result can't be
+  cross-cycle validated on its actual universe: Hyperliquid's public API
+  caps history at ~5000 1h candles (~208 days) per pair — confirmed this is
+  an exchange-side limit (`hmm-slope-experiment/research/analysis/reports/2026-04-24-decision-002-hyperliquid-deep-history.md`),
+  not a freqtrade bug — freqtrade's `download-data` is hard-disabled for
+  Hyperliquid (`ohlcv_has_history=False`) precisely because Hyperliquid
+  doesn't publish bulk OHLCV anywhere. Separately, `WLFI`/`VVV`/`XPL`
+  launched in 2025 and have no prior cycle on any venue — no re-fetch fixes
+  that. No `.vercel` directory or other evidence the paper monitor is
+  deployed.
+- Traced the "cross-cycle validation is required before another paper run"
+  line in `LEARNINGS.md` via git history: it was NOT part of collaborator
+  Ethan's original commit (`5ef361f`, 2026-06-03) — it first appears when
+  `LEARNINGS.md` was written from scratch during the 2026-08-05 repo
+  consolidation (`d96b6fd`), inheriting `hmm-slope-experiment`'s
+  pre-registered kill-criteria discipline by extension rather than being a
+  decision Ethan made for this project. Worth him weighing in before it's
+  treated as a hard gate here.
+- Ran a liquid-majors proxy test (`analysis/cross_cycle_liquid_majors.py`,
+  new script, reuses `run_portfolio_short_funding.simulate`/`target_weights`/
+  `metrics` verbatim — same optimizer, only data source and universe
+  differ): substitutes `BTC, ETH, SOL, AVAX, ARB, DOGE` (deep Binance
+  history) for the actual 9-coin book, across two windows structurally
+  different from the original study window (which was itself a sharp
+  bear-into-recovery leg). Result:
+  `shrunk_mean_variance_signed` placed **last of 5** in a clean bull window
+  (Sharpe 2.88 vs equal-weight's 4.15) and only "lost the least" in a chop
+  window (both had negative Sharpe). Neither window reproduces the original
+  headline result — evidence against the construction having a robust edge
+  outside its one favorable window. This is evidence about the *method*,
+  not the *actual book* (none of `HYPE, PAXG, TRX, WLFI, VVV, TON, ZRO,
+  XPL` are in the proxy universe). See
+  `freqtrade-experiment/mean-variance-paper/analysis/results/cross_cycle_liquid_majors_proxy.md`
+  for the full write-up and caveats.
+- Did not change `shrunk_mean_variance_signed`'s ledger `gate_outcome`
+  (still `"passed"` at the `backtest` evidence stage — that's accurate for
+  what it is: it did pass decision-012's pre-registered thresholds on its
+  own window). The cross-cycle gate is separate and untouched by this
+  session; the proxy result argues for continued caution, not for
+  retroactively flipping the existing backtest-stage verdict.
+
+---
+
 ## 2026-08-06 — Backfilled mean-variance-paper into the registry; migrated remaining hmm-slope-experiment drivers off duplicated formulas
 
 - Backfilled `freqtrade-experiment/mean-variance-paper/` into a new

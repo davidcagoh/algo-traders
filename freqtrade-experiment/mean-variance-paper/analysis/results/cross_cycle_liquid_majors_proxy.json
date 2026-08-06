@@ -1,0 +1,266 @@
+{
+  "universe": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "AVAX",
+    "ARB",
+    "DOGE"
+  ],
+  "data_source": "binance (proxy \u2014 NOT the actual hyperliquid 9-coin book)",
+  "params": {
+    "lookback": 60,
+    "rebalance_days": 7,
+    "fee": 0.00035,
+    "cap": 0.2,
+    "gross_limit": 1.0,
+    "mean_shrink": 0.5,
+    "risk_aversion": 1.0,
+    "turnover_penalty": 0.05
+  },
+  "windows": {
+    "bull_2023H2-2024Q1": [
+      "2023-10-01",
+      "2024-04-01"
+    ],
+    "chop_2024Q2-Q4": [
+      "2024-04-01",
+      "2024-11-01"
+    ]
+  },
+  "results": {
+    "bull_2023H2-2024Q1": {
+      "btc_long": {
+        "days": 184,
+        "total_return_pct": 136.8535183340926,
+        "cagr_pct": 453.16415625882325,
+        "ann_vol_pct": 52.8531365488645,
+        "sharpe": 3.504404778482596,
+        "sortino": 5.333606431556501,
+        "max_drawdown_pct": -16.13780781388642,
+        "calmar": 28.080899307084334,
+        "avg_gross_exposure": 1.001878995317522,
+        "avg_net_exposure": 1.001878995317522,
+        "avg_effective_assets": 1.0,
+        "avg_turnover_per_rebalance": 0.03974619570947983,
+        "total_fee_drag_pct": 0.037984877409860764,
+        "total_funding_pnl_pct": -8.792586437499308,
+        "final_weights": {
+          "BTC": 1.0024730707899594
+        }
+      },
+      "equal_weight_long": {
+        "days": 184,
+        "total_return_pct": 239.73436345961173,
+        "cagr_pct": 1031.4075472795803,
+        "ann_vol_pct": 63.49006128907448,
+        "sharpe": 4.147687336100545,
+        "sortino": 6.975254710396951,
+        "max_drawdown_pct": -16.629199746700017,
+        "calmar": 62.02388346945306,
+        "avg_gross_exposure": 1.0021983076192083,
+        "avg_net_exposure": 1.0021983076192083,
+        "avg_effective_assets": 5.996772665188562,
+        "avg_turnover_per_rebalance": 0.09575854512640138,
+        "total_fee_drag_pct": 0.09376343745105936,
+        "total_funding_pnl_pct": -10.5995498605078,
+        "final_weights": {
+          "BTC": 0.16884925471988155,
+          "ETH": 0.1686060922390895,
+          "SOL": 0.16697633657569294,
+          "AVAX": 0.16378592393451955,
+          "ARB": 0.161110412106646,
+          "DOGE": 0.17365284435533854
+        }
+      },
+      "inverse_vol_long": {
+        "days": 184,
+        "total_return_pct": 214.1984163260393,
+        "cagr_pct": 868.9500659011676,
+        "ann_vol_pct": 60.56973387466764,
+        "sharpe": 4.060647951121947,
+        "sortino": 6.721940459712439,
+        "max_drawdown_pct": -15.869077970865764,
+        "calmar": 54.75743880624216,
+        "avg_gross_exposure": 1.0021744583225156,
+        "avg_net_exposure": 1.0021744583225156,
+        "avg_effective_assets": 5.801986632987065,
+        "avg_turnover_per_rebalance": 0.10594301377454045,
+        "total_fee_drag_pct": 0.10321879027161977,
+        "total_funding_pnl_pct": -10.480616833106456,
+        "final_weights": {
+          "BTC": 0.2030885404759595,
+          "ETH": 0.20279606945851564,
+          "SOL": 0.15644012501175286,
+          "AVAX": 0.13972963603043742,
+          "ARB": 0.19048839104522883,
+          "DOGE": 0.11043802882157529
+        }
+      },
+      "minimum_variance_signed": {
+        "days": 184,
+        "total_return_pct": 198.33003182738915,
+        "cagr_pct": 774.2876110156421,
+        "ann_vol_pct": 59.90264977471883,
+        "sharpe": 3.92637514994594,
+        "sortino": 6.5855593034108715,
+        "max_drawdown_pct": -16.521102058834856,
+        "calmar": 46.86658361277918,
+        "avg_gross_exposure": 1.002196259793286,
+        "avg_net_exposure": 1.002196259793286,
+        "avg_effective_assets": 5.40513629965272,
+        "avg_turnover_per_rebalance": 0.1345074822632875,
+        "total_fee_drag_pct": 0.12990400731173538,
+        "total_funding_pnl_pct": -10.583273870919992,
+        "final_weights": {
+          "BTC": 0.20422268710970887,
+          "ETH": 0.20392858278976975,
+          "SOL": 0.2019573980104036,
+          "AVAX": 0.19809860311284783,
+          "ARB": 0.19486257926548992
+        }
+      },
+      "shrunk_mean_variance_signed": {
+        "days": 184,
+        "total_return_pct": 115.0337807176665,
+        "cagr_pct": 356.65905829060654,
+        "ann_vol_pct": 58.6935077584837,
+        "sharpe": 2.883241602575053,
+        "sortino": 4.457421170858994,
+        "max_drawdown_pct": -19.222006741551013,
+        "calmar": 18.554725481374373,
+        "avg_gross_exposure": 1.00554063288079,
+        "avg_net_exposure": 0.5732338415730378,
+        "avg_effective_assets": 5.236689492864291,
+        "avg_turnover_per_rebalance": 0.4227489617733105,
+        "total_fee_drag_pct": 0.3996972375749402,
+        "total_funding_pnl_pct": -7.27111043030772,
+        "final_weights": {
+          "BTC": 0.19860835336077048,
+          "ETH": 0.13970728725559856,
+          "SOL": 0.19640533985494252,
+          "AVAX": 0.0779640209904304,
+          "ARB": -0.16882433260833898,
+          "DOGE": 0.20425855909784307
+        }
+      }
+    },
+    "chop_2024Q2-Q4": {
+      "btc_long": {
+        "days": 215,
+        "total_return_pct": -6.423912400187348,
+        "cagr_pct": -10.659709501339954,
+        "ann_vol_pct": 49.24208893483551,
+        "sharpe": 0.014305558652061257,
+        "sortino": 0.023799839292650116,
+        "max_drawdown_pct": -26.80582324296319,
+        "calmar": -0.39766394804301486,
+        "avg_gross_exposure": 1.0007668612830862,
+        "avg_net_exposure": 1.0007668612830862,
+        "avg_effective_assets": 1.0,
+        "avg_turnover_per_rebalance": 0.03342868023284939,
+        "total_fee_drag_pct": 0.03640516739379528,
+        "total_funding_pnl_pct": -3.914631358368169,
+        "final_weights": {
+          "BTC": 1.0015116643096038
+        }
+      },
+      "equal_weight_long": {
+        "days": 215,
+        "total_return_pct": -38.12012529780044,
+        "cagr_pct": -55.72905500813462,
+        "ann_vol_pct": 66.95990246214262,
+        "sharpe": -0.8827072221868282,
+        "sortino": -1.4015595780437236,
+        "max_drawdown_pct": -48.87628105617704,
+        "calmar": -1.1402065338007445,
+        "avg_gross_exposure": 1.000766831727574,
+        "avg_net_exposure": 1.000766831727574,
+        "avg_effective_assets": 5.997570647885223,
+        "avg_turnover_per_rebalance": 0.0741497895019899,
+        "total_fee_drag_pct": 0.07609706374185339,
+        "total_funding_pnl_pct": -3.9105168582313694,
+        "final_weights": {
+          "BTC": 0.1697093922664097,
+          "ETH": 0.16632735697897474,
+          "SOL": 0.15610024335503186,
+          "AVAX": 0.15977668964373168,
+          "ARB": 0.16613522008720416,
+          "DOGE": 0.18316693740821924
+        }
+      },
+      "inverse_vol_long": {
+        "days": 215,
+        "total_return_pct": -36.04497773673777,
+        "cagr_pct": -53.17924992637224,
+        "ann_vol_pct": 65.54195294842829,
+        "sharpe": -0.8310695386747604,
+        "sortino": -1.3165419060289976,
+        "max_drawdown_pct": -47.275340647803944,
+        "calmar": -1.1248834846596192,
+        "avg_gross_exposure": 1.0007746472745171,
+        "avg_net_exposure": 1.0007746472745171,
+        "avg_effective_assets": 5.883676498444049,
+        "avg_turnover_per_rebalance": 0.08072968365452762,
+        "total_fee_drag_pct": 0.08448401306959434,
+        "total_funding_pnl_pct": -3.9570427021411723,
+        "final_weights": {
+          "BTC": 0.20365374671716557,
+          "ETH": 0.19302334984288114,
+          "SOL": 0.15140153930550615,
+          "AVAX": 0.1419650654185603,
+          "ARB": 0.1466933503184136,
+          "DOGE": 0.1645129982439045
+        }
+      },
+      "minimum_variance_signed": {
+        "days": 215,
+        "total_return_pct": -34.11877339637934,
+        "cagr_pct": -50.76019385880917,
+        "ann_vol_pct": 65.72102131041538,
+        "sharpe": -0.7505398089601447,
+        "sortino": -1.1773194052877025,
+        "max_drawdown_pct": -47.41055193214364,
+        "calmar": -1.0706518230679891,
+        "avg_gross_exposure": 1.0007788329283656,
+        "avg_net_exposure": 1.0007788329283656,
+        "avg_effective_assets": 5.379737267624871,
+        "avg_turnover_per_rebalance": 0.15765446278258227,
+        "total_fee_drag_pct": 0.16874638237278236,
+        "total_funding_pnl_pct": -3.97933547623788,
+        "final_weights": {
+          "BTC": 0.20317253143969713,
+          "ETH": 0.19912362959879093,
+          "SOL": 0.18687994327979168,
+          "AVAX": 0.15369188530071903,
+          "ARB": 0.039085344646180596,
+          "DOGE": 0.21928362274060337
+        }
+      },
+      "shrunk_mean_variance_signed": {
+        "days": 215,
+        "total_return_pct": -18.112511139400777,
+        "cagr_pct": -28.768570444941243,
+        "ann_vol_pct": 35.00810136930351,
+        "sharpe": -0.7922492547451676,
+        "sortino": -0.9412377853934365,
+        "max_drawdown_pct": -22.244607883741306,
+        "calmar": -1.2932828753510344,
+        "avg_gross_exposure": 0.9892174324947834,
+        "avg_net_exposure": -0.061081800254331055,
+        "avg_effective_assets": 5.28026953190335,
+        "avg_turnover_per_rebalance": 0.441541624886098,
+        "total_fee_drag_pct": 0.4792389351502351,
+        "total_funding_pnl_pct": -0.28159258613728916,
+        "final_weights": {
+          "BTC": 0.20286822949890365,
+          "ETH": -0.19882539190634482,
+          "SOL": 0.18660004358551446,
+          "AVAX": 0.11558901564392572,
+          "ARB": -0.07840667659279092,
+          "DOGE": 0.2189551903904631
+        }
+      }
+    }
+  }
+}

@@ -11,18 +11,21 @@ Usage:
 """
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[4] / "evaluation-framework"))
+from evaluation.layers import max_drawdown
+
 from eval_layers import (
-    _drawdown_series,
-    _equal_weights,
-    _mean_variance_weights,
-    _portfolio_returns,
-    _risk_parity_weights,
     build_returns_matrix,
+    equal_weights,
+    mean_variance_weights,
+    portfolio_returns,
+    risk_parity_weights,
 )
 
 REPO = Path(__file__).resolve().parent.parent
@@ -36,11 +39,10 @@ BOOK_ZIPS: dict[str, Path] = {
 
 def combined_mdd(returns: pd.DataFrame, weights: dict[str, float]) -> float:
     """MDD (negative pct) of equity curve built from weighted daily log-returns."""
-    port_ret = _portfolio_returns(returns, weights)
+    port_ret = portfolio_returns(returns, weights)
     # daily log-returns → equity curve via cumulative exp
     equity = np.exp(port_ret.cumsum())
-    dd = _drawdown_series(equity)
-    return float(dd.min())
+    return -max_drawdown(equity) * 100.0
 
 
 def main() -> None:
@@ -49,9 +51,9 @@ def main() -> None:
     print(f"window: {returns.index.min().date()} → {returns.index.max().date()}  "
           f"({len(returns)} days)")
 
-    w_eq = _equal_weights(book)
-    w_rp = _risk_parity_weights(returns, book, vol_window=90)
-    w_mv = _mean_variance_weights(returns, book)
+    w_eq = equal_weights(book)
+    w_rp = risk_parity_weights(returns, book, vol_window=90)
+    w_mv = mean_variance_weights(returns, book)
 
     mdd_eq = combined_mdd(returns, w_eq)
     mdd_rp = combined_mdd(returns, w_rp)

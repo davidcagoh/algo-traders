@@ -59,14 +59,20 @@ def correlation_matrix(returns: pd.DataFrame, method: str = "pearson") -> pd.Dat
 # ─── Portfolio Sharpe ─────────────────────────────────────────────────────────
 
 
+def portfolio_returns(returns: pd.DataFrame, weights: dict[str, float]) -> pd.Series:
+    """Weighted-portfolio return series from a (period x strategy) frame."""
+    cols = list(weights.keys())
+    w = np.array([weights[c] for c in cols])
+    sub = returns[cols]
+    return pd.Series(sub.values @ w, index=sub.index)
+
+
 def _portfolio_sharpe(
     returns: pd.DataFrame,
     weights: dict[str, float],
     annualisation: float = DEFAULT_ANNUAL,
 ) -> float:
-    cols = list(weights.keys())
-    w = np.array([weights[c] for c in cols])
-    series = returns[cols].values @ w
+    series = portfolio_returns(returns, weights)
     if series.size < 2 or series.std() == 0:
         return 0.0
     return float(series.mean() / series.std() * math.sqrt(annualisation))
@@ -75,12 +81,12 @@ def _portfolio_sharpe(
 # ─── Weighting schemes ────────────────────────────────────────────────────────
 
 
-def _equal_weights(strategies: list[str]) -> dict[str, float]:
+def equal_weights(strategies: list[str]) -> dict[str, float]:
     n = len(strategies)
     return {s: 1.0 / n for s in strategies}
 
 
-def _risk_parity_weights(
+def risk_parity_weights(
     returns: pd.DataFrame,
     strategies: list[str],
     vol_window: int = 90,
@@ -95,11 +101,11 @@ def _risk_parity_weights(
     return {s: x / total for s, x in inv.items()}
 
 
-def _mean_variance_weights(returns: pd.DataFrame, strategies: list[str]) -> dict[str, float]:
+def mean_variance_weights(returns: pd.DataFrame, strategies: list[str]) -> dict[str, float]:
     """Long-only tangency-portfolio weights. Numerically unstable at small N."""
     sub = returns[strategies].dropna(how="any")
     if len(sub) < 30:
-        return _equal_weights(strategies)
+        return equal_weights(strategies)
     mu = sub.mean().values
     cov = sub.cov().values
     try:
@@ -107,10 +113,10 @@ def _mean_variance_weights(returns: pd.DataFrame, strategies: list[str]) -> dict
         raw = inv_cov @ mu
         raw = np.clip(raw, 0.0, None)
         if raw.sum() <= 0:
-            return _equal_weights(strategies)
+            return equal_weights(strategies)
         return dict(zip(strategies, (raw / raw.sum()).tolist()))
     except (np.linalg.LinAlgError, ValueError):
-        return _equal_weights(strategies)
+        return equal_weights(strategies)
 
 
 # ─── MDB ──────────────────────────────────────────────────────────────────────
@@ -129,13 +135,13 @@ def marginal_diversification_benefit(
         return 0.0
     extended = book + [candidate]
     if scheme == "eq":
-        wb, we = _equal_weights(book), _equal_weights(extended)
+        wb, we = equal_weights(book), equal_weights(extended)
     elif scheme == "rp":
-        wb = _risk_parity_weights(returns, book, vol_window)
-        we = _risk_parity_weights(returns, extended, vol_window)
+        wb = risk_parity_weights(returns, book, vol_window)
+        we = risk_parity_weights(returns, extended, vol_window)
     elif scheme == "mv":
-        wb = _mean_variance_weights(returns, book)
-        we = _mean_variance_weights(returns, extended)
+        wb = mean_variance_weights(returns, book)
+        we = mean_variance_weights(returns, extended)
     else:
         raise ValueError(f"unknown MDB scheme: {scheme!r}")
     return _portfolio_sharpe(returns, we, annualisation) - _portfolio_sharpe(

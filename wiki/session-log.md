@@ -4,6 +4,50 @@ Append-only daily log. Newest entry at the top.
 
 ---
 
+## 2026-08-06 — Backfilled mean-variance-paper into the registry; migrated remaining hmm-slope-experiment drivers off duplicated formulas
+
+- Backfilled `freqtrade-experiment/mean-variance-paper/` into a new
+  `TrialLedger` (`analysis/backfill_ledger.py`, 43 trials + gap marker),
+  reading `gate_outcome` mechanically off the pre-registered thresholds in
+  decisions 011/012 (long-only and signed mean-variance kill criteria)
+  benchmarked against each table's own equal-weight row. The
+  `pc_pair_stat_arb` family has no kill-criteria decision doc, so its rows
+  are left `gate_outcome="pending"` rather than asserting an unwritten
+  verdict. The cross-project registry now spans two projects
+  (`hmm-slope-experiment`, `mean-variance-paper`); still a floor, not the
+  full search size, per each ledger's own gap marker.
+- Migrated the remaining `hmm-slope-experiment` analysis drivers onto
+  `evaluation-framework`: `eval_layers.py` is now a thin CLI wrapper around
+  `evaluation.layers.compute()`/`format_markdown_table` (which already
+  covers L1-L5, a superset of the file's old locally duplicated
+  skew/kurtosis/tail-ratio/CVaR/Ulcer/Martin/Pain formulas) plus
+  `evaluation.correlation_mdb` (also already covering the file's old local
+  MDB/weighting-scheme duplication); `combined_book_mdd.py` now imports the
+  weighting/portfolio-returns helpers and uses `evaluation.layers.max_drawdown`
+  instead of a local drawdown-series helper. `run_correlation_mdb.py` had
+  already been migrated in an earlier session. `generate_pareto_chart.py`
+  needed no changes — it's a hand-transcribed data table plus a local
+  Pareto-dominance helper with no formula the package covers.
+- To support the above without leaking private names across script
+  boundaries, promoted `evaluation.correlation_mdb`'s weighting-scheme
+  helpers (`_equal_weights`, `_risk_parity_weights`,
+  `_mean_variance_weights`) to public API and added a public
+  `portfolio_returns()`, exported from `evaluation/__init__.py`.
+- Verification surfaced a real latent bug in `run_correlation_mdb.py`: it
+  called the package's `marginal_diversification_benefit`/`mdb_robust_flag`
+  without passing `annualisation`, silently defaulting to
+  `DEFAULT_ANNUAL=252` (SGX) instead of crypto's 365-day year — even though
+  the script's own output JSON already *claimed* `"annualisation": 365`.
+  Fixed by passing `evaluation.layers.CRYPTO_ANNUAL` explicitly. Confirmed
+  by regenerating `_correlation_table.json` before and after the fix: no
+  `robust` MDB verdict changed (the flag is scale-invariant to a positive
+  annualisation factor at threshold 0), only the reported magnitudes were
+  wrong before the fix — so no prior conclusion in the wiki was affected,
+  but any future work reading raw MDB magnitudes from that file would have
+  been reading a wrong scale.
+
+---
+
 ## 2026-08-06 — Extended TrialRecord with cross-project registry fields; backfilled hmm-slope-experiment
 
 - Extended `evaluation-framework/evaluation/ledger.py`'s `TrialRecord` with

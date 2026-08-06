@@ -2,7 +2,7 @@
 
 Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
-> **Now:** `evaluation-framework/evaluation/` is built out as an installable, tested package (ledger, PBO, purged splits, sealed holdout, costs, live reconciliation — 154 tests, 96% coverage) per `evaluation-framework/PLAN.md`, and `TrialRecord` now carries `project`/`venue`/`evidence_stage`/`gate_outcome` for a cross-project trial registry, backfilled onto `hmm-slope-experiment`'s ledger. Next: backfill `mean-variance-paper` the same way — it has no ledger yet.
+> **Now:** `evaluation-framework/evaluation/` is built out as an installable, tested package (ledger, PBO, purged splits, sealed holdout, costs, live reconciliation — 155 tests, 96% coverage) per `evaluation-framework/PLAN.md`. The cross-project trial registry (`project`/`venue`/`evidence_stage`/`gate_outcome` on `TrialRecord`) now spans both `hmm-slope-experiment` and `mean-variance-paper`. All `hmm-slope-experiment` analysis drivers are migrated onto the package (formula duplication removed); doing so surfaced and fixed a real annualisation bug in `run_correlation_mdb.py` (was silently using 252 instead of crypto's 365).
 > **Queue:** Review the first adaptive-keyword literature PR; separately cross-cycle validate signed MV or park it before another paper run.
 
 ---

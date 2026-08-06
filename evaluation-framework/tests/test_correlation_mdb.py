@@ -58,7 +58,7 @@ def test_mdb_table_shape(rmatrix):
 
 
 def test_mean_variance_weights_falls_back_below_30_obs():
-    from evaluation.correlation_mdb import _mean_variance_weights
+    from evaluation.correlation_mdb import mean_variance_weights
 
     idx = pd.date_range("2024-01-01", periods=10, freq="D")
     r = pd.DataFrame(
@@ -68,5 +68,14 @@ def test_mean_variance_weights_falls_back_below_30_obs():
         },
         index=idx,
     )
-    w = _mean_variance_weights(r, ["a", "b"])
+    w = mean_variance_weights(r, ["a", "b"])
     assert w == {"a": 0.5, "b": 0.5}
+
+
+def test_portfolio_returns_matches_weighted_sum(rmatrix):
+    from evaluation.correlation_mdb import portfolio_returns
+
+    weights = {"a": 0.5, "b": 0.5}
+    series = portfolio_returns(rmatrix, weights)
+    expected = rmatrix["a"] * 0.5 + rmatrix["b"] * 0.5
+    assert np.allclose(series.values, expected.values)

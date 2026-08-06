@@ -20,6 +20,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[4] / "evaluation-framework"))
 from evaluation.backtest import build_returns_matrix
 from evaluation import correlation_matrix, marginal_diversification_benefit, mdb_robust_flag
+from evaluation.layers import CRYPTO_ANNUAL
 from eval_layers import render_heatmap
 
 REPO = Path(__file__).resolve().parent.parent
@@ -78,10 +79,10 @@ def main() -> None:
             rows.append({"code": code, "corr_to_book": None, "mdb_eq": None, "mdb_rp": None, "mdb_mv": None, "robust": None, "in_book": True})
             continue
         corr_t3 = float(corr.loc[code, "T3"])
-        mdb_eq = marginal_diversification_benefit(returns, BOOK, code, "eq")
-        mdb_rp = marginal_diversification_benefit(returns, BOOK, code, "rp")
-        mdb_mv = marginal_diversification_benefit(returns, BOOK, code, "mv")
-        robust = mdb_robust_flag(returns, BOOK, code)
+        mdb_eq = marginal_diversification_benefit(returns, BOOK, code, "eq", annualisation=CRYPTO_ANNUAL)
+        mdb_rp = marginal_diversification_benefit(returns, BOOK, code, "rp", annualisation=CRYPTO_ANNUAL)
+        mdb_mv = marginal_diversification_benefit(returns, BOOK, code, "mv", annualisation=CRYPTO_ANNUAL)
+        robust = mdb_robust_flag(returns, BOOK, code, annualisation=CRYPTO_ANNUAL)
         print(f"{code:<6} {corr_t3:>+8.2f} {mdb_eq:>+8.3f} {mdb_rp:>+8.3f} {mdb_mv:>+8.3f} {'YES' if robust else 'no':>7}")
         rows.append({
             "code": code, "corr_to_book": corr_t3,

@@ -4,6 +4,53 @@ Append-only daily log. Newest entry at the top.
 
 ---
 
+## 2026-08-06 — Built evaluation-framework as an installable package; fixed a second DSR bug; migrated dsr_analysis.py
+
+- Decided `evaluation-framework/` priority: reusable package first, methods
+  paper second. Archived the May manuscript/essay/worked-example to
+  `archive/manuscript-2026-05/` (kept, not deleted — stale relative to the
+  2026-08-05 literature scan and the `HmmSmaSlopeV2` live failure).
+- Built out all 6 phases of `evaluation-framework/PLAN.md`: `pyproject.toml`
+  + CI (`.github/workflows/evaluation-framework-ci.yml`); an append-only
+  trial ledger (`ledger.py`, backfilled for the HmmSmaSlope family with an
+  explicit reconstruction-gap marker); CSCV/PBO (`pbo.py`) and block-bootstrap
+  CIs (`bootstrap.py`/`intervals.py`); purged splits and a mechanically
+  enforced holdout seal (`splits.py`/`holdout.py` — the real
+  2026-06-01→12-31 forward window is now sealed at
+  `freqtrade-experiment/hmm-slope-experiment/analysis/holdout_seals.jsonl`);
+  funding-aware cost/slippage modeling (`costs.py`/`stress.py`); and
+  benchmark/factor/regime decomposition plus backtest-to-live reconciliation
+  with a three-valued PASS/FAIL/**INCOMPLETE** verdict (`live.py`) — the
+  `HmmSmaSlopeV2` original 30-day gate now correctly resolves to
+  `INCOMPLETE` (2 trades < 5 required), the extended run to `FAIL`, as a
+  permanent regression test. 152 tests, 96% coverage, clean ruff/black/mypy.
+- Found and fixed a second DSR bug while re-running the DSR-vs-PBO
+  head-to-head on real HmmSmaSlope data (`analysis/pbo_vs_dsr.py`): a
+  narrow, correlated candidate family (e.g. V1/V2/V3 parameter variants)
+  understates cross-trial `sharpe_var` and inflates DSR — the mirror image
+  of the earlier `n_trials` under-deflation bug. `compute_dsr_table` now
+  accepts an explicit `sharpe_var` override, and `compute_dsr_from_ledger`
+  defaults to pulling it from the ledger's own recorded Sharpes rather than
+  always from the wallets under test. With both fixes, DSR and PBO now
+  agree on the HmmSmaSlope family (NOISE / PBO=0.171).
+- Migrated `research/analysis/dsr_analysis.py` off its duplicated DSR
+  formula onto `evaluation.dsr`; fixed a stale output path bug in the same
+  pass (`wiki/results/` didn't exist; the file actually lives at
+  `analysis/reports/_dsr_table.json`). Verified output matches pre-migration
+  numbers exactly.
+- Discussed (not yet built) extending `TrialRecord` with `project`,
+  `venue`, `evidence_stage`, and `gate_outcome` fields toward a principled
+  cross-project trial registry — filterable by evidence maturity and venue
+  rather than one flat ranked leaderboard, which would misleadingly compare
+  killed IS-backtests against live-tested strategies and mix incompatible
+  Sharpe scales across venues.
+
+**Next:** Nothing from this session is committed. Extend `TrialRecord`'s
+schema (small, ~20min) before committing to the larger backfill effort
+across ~34 report cards in `hmm-slope-experiment/` plus `mean-variance-paper/`.
+
+---
+
 ## 2026-08-06 — Ruled out HmmSmaSlopeV2 short-side; fixed recurring Docker base-image drift
 
 - Drafted `HmmSmaSlopeV2Short` (short-side mirror of V2's HMM/slope signal) and

@@ -21,6 +21,8 @@ Pre-registration eliminates both. The rule is written *before* the first dollar 
 
 This makes kill criteria a **mechanism**, not a metric. The mechanism is "this written threshold triggers this written action". The metric (MDD, Calmar, cointegration p-value, OU half-life) is only the input to the mechanism. Confusing the two is the source of most discretionary retirement-paralysis.
 
+As of 2026-08-06, `evaluation-framework/evaluation/live.py`'s `reconcile()` makes the consecutive-loss axis mechanical for a live run: pass `max_consecutive_losses`/`kill_threshold_consecutive_losses` on a `LiveRun` and a breach forces `FAIL` regardless of net P&L. It also distinguishes `INCOMPLETE` (pre-registered minimum trade count not reached — not evidence of anything) from `FAIL` (enough evidence, and it's bad) — a distinction the `HmmSmaSlopeV2` original 30-day gate needed and didn't have (2 trades against a 5-trade minimum was reported as "not a pass," collapsing incomplete evidence and failure into one bucket).
+
 See `learnings.md` open hypothesis #2 for the cross-project hypothesis this methodology emerged from.
 
 ---

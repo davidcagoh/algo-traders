@@ -64,6 +64,7 @@ Bailey, Borwein, López de Prado, Zhu 2014.
 - Beyond CPCV folds, hold out a final window untouched during all search and tuning.
 - Run the gate-passing config on it once, at the end, no further tuning.
 - This is the only number you should trust when deciding whether to paper-trade live.
+- As of 2026-08-06 this is mechanically enforced, not just a rule to remember: `evaluation-framework/evaluation/holdout.py`'s `seal_holdout`/`guard`/`break_seal` make a partial peek raise `HoldoutViolation` and log an irreversible break with a reason, rather than relying on discipline. `evaluation-framework/evaluation/splits.py` provides `PurgedKFold`, `PurgedWalkForward`, `DoubleOOSSplit`, and `combinatorial_purged_splits` (CPCV) with purge+embargo built in.
 
 ---
 
@@ -85,6 +86,8 @@ Held-out window: <date range, untouched>
 ```
 
 Commit this to the repo before the first run. After the run, only configs that clear the pre-registered gate get a leaderboard row.
+
+**Correction (2026-08-06):** pre-registration is not a substitute for DSR/PBO as a gate — it removes researcher degrees of freedom (silently moved thresholds, post-hoc criteria) but does not correct for cross-trial dependence, non-normality, or the sampling distribution of the selected maximum. Those require DSR/PBO/SPA on their own terms. See `../decisions-archive.md` (2026-08-06 entry) and `evaluation-framework/evaluation/dsr.py`'s module docstring for the specific carve-out that conflated the two.
 
 ---
 

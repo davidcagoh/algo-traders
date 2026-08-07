@@ -3,6 +3,15 @@
 Append-only daily log. Newest entry at the top.
 
 ---
+## 2026-08-07 — mean-variance-paper: daily forward accumulation automated via GitHub Action + healthchecks.io
+
+- Following the same-day `forward_state.py` fix (see the "fixed forward accumulation" entry below), automated the daily pull instead of relying on remembering to run it manually for ~102 more days: new `.github/workflows/forward-accumulation.yml` (cron `30 1 * * *` UTC + `workflow_dispatch`) checks out the repo, refreshes Hyperliquid OHLCV/funding via `download_hyperliquid.py`, runs `forward_accumulate.py`, and commits the updated `forward_state.json`/`forward_daily_log.jsonl`/`forward_accumulation_ledger.jsonl` straight back to `main` (bot commit, no PR — deterministic numeric state, not judgment-requiring content, unlike the existing `paper-search.yml` PR pattern which is for LLM-generated literature notes).
+- Wired healthchecks.io as a dead-man's-switch, mirroring the start/success/fail pattern already used in the user's other repo's `sync-prices.yml`: `HEALTHCHECKS_FORWARD_ACCUMULATION_URL` repo secret (set by the user directly via `gh secret set`, never pasted into the conversation), pinged `/start` before checkout, bare URL on success, `/fail` on failure — each ping guarded so a missing secret doesn't fail the job.
+- User enabled Actions "Read and write permissions" (required for the bot's `git push` step; default `GITHUB_TOKEN` is read-only otherwise) and set the healthchecks secret. Not yet verified end-to-end — next step is a manual `workflow_dispatch` run to confirm the ping actually reaches healthchecks.io before trusting the cron schedule.
+
+**Next:** trigger `workflow_dispatch` once and check the healthchecks.io dashboard shows a received ping; then let the daily cron run unattended.
+
+---
 ## 2026-08-07 — aurora-forecaster: rolling-forecast walk-forward loop built; scoring findings visualized
 
 - Earlier in this session (before another concurrent session built the scoring module below): built the rolling walk-forward forecast loop itself — `aurora_forecaster/rolling.py` (`forecast_origins`, `run_unimodal_forecast`), `forecast_ledger.py` (`ForecastRecord`, append-only JSONL mirroring `evaluation-framework`'s `TrialRecord` pattern), and `scripts/rolling_forecast_btc.py`. Ran it for real: 4 BTC origins (2026-07-19 to 2026-07-31, 96h horizon each) against Binance BTC/USDT, appended to `artifacts/btc_unimodal_forecast_ledger.jsonl`. This is what the scoring module (entry below) then scored.

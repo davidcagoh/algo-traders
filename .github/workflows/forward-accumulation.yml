@@ -31,7 +31,7 @@ jobs:
         working-directory: freqtrade-experiment/mean-variance-paper
         run: |
           pip install -r requirements.txt
-          pip install requests
+          pip install requests "pyarrow>=14"
 
       - name: Refresh Hyperliquid OHLCV + funding
         working-directory: freqtrade-experiment/hmm-slope-experiment/research

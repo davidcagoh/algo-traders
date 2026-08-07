@@ -10,9 +10,9 @@
 - With `mean_shrink=0.50` and `risk_aversion=1.0`, the short-window long-only
   sweep reached +126.59%, Sharpe 3.65, Calmar 30.35, MDD 21.47%, 82% average
   exposure, and 4.25 effective assets.
-- The signed variant returned +122.61% with Sharpe 3.86, Calmar 35.97, MDD
-  17.23%, 1.01 average gross exposure, 0.08 average net exposure, and 5.42
-  effective assets. Funding PnL was +4.72%.
+- The refreshed signed variant returned +115.24% with Sharpe 3.65, Calmar
+  32.74, MDD 17.18%, 0.99 average gross exposure, 0.22 average net exposure,
+  and 5.40 effective assets. Funding PnL was +4.23%.
 - The signed optimizer needs a robust seed. A zero initialization could falsely
   accept all-zero weights under the absolute gross-exposure constraint; the
   current implementation uses split positive/negative variables and a
@@ -20,6 +20,12 @@
 - PC-neutral pair stat-arb was mildly positive but too sparse to be compelling
   (+0.38%, Sharpe 0.71, active on 0.3% of bars). Individual PCA-residual mean
   reversion failed after fees (best -3.66%, Sharpe -0.49).
+- A daily LSTM plus Twitter-sentiment probe is only a data-pipeline result:
+  over 64 OOS days it improved the selected-universe aggregate, but the result
+  was dominated by VVV/XPL and lower-cap results remained negative.
+- The signed strategy was not regime-robust on the Binance 5-coin proxy:
+  2020-11-23 through 2026-06-10 returned +637.67% with Sharpe 0.86 and MDD
+  69.08%, with most gains concentrated in 2021.
 
 ## Caveats
 

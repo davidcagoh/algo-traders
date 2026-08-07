@@ -1,0 +1,687 @@
+{
+  "method": {
+    "window": 50,
+    "train_fraction": 0.6,
+    "entry_threshold": 0.002,
+    "sentiment_scale": 0.0025,
+    "fee": 0.00035,
+    "sentiment_metric": "santiment:sentiment_weighted_twitter_1d",
+    "data_gate": {
+      "min_days": 120,
+      "min_test_days": 60,
+      "min_sentiment_coverage": 0.8
+    }
+  },
+  "universes": {
+    "mv": [
+      "BTC",
+      "HYPE",
+      "PAXG",
+      "TRX",
+      "WLFI",
+      "VVV",
+      "TON",
+      "ZRO",
+      "XPL"
+    ],
+    "lower_cap": [
+      "FARTCOIN",
+      "WIF",
+      "POPCAT",
+      "KPEPE",
+      "KBONK",
+      "KSHIB",
+      "KFLOKI",
+      "SPX",
+      "PENGU",
+      "PNUT",
+      "BRETT",
+      "MELANIA"
+    ],
+    "vvv_xpl": [
+      "VVV",
+      "XPL"
+    ]
+  },
+  "aggregate": {
+    "mv": {
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 31.04999476337893,
+        "cagr_pct": 367.47451084003035,
+        "sharpe": 4.426224794572441,
+        "max_drawdown_pct": -9.509595061549847,
+        "calmar": 38.64249828321716,
+        "avg_exposure": 1.0,
+        "avg_turnover": 0.7701512896825398
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 37.02221883105112,
+        "cagr_pct": 502.7485139303151,
+        "sharpe": 4.898969202325038,
+        "max_drawdown_pct": -6.5367786642585575,
+        "calmar": 76.91074453525802,
+        "avg_exposure": 1.0,
+        "avg_turnover": 0.8279885912698413
+      }
+    },
+    "lower_cap": {
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -10.085252296237302,
+        "cagr_pct": -45.46290225778442,
+        "sharpe": -1.1797277823590162,
+        "max_drawdown_pct": -20.395716764724327,
+        "calmar": -2.2290416552761396,
+        "avg_exposure": 1.0,
+        "avg_turnover": 0.9713541666666667
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -5.8110635107182285,
+        "cagr_pct": -28.924791741799815,
+        "sharpe": -0.5998765785852018,
+        "max_drawdown_pct": -19.785130506013758,
+        "calmar": -1.461945966593853,
+        "avg_exposure": 1.0,
+        "avg_turnover": 1.0215401785714284
+      }
+    },
+    "vvv_xpl": {
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 290.0970840289125,
+        "cagr_pct": 235151.18914601134,
+        "sharpe": 8.158783457333403,
+        "max_drawdown_pct": -12.547944081634277,
+        "calmar": 18740.216533973,
+        "avg_exposure": 1.0,
+        "avg_turnover": 0.75
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 261.2513301879577,
+        "cagr_pct": 151694.85356814376,
+        "sharpe": 7.935015942634818,
+        "max_drawdown_pct": -11.935237355232243,
+        "calmar": 12709.831321590169,
+        "avg_exposure": 0.984375,
+        "avg_turnover": 0.71875
+      }
+    }
+  },
+  "artifacts": {
+    "diagnostics_csv": "wiki/results/lstm_twitter_sentiment_diagnostics_current.csv",
+    "per_coin_csv": "wiki/results/lstm_twitter_sentiment_per_coin_current.csv",
+    "diagnostics_png": "wiki/assets/lstm_twitter_sentiment_diagnostics_current.png",
+    "per_coin_png": "wiki/assets/lstm_twitter_sentiment_per_coin_current.png",
+    "vvv_xpl_png": "wiki/assets/lstm_twitter_sentiment_vvv_xpl_current.png"
+  },
+  "coins": [
+    {
+      "coin": "BTC",
+      "status": "ok",
+      "slug": "bitcoin",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -10.97766793266899,
+        "cagr_pct": -48.478761239429204,
+        "sharpe": -1.8387085738930498,
+        "max_drawdown_pct": -10.345788175990279,
+        "calmar": -4.685845139564624,
+        "avg_exposure": 0.734375,
+        "avg_turnover": 0.5873015873015873
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 6.646073629920357,
+        "cagr_pct": 44.33547670017022,
+        "sharpe": 1.177071177616782,
+        "max_drawdown_pct": -7.6589584600112115,
+        "calmar": 5.788708338301304,
+        "avg_exposure": 0.6875,
+        "avg_turnover": 0.6031746031746031
+      }
+    },
+    {
+      "coin": "HYPE",
+      "status": "ok",
+      "slug": "hyperliquid",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 12.212103228035565,
+        "cagr_pct": 92.92241008284923,
+        "sharpe": 1.1701850290855285,
+        "max_drawdown_pct": -17.299415116522965,
+        "calmar": 5.371419175559147,
+        "avg_exposure": 0.875,
+        "avg_turnover": 0.5555555555555556
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 34.61186960538476,
+        "cagr_pct": 444.72651515295814,
+        "sharpe": 2.402878538619262,
+        "max_drawdown_pct": -14.72808367520695,
+        "calmar": 30.195816710466183,
+        "avg_exposure": 0.78125,
+        "avg_turnover": 0.6984126984126984
+      }
+    },
+    {
+      "coin": "PAXG",
+      "status": "ok",
+      "slug": "pax-gold",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -5.071901762109721,
+        "cagr_pct": -25.684465256398703,
+        "sharpe": -1.2683551022141746,
+        "max_drawdown_pct": -11.745046783941271,
+        "calmar": -2.1868337971643053,
+        "avg_exposure": 0.671875,
+        "avg_turnover": 0.6349206349206349
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -0.5065135060769776,
+        "cagr_pct": -2.8545168587012837,
+        "sharpe": -0.04680790969726003,
+        "max_drawdown_pct": -7.551250913863927,
+        "calmar": -0.37801907144423647,
+        "avg_exposure": 0.625,
+        "avg_turnover": 0.6349206349206349
+      }
+    },
+    {
+      "coin": "TRX",
+      "status": "ok",
+      "slug": "tron",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -14.528282441539208,
+        "cagr_pct": -59.15162325037547,
+        "sharpe": -4.119084345014955,
+        "max_drawdown_pct": -15.819303204370472,
+        "calmar": -3.7392053547613515,
+        "avg_exposure": 0.78125,
+        "avg_turnover": 0.6507936507936508
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -8.925366549159818,
+        "cagr_pct": -41.3269750350399,
+        "sharpe": -2.533928010392494,
+        "max_drawdown_pct": -9.612740239160257,
+        "calmar": -4.299187745309356,
+        "avg_exposure": 0.78125,
+        "avg_turnover": 0.6349206349206349
+      }
+    },
+    {
+      "coin": "WLFI",
+      "status": "ok",
+      "slug": "world-liberty-financial-wlfi",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -20.652127802298857,
+        "cagr_pct": -73.2676478740281,
+        "sharpe": -1.271276250707885,
+        "max_drawdown_pct": -37.7518136593867,
+        "calmar": -1.9407716019972103,
+        "avg_exposure": 0.890625,
+        "avg_turnover": 0.8095238095238095
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -6.6394086310125005,
+        "cagr_pct": -32.41672288757168,
+        "sharpe": -0.06133441322273478,
+        "max_drawdown_pct": -28.549491435005912,
+        "calmar": -1.1354571047743418,
+        "avg_exposure": 0.890625,
+        "avg_turnover": 0.8095238095238095
+      }
+    },
+    {
+      "coin": "VVV",
+      "status": "ok",
+      "slug": "venice-token",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 418.3126778177252,
+        "cagr_pct": 1189515.2976343746,
+        "sharpe": 7.575617632098299,
+        "max_drawdown_pct": -20.245839655399323,
+        "calmar": 58753.567047891986,
+        "avg_exposure": 1.0,
+        "avg_turnover": 0.5396825396825397
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 372.11146041268063,
+        "cagr_pct": 698390.1467808884,
+        "sharpe": 7.15560677787237,
+        "max_drawdown_pct": -20.245839655399323,
+        "calmar": 34495.48937796888,
+        "avg_exposure": 0.984375,
+        "avg_turnover": 0.5396825396825397
+      }
+    },
+    {
+      "coin": "TON",
+      "status": "ok",
+      "slug": "tontoken",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -3.9678014118373683,
+        "cagr_pct": -20.618148858660813,
+        "sharpe": 0.45781588706726745,
+        "max_drawdown_pct": -31.916054987977205,
+        "calmar": -0.6460118227778364,
+        "avg_exposure": 0.96875,
+        "avg_turnover": 0.31746031746031744
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -1.7496819685170473,
+        "cagr_pct": -9.576847690878076,
+        "sharpe": 0.5252265462512928,
+        "max_drawdown_pct": -39.179399397639294,
+        "calmar": -0.24443579631430282,
+        "avg_exposure": 0.875,
+        "avg_turnover": 0.4126984126984127
+      }
+    },
+    {
+      "coin": "ZRO",
+      "status": "ok",
+      "slug": "layerzero",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -35.61159924580354,
+        "cagr_pct": -91.87906446532453,
+        "sharpe": -2.3842465158429116,
+        "max_drawdown_pct": -50.88930384769868,
+        "calmar": -1.8054690773585715,
+        "avg_exposure": 0.875,
+        "avg_turnover": 0.47619047619047616
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -44.74842337467487,
+        "cagr_pct": -96.60719049370013,
+        "sharpe": -3.159258603133574,
+        "max_drawdown_pct": -57.85819557872634,
+        "calmar": -1.6697235288343708,
+        "avg_exposure": 0.953125,
+        "avg_turnover": 0.4126984126984127
+      }
+    },
+    {
+      "coin": "XPL",
+      "status": "ok",
+      "slug": "bnb-plasma-xpl",
+      "coverage": 0.9760765550239234,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-04-07",
+      "end": "2026-06-09",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 111.2517562838926,
+        "cagr_pct": 7018.309581798869,
+        "sharpe": 4.502055400523631,
+        "max_drawdown_pct": -20.049980098550655,
+        "calmar": 350.0407255918522,
+        "avg_exposure": 0.8125,
+        "avg_turnover": 0.5714285714285714
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 152.17813788275015,
+        "cagr_pct": 19442.84136523552,
+        "sharpe": 5.74076765924475,
+        "max_drawdown_pct": -11.965136307805535,
+        "calmar": 1624.9577827669088,
+        "avg_exposure": 0.796875,
+        "avg_turnover": 0.5396825396825397
+      }
+    },
+    {
+      "coin": "FARTCOIN",
+      "status": "ok",
+      "slug": "fartcoin",
+      "coverage": 1.0,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-03-30",
+      "end": "2026-06-01",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -34.22197818283581,
+        "cagr_pct": -90.82740726448925,
+        "sharpe": -1.7069783484794205,
+        "max_drawdown_pct": -43.687221382988675,
+        "calmar": -2.079038318052804,
+        "avg_exposure": 0.90625,
+        "avg_turnover": 0.9523809523809523
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -30.535149583681832,
+        "cagr_pct": -87.48108722209332,
+        "sharpe": -1.5767619724169595,
+        "max_drawdown_pct": -40.53091541683923,
+        "calmar": -2.1583792599401264,
+        "avg_exposure": 0.828125,
+        "avg_turnover": 0.9206349206349206
+      }
+    },
+    {
+      "coin": "WIF",
+      "status": "ok",
+      "slug": "dogwifhat",
+      "coverage": 1.0,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-03-30",
+      "end": "2026-06-01",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 6.391471992634523,
+        "cagr_pct": 42.38129692006935,
+        "sharpe": 0.9047399979475288,
+        "max_drawdown_pct": -14.417557032258276,
+        "calmar": 2.9395615932188903,
+        "avg_exposure": 0.828125,
+        "avg_turnover": 0.8253968253968254
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -23.48910901190271,
+        "cagr_pct": -78.28003034802782,
+        "sharpe": -2.042095616953504,
+        "max_drawdown_pct": -29.394784643765025,
+        "calmar": -2.663058474375723,
+        "avg_exposure": 0.796875,
+        "avg_turnover": 0.7301587301587301
+      }
+    },
+    {
+      "coin": "POPCAT",
+      "status": "ok",
+      "slug": "popcat-sol",
+      "coverage": 1.0,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-03-30",
+      "end": "2026-06-01",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -22.349230982903723,
+        "cagr_pct": -76.36870378841407,
+        "sharpe": -1.6584956051712645,
+        "max_drawdown_pct": -38.163709246080025,
+        "calmar": -2.001081794643907,
+        "avg_exposure": 0.84375,
+        "avg_turnover": 0.5714285714285714
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 15.988025323387012,
+        "cagr_pct": 133.00018879898775,
+        "sharpe": 1.5575114647744996,
+        "max_drawdown_pct": -29.054819559312417,
+        "calmar": 4.577560308969793,
+        "avg_exposure": 0.796875,
+        "avg_turnover": 0.7936507936507936
+      }
+    },
+    {
+      "coin": "KPEPE",
+      "status": "skip",
+      "reason": "missing or short OHLCV"
+    },
+    {
+      "coin": "KBONK",
+      "status": "skip",
+      "reason": "missing or short OHLCV"
+    },
+    {
+      "coin": "KSHIB",
+      "status": "skip",
+      "reason": "missing or short OHLCV"
+    },
+    {
+      "coin": "KFLOKI",
+      "status": "skip",
+      "reason": "missing or short OHLCV"
+    },
+    {
+      "coin": "SPX",
+      "status": "ok",
+      "slug": "spx6900",
+      "coverage": 1.0,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-03-30",
+      "end": "2026-06-01",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 6.020981322221486,
+        "cagr_pct": 39.57663432038634,
+        "sharpe": 0.8035117650267456,
+        "max_drawdown_pct": -21.8988191780759,
+        "calmar": 1.8072496968242315,
+        "avg_exposure": 0.875,
+        "avg_turnover": 1.1111111111111112
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -6.38452319038324,
+        "cagr_pct": -31.3576588942967,
+        "sharpe": 0.0377912963650278,
+        "max_drawdown_pct": -32.150437780210126,
+        "calmar": -0.9753415834853293,
+        "avg_exposure": 0.90625,
+        "avg_turnover": 1.0793650793650793
+      }
+    },
+    {
+      "coin": "PENGU",
+      "status": "ok",
+      "slug": "pudgy-penguins",
+      "coverage": 1.0,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-03-30",
+      "end": "2026-06-01",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 34.02292698929914,
+        "cagr_pct": 431.2736738888403,
+        "sharpe": 2.491760917672534,
+        "max_drawdown_pct": -27.217414791081307,
+        "calmar": 15.84550469613894,
+        "avg_exposure": 0.921875,
+        "avg_turnover": 0.8253968253968254
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 63.62822393140108,
+        "cagr_pct": 1558.2886975358515,
+        "sharpe": 3.6366024889559796,
+        "max_drawdown_pct": -20.96150688765148,
+        "calmar": 74.34049020845188,
+        "avg_exposure": 0.96875,
+        "avg_turnover": 0.8412698412698413
+      }
+    },
+    {
+      "coin": "PNUT",
+      "status": "ok",
+      "slug": "peanut-the-squirrel",
+      "coverage": 1.0,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-03-30",
+      "end": "2026-06-01",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -51.62268458771361,
+        "cagr_pct": -98.40972378561665,
+        "sharpe": -2.2048173985020334,
+        "max_drawdown_pct": -59.98137628101705,
+        "calmar": -1.6406713197869958,
+        "avg_exposure": 0.875,
+        "avg_turnover": 0.47619047619047616
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -49.54096212683963,
+        "cagr_pct": -97.97780148649989,
+        "sharpe": -2.0598525194578747,
+        "max_drawdown_pct": -58.583748016589055,
+        "calmar": -1.6724399650694197,
+        "avg_exposure": 0.78125,
+        "avg_turnover": 0.5714285714285714
+      }
+    },
+    {
+      "coin": "BRETT",
+      "status": "ok",
+      "slug": "based-brett",
+      "coverage": 1.0,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-03-30",
+      "end": "2026-06-01",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": 7.0303674911408764,
+        "cagr_pct": 47.32695200620356,
+        "sharpe": 0.8814813983891808,
+        "max_drawdown_pct": -30.873405259597074,
+        "calmar": 1.532935923596956,
+        "avg_exposure": 0.890625,
+        "avg_turnover": 0.746031746031746
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": 22.964127326298534,
+        "cagr_pct": 225.10048675845792,
+        "sharpe": 1.7669563783124314,
+        "max_drawdown_pct": -21.188910252235218,
+        "calmar": 10.62350465780618,
+        "avg_exposure": 0.90625,
+        "avg_turnover": 0.7301587301587301
+      }
+    },
+    {
+      "coin": "MELANIA",
+      "status": "ok",
+      "slug": "melania-meme",
+      "coverage": 1.0,
+      "daily_rows": 209,
+      "usable_samples": 158,
+      "train_days": 94,
+      "test_days": 64,
+      "start": "2026-03-30",
+      "end": "2026-06-01",
+      "lstm_only": {
+        "days": 64,
+        "total_return_pct": -26.448481031719396,
+        "cagr_pct": -82.65575172333628,
+        "sharpe": -3.0625267594229517,
+        "max_drawdown_pct": -31.644025935827035,
+        "calmar": -2.6120491713336103,
+        "avg_exposure": 0.890625,
+        "avg_turnover": 0.746031746031746
+      },
+      "lstm_twitter": {
+        "days": 64,
+        "total_return_pct": -30.509779190095585,
+        "cagr_pct": -87.45498877859842,
+        "sharpe": -3.6176437170609006,
+        "max_drawdown_pct": -34.425417586975705,
+        "calmar": -2.540419112059968,
+        "avg_exposure": 0.875,
+        "avg_turnover": 0.6984126984126984
+      }
+    }
+  ]
+}

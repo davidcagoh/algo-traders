@@ -1,0 +1,136 @@
+{
+  "universe": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "AVAX",
+    "DOGE"
+  ],
+  "window": {
+    "start": "2020-11-23 00:00:00+00:00",
+    "end": "2025-08-28 00:00:00+00:00"
+  },
+  "method": {
+    "venue": "hyperliquid",
+    "timeframe": "1d",
+    "portfolio": "shrunk_mean_variance_signed",
+    "lookback_days": 60,
+    "rebalance_days": 7,
+    "fee": 0.00035,
+    "max_abs_weight": 0.2,
+    "gross_limit": 1.0,
+    "mean_shrink": 0.5,
+    "risk_aversion": 1.0,
+    "turnover_penalty": 0.05,
+    "funding_note": "Funding zero-filled where local Hyperliquid funding history is unavailable."
+  },
+  "full_metrics": {
+    "days": 1740,
+    "total_return_pct": 941.2829746322085,
+    "cagr_pct": 63.476570148041155,
+    "ann_vol_pct": 67.14069593812408,
+    "sharpe": 1.0350730065528524,
+    "sortino": 1.705136418587072,
+    "max_drawdown_pct": -70.51238741527358,
+    "calmar": 0.9002187058878621,
+    "avg_gross_exposure": 0.8825794317547744,
+    "avg_net_exposure": 0.16479786852121017,
+    "avg_effective_assets": 4.619948693049597,
+    "avg_turnover_per_rebalance": 0.35968433740743855,
+    "total_fee_drag_pct": 3.088636172720885,
+    "total_funding_pnl_pct": -26.909276563137396,
+    "final_weights": {
+      "BTC": -0.20138628091750563,
+      "ETH": 0.19157057992829443,
+      "SOL": 0.21132866721669175,
+      "AVAX": 0.19613125409140253,
+      "DOGE": 0.19665497004497884
+    }
+  },
+  "slices": [
+    {
+      "period": "2020",
+      "start": "2020-11-23 00:00:00+00:00",
+      "end": "2020-12-31 00:00:00+00:00",
+      "regime": "bull",
+      "days": 39,
+      "signed_mv_return_pct": 31.939503105840352,
+      "signed_mv_sharpe": 5.473818449276887,
+      "signed_mv_mdd_pct": -10.5945114632487,
+      "signed_mv_calmar": 116.89046644668485,
+      "btc_return_pct": 57.045760284672944,
+      "equal_weight_return_pct": 13.738406051690589,
+      "funding_coverage_pct": 0.0
+    },
+    {
+      "period": "2021",
+      "start": "2021-01-01 00:00:00+00:00",
+      "end": "2021-12-31 00:00:00+00:00",
+      "regime": "bull",
+      "days": 365,
+      "signed_mv_return_pct": 1437.6314904933156,
+      "signed_mv_sharpe": 2.84727755137599,
+      "signed_mv_mdd_pct": -34.101742339004524,
+      "signed_mv_calmar": 42.1571272283351,
+      "btc_return_pct": 59.612734312665694,
+      "equal_weight_return_pct": 3656.80772252175,
+      "funding_coverage_pct": 0.0
+    },
+    {
+      "period": "2022",
+      "start": "2022-01-01 00:00:00+00:00",
+      "end": "2022-12-31 00:00:00+00:00",
+      "regime": "bear",
+      "days": 365,
+      "signed_mv_return_pct": -25.711252344374525,
+      "signed_mv_sharpe": -0.41491729802508903,
+      "signed_mv_mdd_pct": -56.34559148620668,
+      "signed_mv_calmar": -0.4563134695403562,
+      "btc_return_pct": -64.2125399800046,
+      "equal_weight_return_pct": -77.85412635368938,
+      "funding_coverage_pct": 0.0
+    },
+    {
+      "period": "2023",
+      "start": "2023-01-01 00:00:00+00:00",
+      "end": "2023-12-31 00:00:00+00:00",
+      "regime": "bull",
+      "days": 365,
+      "signed_mv_return_pct": 16.80416011257444,
+      "signed_mv_sharpe": 0.5822695420903833,
+      "signed_mv_mdd_pct": -44.362357707638914,
+      "signed_mv_calmar": 0.37879321525963155,
+      "btc_return_pct": 155.87146865325076,
+      "equal_weight_return_pct": 222.8004436472772,
+      "funding_coverage_pct": 64.10958904109589
+    },
+    {
+      "period": "2024",
+      "start": "2024-01-01 00:00:00+00:00",
+      "end": "2024-12-31 00:00:00+00:00",
+      "regime": "bull",
+      "days": 366,
+      "signed_mv_return_pct": -23.98400812130551,
+      "signed_mv_sharpe": -0.3189064111354231,
+      "signed_mv_mdd_pct": -44.805630378634916,
+      "signed_mv_calmar": -0.53401841237322,
+      "btc_return_pct": 121.24542124542094,
+      "equal_weight_return_pct": 98.7899138215955,
+      "funding_coverage_pct": 100.0
+    },
+    {
+      "period": "2025",
+      "start": "2025-01-01 00:00:00+00:00",
+      "end": "2025-08-28 00:00:00+00:00",
+      "regime": "recovery",
+      "days": 240,
+      "signed_mv_return_pct": -22.1864294271522,
+      "signed_mv_sharpe": -0.6520679955797746,
+      "signed_mv_mdd_pct": -43.11814680124048,
+      "signed_mv_calmar": -0.735580855956214,
+      "btc_return_pct": 20.2787865840633,
+      "equal_weight_return_pct": 2.6996221648811325,
+      "funding_coverage_pct": 100.0
+    }
+  ]
+}

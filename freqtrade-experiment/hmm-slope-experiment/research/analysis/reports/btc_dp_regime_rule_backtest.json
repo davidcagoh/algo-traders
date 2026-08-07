@@ -1,0 +1,58 @@
+{
+  "rule": {
+    "long_regimes": [
+      "bull",
+      "recovery",
+      "volatile_bull"
+    ],
+    "short_regimes": [
+      "drawdown"
+    ],
+    "flat_otherwise": true,
+    "signal_lag": "1 daily bar",
+    "signal_column": "regime_raw",
+    "fee_per_turnover": 0.00035,
+    "funding": "daily sum; long pays positive funding, short receives positive funding"
+  },
+  "window": {
+    "start": "2020-09-23",
+    "end": "2026-06-10"
+  },
+  "strategy": {
+    "total_return_pct": -52.836468758192076,
+    "cagr_pct": -12.316819671355972,
+    "volatility_pct": 45.01516835583447,
+    "sharpe": -0.06614077773890403,
+    "max_drawdown_pct": -80.90893339214045,
+    "calmar": -0.15223065185719573,
+    "ulcer_pct": 55.16342479327817,
+    "martin": -0.22327873436996634,
+    "days": 2087,
+    "active_days": 1284,
+    "long_days": 839,
+    "short_days": 445,
+    "flat_days": 803,
+    "avg_abs_exposure": 0.6152371825586967
+  },
+  "buy_and_hold": {
+    "total_return_pct": 500.54933086928986,
+    "cagr_pct": 36.82393763622318,
+    "volatility_pct": 58.20646143135952,
+    "sharpe": 0.8292800634383608,
+    "max_drawdown_pct": -76.66956183209538,
+    "calmar": 0.48029409267874484,
+    "ulcer_pct": 39.452789361335114,
+    "martin": 0.9333671517865277,
+    "days": 2087,
+    "active_days": 2087,
+    "long_days": 2087,
+    "short_days": 0,
+    "flat_days": 0,
+    "avg_abs_exposure": 1.0
+  },
+  "trade_count": 172,
+  "turnover": 207.0,
+  "fee_drag_pct": -7.244999999999998,
+  "funding_pnl_pct": -21.439489000000002,
+  "gross_price_pnl_pct": 11.660639910879155
+}

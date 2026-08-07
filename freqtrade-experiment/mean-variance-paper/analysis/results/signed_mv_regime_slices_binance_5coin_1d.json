@@ -1,0 +1,151 @@
+{
+  "universe": [
+    "BTC",
+    "ETH",
+    "SOL",
+    "AVAX",
+    "DOGE"
+  ],
+  "window": {
+    "start": "2020-11-23 00:00:00+00:00",
+    "end": "2026-06-10 00:00:00+00:00"
+  },
+  "method": {
+    "venue": "binance",
+    "timeframe": "1d",
+    "portfolio": "shrunk_mean_variance_signed",
+    "lookback_days": 60,
+    "rebalance_days": 7,
+    "fee": 0.00035,
+    "max_abs_weight": 0.2,
+    "gross_limit": 1.0,
+    "mean_shrink": 0.5,
+    "risk_aversion": 1.0,
+    "turnover_penalty": 0.05,
+    "rolling_sharpe_days": 90,
+    "funding_note": "Funding zero-filled where local funding history is unavailable."
+  },
+  "full_metrics": {
+    "days": 2026,
+    "total_return_pct": 637.6675911877105,
+    "cagr_pct": 43.33491801571585,
+    "ann_vol_pct": 62.99681385534619,
+    "sharpe": 0.8569729109460892,
+    "sortino": 1.3729098219131444,
+    "max_drawdown_pct": -69.08005257398224,
+    "calmar": 0.6273144909567884,
+    "avg_gross_exposure": 0.877288484061798,
+    "avg_net_exposure": 0.09483299372222559,
+    "avg_effective_assets": 4.5952557153515885,
+    "avg_turnover_per_rebalance": 0.3640593538975919,
+    "total_fee_drag_pct": 3.6330597169512675,
+    "total_funding_pnl_pct": -30.8204605649084,
+    "final_weights": {
+      "BTC": -0.1888309552062487,
+      "ETH": -0.186472709902418,
+      "SOL": -0.1847794839234708,
+      "AVAX": -0.18190841630959434,
+      "DOGE": 0.18375833015664123
+    }
+  },
+  "slices": [
+    {
+      "period": "2020",
+      "start": "2020-11-23 00:00:00+00:00",
+      "end": "2020-12-31 00:00:00+00:00",
+      "regime": "bull",
+      "days": 39,
+      "signed_mv_return_pct": 28.707047360039752,
+      "signed_mv_sharpe": 4.96299634324751,
+      "signed_mv_mdd_pct": -10.960556871466476,
+      "signed_mv_calmar": 87.68916946589707,
+      "btc_return_pct": 57.04565179656305,
+      "equal_weight_return_pct": 13.738389086527958,
+      "funding_coverage_pct": 100.0
+    },
+    {
+      "period": "2021",
+      "start": "2021-01-01 00:00:00+00:00",
+      "end": "2021-12-31 00:00:00+00:00",
+      "regime": "bull",
+      "days": 365,
+      "signed_mv_return_pct": 810.8873637809813,
+      "signed_mv_sharpe": 2.4429705976614726,
+      "signed_mv_mdd_pct": -28.203801553534824,
+      "signed_mv_calmar": 28.75099522459062,
+      "btc_return_pct": 59.612706412892045,
+      "equal_weight_return_pct": 3656.8085740583756,
+      "funding_coverage_pct": 100.0
+    },
+    {
+      "period": "2022",
+      "start": "2022-01-01 00:00:00+00:00",
+      "end": "2022-12-31 00:00:00+00:00",
+      "regime": "bear",
+      "days": 365,
+      "signed_mv_return_pct": -29.99701000780437,
+      "signed_mv_sharpe": -0.5333604355847846,
+      "signed_mv_mdd_pct": -56.945750062466914,
+      "signed_mv_calmar": -0.5267646834908488,
+      "btc_return_pct": -64.21250900227139,
+      "equal_weight_return_pct": -77.85412245009547,
+      "funding_coverage_pct": 100.0
+    },
+    {
+      "period": "2023",
+      "start": "2023-01-01 00:00:00+00:00",
+      "end": "2023-12-31 00:00:00+00:00",
+      "regime": "bull",
+      "days": 365,
+      "signed_mv_return_pct": 36.72471684103067,
+      "signed_mv_sharpe": 0.9762768398276384,
+      "signed_mv_mdd_pct": -42.86209023567989,
+      "signed_mv_calmar": 0.8568111503451539,
+      "btc_return_pct": 155.8654218266254,
+      "equal_weight_return_pct": 222.74188498013808,
+      "funding_coverage_pct": 100.0
+    },
+    {
+      "period": "2024",
+      "start": "2024-01-01 00:00:00+00:00",
+      "end": "2024-12-31 00:00:00+00:00",
+      "regime": "bull",
+      "days": 366,
+      "signed_mv_return_pct": -14.129222993468549,
+      "signed_mv_sharpe": -0.060718804819929216,
+      "signed_mv_mdd_pct": -40.794607799312196,
+      "signed_mv_calmar": -0.3454740100527155,
+      "btc_return_pct": 121.08262040932112,
+      "equal_weight_return_pct": 98.50207104734383,
+      "funding_coverage_pct": 100.0
+    },
+    {
+      "period": "2025",
+      "start": "2025-01-01 00:00:00+00:00",
+      "end": "2025-12-31 00:00:00+00:00",
+      "regime": "chop",
+      "days": 365,
+      "signed_mv_return_pct": -9.595865878865107,
+      "signed_mv_sharpe": -0.0009102194904243267,
+      "signed_mv_mdd_pct": -43.05229200647205,
+      "signed_mv_calmar": -0.22288861827432,
+      "btc_return_pct": -6.350368630737446,
+      "equal_weight_return_pct": -37.33578056909136,
+      "funding_coverage_pct": 100.0
+    },
+    {
+      "period": "2026",
+      "start": "2026-01-01 00:00:00+00:00",
+      "end": "2026-06-10 00:00:00+00:00",
+      "regime": "drawdown",
+      "days": 161,
+      "signed_mv_return_pct": -15.316969317097174,
+      "signed_mv_sharpe": -0.6809596542898687,
+      "signed_mv_mdd_pct": -22.966331325920308,
+      "signed_mv_calmar": -1.3673255723752593,
+      "btc_return_pct": -29.819697242951946,
+      "equal_weight_return_pct": -40.38594669384559,
+      "funding_coverage_pct": 100.0
+    }
+  ]
+}

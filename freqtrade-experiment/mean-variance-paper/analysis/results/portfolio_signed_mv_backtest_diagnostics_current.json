@@ -1,0 +1,53 @@
+{
+  "universe": [
+    "BTC",
+    "HYPE",
+    "PAXG",
+    "TRX",
+    "WLFI",
+    "VVV",
+    "TON",
+    "ZRO",
+    "XPL"
+  ],
+  "window": {
+    "start": "2026-01-13 00:00:00+00:00",
+    "end": "2026-06-09 00:00:00+00:00"
+  },
+  "method": {
+    "portfolio": "shrunk_mean_variance_signed",
+    "lookback_days": 60,
+    "rebalance_days": 7,
+    "fee": 0.00035,
+    "max_abs_weight": 0.2,
+    "gross_limit": 1.0,
+    "mean_shrink": 0.5,
+    "risk_aversion": 1.0,
+    "turnover_penalty": 0.05,
+    "rolling_sharpe_days": 30
+  },
+  "metrics": {
+    "days": 148,
+    "total_return_pct": 115.24367585801562,
+    "cagr_pct": 562.3359860335954,
+    "ann_vol_pct": 56.14604352990775,
+    "sharpe": 3.6498525720076898,
+    "sortino": 6.589331436641536,
+    "max_drawdown_pct": -17.176706796554797,
+    "calmar": 32.73828870074126,
+    "avg_gross_exposure": 0.9921952299459572,
+    "avg_net_exposure": 0.22104457203052244,
+    "avg_effective_assets": 5.403254872507819,
+    "avg_turnover_per_rebalance": 0.510696926957597,
+    "total_fee_drag_pct": 0.3828586568571651,
+    "total_funding_pnl_pct": 4.22835132606013,
+    "final_weights": {
+      "HYPE": 0.18805019458763098,
+      "WLFI": -0.04567287912284408,
+      "VVV": 0.18661899439451107,
+      "TON": 0.15346109216285161,
+      "ZRO": -0.20125628221715447,
+      "XPL": -0.19471465380066325
+    }
+  }
+}

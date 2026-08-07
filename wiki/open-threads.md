@@ -19,6 +19,7 @@ Mutable. Active cross-project questions and next steps only.
 - Write a generic cross-cycle validation protocol after a second project completes the gate.
 - Run the first bounded-grammar Pareto sweep only when a project has enough independent trades per fold for meaningful purged cross-validation.
 - Check for the literature-search workflow's PR (`gh run 31125217798`, manually triggered 2026-08-06 — its first-ever run) and review it once it lands.
+- Decide whether `aurora-forecaster/artifacts/` (the two forecast/scored JSONL ledgers plus the new `btc_unimodal_forecast_chart.html` visualization, 2026-08-07) should be committed as evidence or added to `.gitignore` as regenerable output — currently untracked, neither decided.
 
 ## Open Questions
 

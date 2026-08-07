@@ -3,6 +3,15 @@
 Append-only daily log. Newest entry at the top.
 
 ---
+## 2026-08-07 — aurora-forecaster: rolling-forecast walk-forward loop built; scoring findings visualized
+
+- Earlier in this session (before another concurrent session built the scoring module below): built the rolling walk-forward forecast loop itself — `aurora_forecaster/rolling.py` (`forecast_origins`, `run_unimodal_forecast`), `forecast_ledger.py` (`ForecastRecord`, append-only JSONL mirroring `evaluation-framework`'s `TrialRecord` pattern), and `scripts/rolling_forecast_btc.py`. Ran it for real: 4 BTC origins (2026-07-19 to 2026-07-31, 96h horizon each) against Binance BTC/USDT, appended to `artifacts/btc_unimodal_forecast_ledger.jsonl`. This is what the scoring module (entry below) then scored.
+- After the scoring module landed (`aurora_forecaster/scoring.py`, `scored_ledger.py`, `artifacts/btc_unimodal_forecast_scored.jsonl`, committed `04fe3f7`/`f0d7292` by the concurrent session — verified via `git log`/`git status` before touching anything, wiki files already clean/committed by that session so no reconciliation needed here): built a single-file HTML visualization, `aurora-forecaster/artifacts/btc_unimodal_forecast_chart.html`, joining both ledgers by `forecast_id`. Shows the actual BTC price line against all 4 forecast fans (mean ± std), a forecast-summary table extended with skill/CRPS/MASE per origin, and a calibration panel (nominal-vs-empirical coverage bars for 50/80/95%, mean standardized residual) that makes the overconfidence finding visible at a glance rather than only readable from the JSONL. Local file, not published as a hosted Artifact per user preference this session.
+- Dataviz skill's palette validator run against the 5-series set (actual + 4 forecast origins) in both light/dark before use — all hard gates pass; light mode carries a contrast WARN on 3 of the 5 hues, mitigated with the required relief (visible legend labels + the summary table, never color-only identity).
+
+**Next:** `artifacts/` (both JSONL ledgers and the new chart HTML) still isn't in `.gitignore` — undecided whether these should be committed as evidence or treated as regenerable output; flagged in `open-threads.md`.
+
+---
 ## 2026-08-07 — aurora-forecaster: forecast scoring module built and run against the real ledger
 
 - Closed the open thread from 2026-08-06 ("extend evaluation-framework or wrap separately to score a probabilistic forecast") by building a standalone module inside `aurora-forecaster/` rather than extending `evaluation-framework` — that package's Sharpe/DSR/PBO stack assumes realized trade/portfolio returns, which a probabilistic price forecast doesn't have. TDD throughout (RED confirmed via `ModuleNotFoundError`/`TypeError` before each implementation, GREEN after; 47/47 tests pass).

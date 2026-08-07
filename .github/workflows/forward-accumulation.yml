@@ -14,10 +14,12 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+    env:
+      HEALTHCHECKS_URL: ${{ secrets.HEALTHCHECKS_FORWARD_ACCUMULATION_URL }}
     steps:
       - name: Ping healthchecks.io (start)
-        if: ${{ secrets.HEALTHCHECKS_FORWARD_ACCUMULATION_URL != '' }}
-        run: curl -fsS -m 10 --retry 5 "${{ secrets.HEALTHCHECKS_FORWARD_ACCUMULATION_URL }}/start" || true
+        if: ${{ env.HEALTHCHECKS_URL != '' }}
+        run: curl -fsS -m 10 --retry 5 "${{ env.HEALTHCHECKS_URL }}/start" || true
 
       - uses: actions/checkout@v4
 
@@ -61,9 +63,9 @@ jobs:
           fi
 
       - name: Ping healthchecks.io (success)
-        if: ${{ success() && secrets.HEALTHCHECKS_FORWARD_ACCUMULATION_URL != '' }}
-        run: curl -fsS -m 10 --retry 5 "${{ secrets.HEALTHCHECKS_FORWARD_ACCUMULATION_URL }}" || true
+        if: ${{ success() && env.HEALTHCHECKS_URL != '' }}
+        run: curl -fsS -m 10 --retry 5 "${{ env.HEALTHCHECKS_URL }}" || true
 
       - name: Ping healthchecks.io (failure)
-        if: ${{ failure() && secrets.HEALTHCHECKS_FORWARD_ACCUMULATION_URL != '' }}
-        run: curl -fsS -m 10 --retry 5 "${{ secrets.HEALTHCHECKS_FORWARD_ACCUMULATION_URL }}/fail" || true
+        if: ${{ failure() && env.HEALTHCHECKS_URL != '' }}
+        run: curl -fsS -m 10 --retry 5 "${{ env.HEALTHCHECKS_URL }}/fail" || true

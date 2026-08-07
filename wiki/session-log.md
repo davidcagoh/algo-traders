@@ -3,6 +3,17 @@
 Append-only daily log. Newest entry at the top.
 
 ---
+## 2026-08-07 — aurora-forecaster: forecast scoring module built and run against the real ledger
+
+- Closed the open thread from 2026-08-06 ("extend evaluation-framework or wrap separately to score a probabilistic forecast") by building a standalone module inside `aurora-forecaster/` rather than extending `evaluation-framework` — that package's Sharpe/DSR/PBO stack assumes realized trade/portfolio returns, which a probabilistic price forecast doesn't have. TDD throughout (RED confirmed via `ModuleNotFoundError`/`TypeError` before each implementation, GREEN after; 47/47 tests pass).
+- New: `aurora_forecaster/scoring.py` (closed-form Gaussian CRPS via `math.erf`, no scipy; MASE scaled by lookback lag-1 naive error; skill score vs. random-walk-flat; calibration coverage from standardized residuals), `realized.py` (aligns a `ForecastRecord` to realized lookback+horizon closes by timestamp), `scored_ledger.py` (`ScoredForecastRecord`, mirrors `ForecastRecord`'s append-only JSONL pattern), `compare.py` (Diebold-Mariano paired test, built now but inert until a multimodal ledger exists to compare against). `data/price.py::fetch_btc_ohlcv` gained an optional `since` param with pagination past Binance's 1000-row cap.
+- Ran `scripts/score_forecast_ledger.py` against the real 4-origin BTC ledger. Independently re-derived the CRPS formula and the calibration cutoffs by hand (not reusing the module's own code path) to verify before trusting the output — both matched exactly.
+- **Real finding:** skill vs. naive-flat is mixed (−0.26 to +0.41 across the 4 origins), but calibration is badly overconfident — nominal 50/80/95% coverage empirically only ~20/28/38%, mean standardized residual −1.8. See `learnings-archive.md`. n=4 only; flagged in `open-threads.md` as a signal to watch, not settled, until more origins accumulate.
+
+**Next:** keep running `rolling_forecast_btc.py` to accumulate more BTC origins, then re-check whether the calibration miss and skill-score sign persist at larger n; Option B (one text source wired into the multimodal path) is the next real feature work, and will produce a second ledger `compare.py`'s Diebold-Mariano test can immediately use.
+
+---
+
 
 ## 2026-08-06 — mean-variance-paper: independent forward accumulation built and run against real data; TON found delisted
 

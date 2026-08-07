@@ -17,6 +17,51 @@ shape `(batch, num_samples, horizon)` as expected. Multimodal (text-context)
 path not yet exercised — no text-context data source exists in this repo yet;
 that's the actual design gap, not the inference call itself.
 
+### Rolling forecast
+
+`scripts/rolling_forecast_btc.py` (2026-08-07) wraps the proven unimodal call
+in a walk-forward loop over real BTC OHLCV, appending each origin's forecast
+(summary mean/std per horizon step, not raw samples) to
+`artifacts/btc_unimodal_forecast_ledger.jsonl` — an append-only ledger
+modeled on `evaluation-framework`'s `TrialRecord` pattern but scoped to what
+a forecast has at generation time (no realized returns yet). No text context
+— that's still the multimodal/source-alignment gap above.
+
+### Scoring
+
+`scripts/score_forecast_ledger.py` (2026-08-07) scores every record in the
+forecast ledger against realized BTC prices, writing
+`artifacts/btc_unimodal_forecast_scored.jsonl`. Built as a small
+self-contained module in this repo, not an `evaluation-framework` extension
+— that package's Sharpe/DSR/PBO stack assumes realized trade/portfolio
+returns, which a probabilistic price forecast doesn't have.
+
+- `aurora_forecaster/realized.py` aligns a `ForecastRecord` to realized
+  lookback + horizon closes by timestamp (`origin_timestamp` is the last
+  lookback bar, per `forecast_ledger.py`'s docstring).
+- `aurora_forecaster/scoring.py` — closed-form Gaussian CRPS (the ledger
+  stores mean/std, not raw samples or quantiles, so CRPS is computed
+  analytically rather than empirically), MASE (Hyndman & Koehler, scaled by
+  the lookback window's own lag-1 naive error), skill score vs. a
+  random-walk-flat baseline, and calibration coverage from standardized
+  residuals. No scipy dependency — Gaussian CDF/PDF via `math.erf`.
+- `aurora_forecaster/compare.py` — Diebold & Mariano paired test, built now
+  so a real unimodal-vs-multimodal significance test is ready the moment a
+  multimodal ledger exists; inert until then.
+- `aurora_forecaster/data/price.py::fetch_btc_ohlcv` gained an optional
+  `since` (ms epoch) param with pagination past Binance's 1000-row cap, to
+  reconstruct a specific historical span rather than "most recent N bars".
+
+**First real result (4 BTC origins, 2026-07-19 to 2026-07-31, 96h horizon,
+scored 2026-08-07):** skill vs. naive-flat is mixed (−0.26 to +0.41 across
+the 4 origins — no consistent edge yet at this sample size), but
+**calibration is badly overconfident**: nominal 50/80/95% central intervals
+achieve only ~20/28/38% empirical coverage, and mean standardized residual
+is −1.8 (not ~0). The model's stated uncertainty (`sample_std`, from only
+10 samples) understates real 96-hour-ahead uncertainty substantially. Only
+4 origins — treat as a first signal to watch, not a settled result; revisit
+once more origins accumulate.
+
 ## Compute target
 
 Local (Apple Silicon, CPU/MPS) first — the model is 0.2B params (~800MB F32),
@@ -135,10 +180,9 @@ text through the full multimodal path, output shape `(1, 10, 96)`.
 
 - How to align/merge GDELT's un-tagged event stream and Alpha Vantage's
   ticker-tagged feed into one per-timestep text-context input Aurora expects.
-- How to wrap `model.generate(...)`'s distributional output into a
-  walk-forward loop comparable to `evaluation-framework`'s existing metrics,
-  which currently assume realized trade/portfolio returns, not a
-  probabilistic forecast.
 - Whether/when this needs to register into the cross-project `TrialLedger`
   registry as a third `project` value alongside `hmm-slope-experiment` and
-  `mean-variance-paper`.
+  `mean-variance-paper`. Deferred: `ScoredForecastRecord` (see Scoring above)
+  deliberately doesn't attempt this mapping yet — build it only once there's
+  a concrete reason to compare a forecast's score against a strategy's
+  Sharpe in one registry.

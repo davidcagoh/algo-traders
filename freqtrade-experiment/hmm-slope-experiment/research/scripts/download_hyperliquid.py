@@ -53,7 +53,8 @@ import requests
 
 
 API_URL = "https://api.hyperliquid.xyz/info"
-MAX_RETRIES = 5
+MAX_RETRIES = 8
+MAX_BACKOFF_SECONDS = 30
 MAX_CANDLES = 5000       # Hyperliquid public cap; not a pagination limit
 FUNDING_PAGE_SIZE = 500  # records per fundingHistory request
 INTERVAL_TO_MS: dict[str, int] = {
@@ -82,7 +83,7 @@ def post_with_retry(payload: dict) -> requests.Response:
         if resp.status_code != 429:
             resp.raise_for_status()
             return resp
-        wait = 2 ** attempt
+        wait = min(2 ** attempt, MAX_BACKOFF_SECONDS)
         logger.warning("429 from Hyperliquid, retrying in %ds (attempt %d/%d)", wait, attempt + 1, MAX_RETRIES)
         time.sleep(wait)
     resp.raise_for_status()
@@ -202,7 +203,7 @@ def fetch_funding_history(coin: str, start_ms: int | None = None) -> list[dict]:
         cursor_ms = last_ts + 1
         if len(page) < FUNDING_PAGE_SIZE:
             break  # partial page → last page
-        time.sleep(0.2)  # be nice to the API; avoid 429 on long histories
+        time.sleep(0.5)  # be nice to the API; avoid 429 on long histories
 
     return all_records
 
@@ -300,7 +301,9 @@ def main(argv: list[str] | None = None) -> int:
                 failures.append((pair, tf, str(exc)))
 
     if args.funding:
-        for coin in args.coins:
+        for i, coin in enumerate(args.coins):
+            if i > 0:
+                time.sleep(1.0)  # space out per-coin bursts; avoid 429 on cold-cache full-history pulls
             try:
                 download_funding(coin, args.data_dir)
             except Exception as exc:

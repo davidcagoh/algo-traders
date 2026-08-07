@@ -33,6 +33,14 @@ jobs:
           pip install -r requirements.txt
           pip install requests "pyarrow>=14"
 
+      - name: Restore cached Hyperliquid data
+        uses: actions/cache@v4
+        with:
+          path: freqtrade-experiment/hmm-slope-experiment/research/data/hyperliquid
+          key: hyperliquid-data-${{ github.run_id }}
+          restore-keys: |
+            hyperliquid-data-
+
       - name: Refresh Hyperliquid OHLCV + funding
         working-directory: freqtrade-experiment/hmm-slope-experiment/research
         run: |

@@ -28,8 +28,9 @@ jobs:
           python-version: "3.13"
 
       - name: Install dependencies
+        working-directory: freqtrade-experiment/mean-variance-paper
         run: |
-          pip install -r freqtrade-experiment/mean-variance-paper/requirements.txt
+          pip install -r requirements.txt
           pip install requests
 
       - name: Refresh Hyperliquid OHLCV + funding

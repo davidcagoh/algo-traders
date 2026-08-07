@@ -53,6 +53,7 @@ import requests
 
 
 API_URL = "https://api.hyperliquid.xyz/info"
+MAX_RETRIES = 5
 MAX_CANDLES = 5000       # Hyperliquid public cap; not a pagination limit
 FUNDING_PAGE_SIZE = 500  # records per fundingHistory request
 INTERVAL_TO_MS: dict[str, int] = {
@@ -72,6 +73,20 @@ INTERVAL_TO_MS: dict[str, int] = {
 }
 
 logger = logging.getLogger("download_hyperliquid")
+
+
+def post_with_retry(payload: dict) -> requests.Response:
+    """POST to API_URL, retrying on 429 with exponential backoff."""
+    for attempt in range(MAX_RETRIES):
+        resp = requests.post(API_URL, json=payload, timeout=30)
+        if resp.status_code != 429:
+            resp.raise_for_status()
+            return resp
+        wait = 2 ** attempt
+        logger.warning("429 from Hyperliquid, retrying in %ds (attempt %d/%d)", wait, attempt + 1, MAX_RETRIES)
+        time.sleep(wait)
+    resp.raise_for_status()
+    return resp
 
 
 @dataclass(frozen=True)
@@ -106,8 +121,7 @@ def fetch_candles(coin: str, interval: str) -> list[dict]:
             "endTime": end_ms,
         },
     }
-    resp = requests.post(API_URL, json=payload, timeout=30)
-    resp.raise_for_status()
+    resp = post_with_retry(payload)
     data = resp.json()
     if not isinstance(data, list):
         raise RuntimeError(f"Unexpected response shape for {coin}/{interval}: {data!r}")
@@ -176,8 +190,7 @@ def fetch_funding_history(coin: str, start_ms: int | None = None) -> list[dict]:
             "startTime": cursor_ms,
             "endTime": now_ms,
         }
-        resp = requests.post(API_URL, json=payload, timeout=30)
-        resp.raise_for_status()
+        resp = post_with_retry(payload)
         page: list[dict] = resp.json()
         if not page:
             break

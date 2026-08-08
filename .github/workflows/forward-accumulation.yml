@@ -1,0 +1,80 @@
+name: Daily Hyperliquid forward accumulation
+
+on:
+  schedule:
+    - cron: "30 1 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: daily-forward-accumulation
+  cancel-in-progress: false
+
+jobs:
+  accumulate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      HEALTHCHECKS_URL: ${{ secrets.HEALTHCHECKS_FORWARD_ACCUMULATION_URL }}
+    steps:
+      - name: Ping healthchecks.io (start)
+        if: ${{ env.HEALTHCHECKS_URL != '' }}
+        run: curl -fsS -m 10 --retry 5 "${{ env.HEALTHCHECKS_URL }}/start" || true
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        working-directory: freqtrade-experiment/mean-variance-paper
+        run: |
+          pip install -r requirements.txt
+          pip install requests "pyarrow>=14"
+
+      - name: Restore cached Hyperliquid data
+        uses: actions/cache@v4
+        with:
+          path: freqtrade-experiment/hmm-slope-experiment/research/data/hyperliquid
+          key: hyperliquid-data-${{ github.run_id }}
+          restore-keys: |
+            hyperliquid-data-
+
+      - name: Refresh Hyperliquid OHLCV + funding
+        working-directory: freqtrade-experiment/hmm-slope-experiment/research
+        run: |
+          python scripts/download_hyperliquid.py \
+            --pairs BTC/USDC:USDC HYPE/USDC:USDC PAXG/USDC:USDC TRX/USDC:USDC WLFI/USDC:USDC VVV/USDC:USDC TON/USDC:USDC ZRO/USDC:USDC XPL/USDC:USDC \
+            --timeframes 1h \
+            --coins BTC HYPE PAXG TRX WLFI VVV TON ZRO XPL \
+            --funding \
+            --data-dir data/hyperliquid
+
+      - name: Run forward accumulation
+        working-directory: freqtrade-experiment/mean-variance-paper
+        run: python analysis/forward_accumulate.py
+
+      - name: Commit updated state
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add freqtrade-experiment/mean-variance-paper/analysis/forward_state.json \
+                  freqtrade-experiment/mean-variance-paper/analysis/forward_daily_log.jsonl \
+                  freqtrade-experiment/mean-variance-paper/analysis/forward_accumulation_ledger.jsonl
+          if git diff --cached --quiet; then
+            echo "No new day accumulated (already ran today)."
+          else
+            git commit -m "chore: forward accumulation $(date -u +%F)"
+            git push
+          fi
+
+      - name: Ping healthchecks.io (success)
+        if: ${{ success() && env.HEALTHCHECKS_URL != '' }}
+        run: curl -fsS -m 10 --retry 5 "${{ env.HEALTHCHECKS_URL }}" || true
+
+      - name: Ping healthchecks.io (failure)
+        if: ${{ failure() && env.HEALTHCHECKS_URL != '' }}
+        run: curl -fsS -m 10 --retry 5 "${{ env.HEALTHCHECKS_URL }}/fail" || true

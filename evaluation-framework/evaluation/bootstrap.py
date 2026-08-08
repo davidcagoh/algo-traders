@@ -51,13 +51,16 @@ def optimal_block_length(returns: pd.Series, max_lag: int = 50) -> int:
     return int(min(max(round(b), 2), min(max_lag, n // 2 or 1)))
 
 
-def _stationary_bootstrap_indices(
+def stationary_bootstrap_indices(
     n: int, n_boot: int, block_len: float, rng: np.random.Generator
 ) -> np.ndarray:
     """Vectorised Politis-Romano stationary bootstrap index generation.
 
     Returns an (n_boot, n) int array of resampled indices into a length-n
-    series, using geometric block lengths with mean `block_len`.
+    series, using geometric block lengths with mean `block_len`. Public so
+    that other modules (e.g. `spa.py`, which needs per-trial bootstrap
+    resamples of a (T x K) matrix rather than a single series) can reuse
+    the same resampling scheme instead of reimplementing it.
     """
     p = 1.0 / max(block_len, 1.0)
     starts = rng.integers(0, n, size=(n_boot, n))
@@ -129,7 +132,7 @@ def stationary_bootstrap(
     rng = np.random.default_rng(seed)
     n = len(returns)
     bl = block_len or optimal_block_length(returns)
-    idx = _stationary_bootstrap_indices(n, n_boot, bl, rng)
+    idx = stationary_bootstrap_indices(n, n_boot, bl, rng)
     return returns.to_numpy()[idx]
 
 
@@ -202,7 +205,7 @@ def paired_bootstrap_test(
     if method not in _METHODS:
         raise ValueError(f"unknown bootstrap method: {method!r}")
     if method == "stationary":
-        idx = _stationary_bootstrap_indices(n, n_boot, bl, rng)
+        idx = stationary_bootstrap_indices(n, n_boot, bl, rng)
     elif method == "moving":
         idx = _moving_block_indices(n, n_boot, bl, rng)
     else:

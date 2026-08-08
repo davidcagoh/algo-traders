@@ -3,6 +3,315 @@
 Append-only daily log. Newest entry at the top.
 
 ---
+## 2026-08-07 — mean-variance-paper: forward-accumulation Action debugged to a verified green run
+
+- Following the same-day Action build (entry below), the first `workflow_dispatch` test run immediately 422'd: GitHub Actions rejects the `secrets` context directly inside `if:` expressions ("Unrecognized named-value: 'secrets'"). Fixed by promoting the secret to a job-level `env.HEALTHCHECKS_URL` and gating on that instead — this also confirmed the secret itself was wired correctly, since the `/fail` ping fired and returned `OK` from healthchecks.io on this same broken run.
+- Second failure: `pip install -r requirements.txt` from repo root broke the file's `-e ../../evaluation-framework` editable path (relative to the requirements file's own directory, not the invocation CWD). Fixed with `working-directory:` on the install step.
+- Third failure: `ModuleNotFoundError: No module named 'pyarrow'` — `requirements.txt`'s editable install doesn't pull `evaluation-framework`'s `[freqtrade]` extra that provides it; worked locally only because the existing dev venv happened to already have it installed from an earlier session. Added `pyarrow>=14` to the install step explicitly.
+- Fourth failure, the real one: sustained `429 Too Many Requests` from Hyperliquid on funding-history calls. Root cause wasn't just the repeated manual test triggers — raw price/funding data is `.gitignore`d (`*.feather`/`*.parquet`), so a **fresh Actions checkout has no local cache to resume from**, and `download_hyperliquid.py`'s funding fetch starts from Hyperliquid's 2022 epoch for all 9 coins instead of resuming from yesterday's cursor like it does locally — thousands of paginated requests instead of a handful, every single day. Fixed two ways: (1) added `actions/cache@v4` keyed on the `data/hyperliquid` directory so only the first cold-cache run pays the full-history cost, every run after resumes incrementally; (2) hardened `download_hyperliquid.py` itself — added `post_with_retry()` (was previously zero retry logic, just a flat 0.2s inter-page sleep), raised `MAX_RETRIES` to 8 with a 30s backoff cap, and added 1s spacing between per-coin funding requests. The retry/backoff fix benefits the script generally, not just this Action.
+- Fifth run (after all four fixes) went fully green: data refresh, retry/cache, `forward_accumulate.py`, and both healthchecks pings all succeeded. Correctly logged `already accumulated 2026-08-07, skipping (N=148)` — today's slot was already filled by the manual local run earlier in the session, so no duplicate commit, exactly the idempotency the state design was supposed to guarantee. Confirmed via `git log origin/main` and the healthchecks.io success ping.
+- **Real takeaway generalizing beyond this one workflow:** a script whose local behavior depends on pre-existing local state (here: incremental resume from cached data files) will behave completely differently in a stateless CI environment unless that state is explicitly cached or re-derived. "It works when I run it locally" is not evidence it'll work in the Action — the local venv had months of accumulated cache the fresh runner didn't.
+
+---
+## 2026-08-07 — mean-variance-paper: daily forward accumulation automated via GitHub Action + healthchecks.io
+
+- Following the same-day `forward_state.py` fix (see the "fixed forward accumulation" entry below), automated the daily pull instead of relying on remembering to run it manually for ~102 more days: new `.github/workflows/forward-accumulation.yml` (cron `30 1 * * *` UTC + `workflow_dispatch`) checks out the repo, refreshes Hyperliquid OHLCV/funding via `download_hyperliquid.py`, runs `forward_accumulate.py`, and commits the updated `forward_state.json`/`forward_daily_log.jsonl`/`forward_accumulation_ledger.jsonl` straight back to `main` (bot commit, no PR — deterministic numeric state, not judgment-requiring content, unlike the existing `paper-search.yml` PR pattern which is for LLM-generated literature notes).
+- Wired healthchecks.io as a dead-man's-switch, mirroring the start/success/fail pattern already used in the user's other repo's `sync-prices.yml`: `HEALTHCHECKS_FORWARD_ACCUMULATION_URL` repo secret (set by the user directly via `gh secret set`, never pasted into the conversation), pinged `/start` before checkout, bare URL on success, `/fail` on failure — each ping guarded so a missing secret doesn't fail the job.
+- User enabled Actions "Read and write permissions" (required for the bot's `git push` step; default `GITHUB_TOKEN` is read-only otherwise) and set the healthchecks secret. Not yet verified end-to-end — next step is a manual `workflow_dispatch` run to confirm the ping actually reaches healthchecks.io before trusting the cron schedule.
+
+**Next:** trigger `workflow_dispatch` once and check the healthchecks.io dashboard shows a received ping; then let the daily cron run unattended.
+
+---
+## 2026-08-07 — aurora-forecaster: rolling-forecast walk-forward loop built; scoring findings visualized
+
+- Earlier in this session (before another concurrent session built the scoring module below): built the rolling walk-forward forecast loop itself — `aurora_forecaster/rolling.py` (`forecast_origins`, `run_unimodal_forecast`), `forecast_ledger.py` (`ForecastRecord`, append-only JSONL mirroring `evaluation-framework`'s `TrialRecord` pattern), and `scripts/rolling_forecast_btc.py`. Ran it for real: 4 BTC origins (2026-07-19 to 2026-07-31, 96h horizon each) against Binance BTC/USDT, appended to `artifacts/btc_unimodal_forecast_ledger.jsonl`. This is what the scoring module (entry below) then scored.
+- After the scoring module landed (`aurora_forecaster/scoring.py`, `scored_ledger.py`, `artifacts/btc_unimodal_forecast_scored.jsonl`, committed `04fe3f7`/`f0d7292` by the concurrent session — verified via `git log`/`git status` before touching anything, wiki files already clean/committed by that session so no reconciliation needed here): built a single-file HTML visualization, `aurora-forecaster/artifacts/btc_unimodal_forecast_chart.html`, joining both ledgers by `forecast_id`. Shows the actual BTC price line against all 4 forecast fans (mean ± std), a forecast-summary table extended with skill/CRPS/MASE per origin, and a calibration panel (nominal-vs-empirical coverage bars for 50/80/95%, mean standardized residual) that makes the overconfidence finding visible at a glance rather than only readable from the JSONL. Local file, not published as a hosted Artifact per user preference this session.
+- Dataviz skill's palette validator run against the 5-series set (actual + 4 forecast origins) in both light/dark before use — all hard gates pass; light mode carries a contrast WARN on 3 of the 5 hues, mitigated with the required relief (visible legend labels + the summary table, never color-only identity).
+
+**Next:** `artifacts/` (both JSONL ledgers and the new chart HTML) still isn't in `.gitignore` — undecided whether these should be committed as evidence or treated as regenerable output; flagged in `open-threads.md`.
+
+---
+## 2026-08-07 — aurora-forecaster: forecast scoring module built and run against the real ledger
+
+- Closed the open thread from 2026-08-06 ("extend evaluation-framework or wrap separately to score a probabilistic forecast") by building a standalone module inside `aurora-forecaster/` rather than extending `evaluation-framework` — that package's Sharpe/DSR/PBO stack assumes realized trade/portfolio returns, which a probabilistic price forecast doesn't have. TDD throughout (RED confirmed via `ModuleNotFoundError`/`TypeError` before each implementation, GREEN after; 47/47 tests pass).
+- New: `aurora_forecaster/scoring.py` (closed-form Gaussian CRPS via `math.erf`, no scipy; MASE scaled by lookback lag-1 naive error; skill score vs. random-walk-flat; calibration coverage from standardized residuals), `realized.py` (aligns a `ForecastRecord` to realized lookback+horizon closes by timestamp), `scored_ledger.py` (`ScoredForecastRecord`, mirrors `ForecastRecord`'s append-only JSONL pattern), `compare.py` (Diebold-Mariano paired test, built now but inert until a multimodal ledger exists to compare against). `data/price.py::fetch_btc_ohlcv` gained an optional `since` param with pagination past Binance's 1000-row cap.
+- Ran `scripts/score_forecast_ledger.py` against the real 4-origin BTC ledger. Independently re-derived the CRPS formula and the calibration cutoffs by hand (not reusing the module's own code path) to verify before trusting the output — both matched exactly.
+- **Real finding:** skill vs. naive-flat is mixed (−0.26 to +0.41 across the 4 origins), but calibration is badly overconfident — nominal 50/80/95% coverage empirically only ~20/28/38%, mean standardized residual −1.8. See `learnings-archive.md`. n=4 only; flagged in `open-threads.md` as a signal to watch, not settled, until more origins accumulate.
+
+**Next:** keep running `rolling_forecast_btc.py` to accumulate more BTC origins, then re-check whether the calibration miss and skill-score sign persist at larger n; Option B (one text source wired into the multimodal path) is the next real feature work, and will produce a second ledger `compare.py`'s Diebold-Mariano test can immediately use.
+
+---
+
+
+## 2026-08-06 — mean-variance-paper: independent forward accumulation built and run against real data; TON found delisted
+
+- Ethan proposed regime-scoping forward accumulation to post-October-2025-BTC-peak; agreed this has merit (see `decisions-archive.md`) since the real book's coins have no prior-cycle backtest history anyway. Rather than requesting Ethan's Vercel/Upstash credentials, built independent accumulation reusing `run_portfolio_short_funding.simulate()` unchanged — it's a pure deterministic function of the full price/funding history array, so re-running it daily and reading the latest metrics is mathematically identical to a persistent incremental tick, no external state store needed.
+- TDD'd `analysis/forward_accumulate.py` (`freqtrade-experiment/mean-variance-paper/tests/test_forward_accumulate.py`, 9 tests, no network): `check_dsr_binding` (N≥250 threshold), `check_kill_criteria` (decision-012's Kill If rules), `to_trial_record` (maps into `evaluation.ledger.TrialRecord`, `evidence_stage="paper"`). New `.venv` + `requirements.txt` for this directory (none existed before).
+- **Real blocker found before any of this could run for real:** the actual 9-coin universe (`BTC, HYPE, PAXG, TRX, WLFI, VVV, TON, ZRO, XPL`) had no local data at all — only 6 unrelated proxy-backtest coins existed, 3 months stale. Fetched fresh 1h OHLCV + funding for all 9 via the existing `download_hyperliquid.py` (rate-limited on the last few funding calls, resolved via a longer backoff).
+- **Real finding: TON is delisted from Hyperliquid** (confirmed via the `/info` `meta` endpoint, `isDelisted: true`; its OHLCV data stops 2026-06-15). Excluded from forward accumulation (`EXCLUDED_COINS = {"TON"}` in `forward_accumulate.py`, `mean_variance_hl_universe.json` left unmodified as a historical record) — this is a real change to the actual book's tradable composition, not a script parameter, and needs relaying to Ethan regardless of what we do here.
+- **First real result** (window 2026-01-11 → 2026-08-06, 148 days — the most recent slice available given Hyperliquid's ~208-candle cap, computed retrospectively today, not yet genuine day-by-day observation): signed MV +18.58% return, Sharpe 1.26, Calmar 2.23 vs. equal-weight baseline's -4.42%/-0.01/-0.53 — dominates on every return-based metric. But signed MV's max drawdown (-23.40%) is worse than baseline's (-19.92%), which literally triggers decision-012's Kill If rule despite the otherwise dominant profile. Recorded as `gate_outcome="killed"` in `forward_accumulation_ledger.jsonl` per the pre-registered rule, but flagged as worth Ethan's judgment rather than treated as a decisive verdict — a single marginally-worse MDD overriding three strongly favorable metrics is exactly the kind of single-metric brittleness this project's own learnings warn against trusting blindly.
+- N=148 is below the DSR-binding threshold (250) — this result is directional, not yet statistically meaningful by the project's own standard.
+- User pushback, worth recording precisely: does killing on one MDD miss despite dominant Sharpe/Calmar/return reflect poorly on the evaluation stack's discipline? Distinguished two separate questions. Applying decision-012's Kill If rule as pre-registered (not loosening it after seeing an inconvenient result) is correct discipline — that's the entire point of pre-registration, and MDD is legitimately part of the L5 tail/path layer precisely because Sharpe is blind to loss clustering/timing. But treating a bare point-estimate MDD gap (-23.40% vs -19.92%, ~3.5pp, N=148, below the project's own DSR-binding floor) as decisive *is* a real gap: `evaluation-framework/evaluation/bootstrap.py`/`intervals.py` already exist for exactly this — putting a block-bootstrap CI on both MDDs would show whether that gap is real or noise at this sample size, and wasn't applied here. **Next-next step, not yet done:** bootstrap a CI on the MDD comparison before treating the kill as settled either way.
+
+**Next:** relay the TON delisting finding to Ethan (affects his actual book regardless of this script), rerun `forward_accumulate.py` daily to genuinely accumulate forward observations, bootstrap a CI on the MDD gap before treating the kill as settled, and revisit the flag with Ethan's input once there's more than one day of true forward data.
+
+---
+
+## 2026-08-06 — evaluation-framework cleanup + Phase 7 (SPA/Reality Check) implemented
+
+- Cleaned up `evaluation-framework/` and root build junk: deleted untracked
+  `.venv`, `.mypy_cache`, `.pytest_cache`, `.ruff_cache`, `.coverage`,
+  `algo_eval_stack.egg-info` (~481M, none git-tracked); added
+  `.mypy_cache/`, `.pytest_cache/`, `.ruff_cache/` to root `.gitignore`
+  (they were missing despite `.venv/`/`.coverage`/`*.egg-info/` already
+  being covered). Confirmed `PLAN.md`/`STATUS.md`/`README.md`/
+  `pyproject.toml` were NOT stale despite the user's suspicion — all 6
+  original phases were genuinely complete per `STATUS.md`.
+- Investigated why SPA/Reality Check (Hansen 2005, White 2000) were listed
+  as "record only" in `literature/strategy-evaluation/_index.md`: Hansen
+  hit a TLS download failure against the DOI resolver, White is behind an
+  Econometrica-adjacent paywall — not a research gap, a fetch/access
+  failure. User supplied both PDFs directly; relocated into
+  `literature/strategy-evaluation/foundational/` with descriptive
+  filenames matching the directory's existing convention, and read both
+  in full (30 + 17 pages).
+- Wrote an implementation plan as **Phase 7** in
+  `evaluation-framework/PLAN.md`, matching the existing phase format
+  (literature citation, concrete deliverables, test list, exit criteria),
+  then implemented it fully in the same session: `evaluation/spa.py`
+  (Hansen's studentized SPA test with three null-recentering variants
+  `l`/`c`/`u`, plus White's unstudentized RC as `SPAResult.rc_p_value`
+  computed from the same bootstrap resamples), 7 new tests in
+  `tests/test_spa.py`, de-privatized
+  `bootstrap.py::stationary_bootstrap_indices` so `spa.py` reuses it
+  instead of reimplementing resampling, wired into `__init__.py` and
+  `evaluation/README.md`'s module map + worked example.
+- **Correction to my own Phase 7 plan, caught during implementation**: I
+  had written a test asserting `p_value_liberal` (Hansen's `μ̂ˡ` null
+  variant) numerically equals White's RC p-value, reasoning "μ̂ˡ is by
+  construction the RC's null." That's wrong — `μ̂ᵘ=0` (not `μ̂ˡ`) is the
+  RC-equivalent null *philosophy* (both assume every model's population
+  mean is exactly 0), and even then literal RC is unstudentized while all
+  three SPA variants are studentized, so they're related in spirit but
+  not numerically equal. Replaced with a p-value ordering test
+  (`liberal <= consistent <= upper`, which Hansen's `μ̂ˡ ≤ μ̂ᶜ ≤ μ̂ᵘ`
+  ordering does guarantee) and a direct power-comparison test
+  (`p_value_consistent <= rc_p_value` on a known-edge fixture,
+  reproducing the paper's actual headline claim).
+- Verified: full suite 162/162 passing (150 prior + 12, including the 7
+  new SPA tests and bootstrap.py rename fallout), `spa.py` at 96% line
+  coverage, ruff/black/mypy clean across the whole package. Updated
+  `PLAN.md` (0-6 → 0-7 complete), `STATUS.md`, and the literature index's
+  read-status flags to close out the phase. Deleted the venv/caches again
+  after verification, consistent with the earlier cleanup.
+- Discussed the real order-book capture item (`stress.py`'s
+  `depth_from_ohlcv` OHLCV proxy) — decided to skip it for now rather than
+  build a rushed version: no strategy is currently live-paper-trading, so
+  there is nothing to capture real book depth against yet. A genuinely
+  quick forward-only capture stub (poll Hyperliquid's order-book endpoint
+  going forward, no historical backfill) was scoped as the option if this
+  becomes relevant later.
+- Confirmed with the user that `evaluation-framework/PLAN.md` and
+  `STATUS.md` should stay as project-local docs rather than being folded
+  into the wiki's H3L structure — they're a phase-by-phase build spec with
+  literature citations, not ephemeral cross-project state; the wiki's
+  `_index.md` already routes to them correctly via the `Now:` pointer.
+
+**Next:** Optional order-book capture item is deliberately parked, not
+forgotten — revisit once a strategy is actually live-paper-trading.
+
+## 2026-08-06 — Session wrap: aurora-forecaster stood up end-to-end (data + model + text sources)
+
+- Full session summary (see detailed entries below for each step): scaffolded
+  new top-level project `aurora-forecaster/` for a forecasting archetype
+  genuinely different from the mean-reversion-style archetypes everywhere
+  else in this repo; TDD'd device selection, price clients (BTC via
+  ccxt/Binance, SPY via yfinance), and four text-context clients (GDELT,
+  Alpha Vantage, Currents API, Guardian Open Platform); got a real
+  multimodal forward pass running end-to-end on local Apple Silicon (MPS);
+  found and fixed a genuine bug in the published `aurora-model==0.2.0`
+  package. All four text sources and both price sources are now confirmed
+  working against live endpoints — see `aurora-forecaster/README.md` for
+  the full technical record (version pins, the library bug and its fix,
+  per-source rate limits).
+- Ethan separately confirmed his Vercel paper monitor is deployed
+  (undocumented locally because never pushed) but not working —
+  corroborates this session's earlier proxy-backtest doubt about signed
+  MV's edge.
+- Noted (git status) unrelated uncommitted changes in
+  `evaluation-framework/` (PLAN.md, STATUS.md, new `spa.py`/`test_spa.py`)
+  and `literature/strategy-evaluation/` (two new PDFs, updated `_index.md`)
+  that predate this session and weren't touched here — left alone, not
+  part of this commit. Worth checking their origin next session (possibly
+  the literature-search workflow's first run landing changes, or leftover
+  unstaged work from an earlier session).
+
+**Next:** Align the four text sources into one per-timestep text-context
+input for Aurora's multimodal path, then run the actual unimodal vs.
+GDELT vs. Alpha Vantage vs. Currents comparison — the feasibility question
+this whole build has been aiming at. Guardian stays built-but-unwired until
+that comparison shows a need for it. Separately, investigate the unrelated
+uncommitted `evaluation-framework`/`literature` changes noted above.
+
+---
+
+## 2026-08-06 — Currents and Guardian smoke-tested; all four text sources confirmed working
+
+- User added `CURRENTS_API_KEY` and `GUARDIAN_API_KEY` to root `.env`.
+  Confirmed present via `grep -oE '^[A-Z_]+='` (names only, values never
+  read), then ran both smoke scripts the same way as Alpha Vantage's (key
+  loaded via `python-dotenv`, never printed). Both work: Currents returned
+  20 real articles each for `bitcoin` and `S&P 500` keyword queries;
+  Guardian returned 10 real, on-topic business-section articles each for
+  the same two queries.
+- All four text sources (GDELT, Alpha Vantage, Currents, Guardian) and both
+  price sources (BTC, SPY) are now confirmed working against real,
+  live endpoints. Guardian remains explicitly unwired per standing
+  decision — verified working, not yet used in any pipeline.
+- Fast test suite: 18/18 passing, no network required.
+
+---
+
+## 2026-08-06 — Added Currents API and Guardian text clients; four-source comparison now scoped
+
+- User surfaced a comparison table + a second corroborating source (a blog
+  post, treated with mild skepticism given its unrelated origin domain, but
+  its claims matched both the table and this session's own GDELT/Alpha
+  Vantage findings). Consensus read: Alpha Vantage's 25 req/day cap is a
+  hard ceiling no caching strategy fixes, not a throttle to design around;
+  Currents API (1,000/day, no card, commercial-ok) and Guardian Open
+  Platform (5,000/day, non-commercial, single-publisher but
+  professionally-curated business/economics coverage closer to TimeMMD's
+  domain) are the credible alternatives.
+- Decision: try all four rather than swap. TDD'd
+  `aurora_forecaster/data/text_currents.py` and
+  `aurora_forecaster/data/text_guardian.py` (build-URL + fetch, dependency
+  injected, no network in tests — 18/18 passing total now). Neither
+  smoke-tested yet — both need free API keys (Currents: currentsapi.services,
+  Guardian: open-platform.theguardian.com) not yet in `.env`. Guardian is
+  explicitly "verify it works, don't use it yet" per standing decision not
+  to commit to a source before the comparison runs.
+- `.env` var names checked via `grep -oE '^[A-Z_]+='` (names only, values
+  never read) — confirmed only `OPENAI_API_KEY` and `ALPHA_VANTAGE_API_KEY`
+  present; `CURRENTS_API_KEY` and `GUARDIAN_API_KEY` still needed.
+
+---
+
+## 2026-08-06 — First real multimodal Aurora forward pass; found and fixed a batch-collapsing bug in aurora-model==0.2.0
+
+- Got a real end-to-end multimodal forward pass working: real BTC OHLCV
+  (528-step lookback, ccxt/Binance) + real/fallback text through
+  `AuroraForPrediction.generate(...)`, output shape `(1, 10, 96)` matching
+  the unimodal baseline. Confirmed via
+  `aurora-forecaster/scripts/multimodal_smoke_test.py`.
+- Found a real bug in the published `aurora-model==0.2.0` package along the
+  way: its `generate(text_inputs=...)` convenience path
+  (`aurora/ts_generation_mixin.py`) calls `.squeeze(0)` on the tokenizer
+  output, which collapses the batch dimension whenever batch size is 1 —
+  our case, since forecasting is per-asset. Crashes downstream BERT encoding
+  with `not enough values to unpack (expected 2, got 1)`. Not an environment
+  or usage mistake — reproduced with real data, root-caused by reading the
+  installed package source, confirmed by an isolated bypass test.
+- Fix: pre-tokenize ourselves and pass `text_input_ids`/`text_attention_mask`/
+  `text_token_type_ids` directly (the `generate()` signature accepts these
+  and only hits the buggy path when `text_inputs` is set). Landed as
+  `aurora_forecaster/multimodal.py::tokenize_text_context`, TDD'd (3 tests,
+  no network — uses the model's bundled local BERT tokenizer files), wired
+  into the smoke script with a comment explaining why.
+- Both live text sources hit rate limits during testing: GDELT returned 429
+  twice (undocumented limit, no backoff yet); Alpha Vantage confirmed at its
+  stated 25 req/day, 1/sec free-tier cap (see earlier entry below). Neither
+  is fatal — the smoke script now degrades to fallback text on GDELT failure
+  — but a real walk-forward loop will need caching/backoff design for both.
+- User flagged a third possible text source for later: a personal Straits
+  Times Opinion Forum scraper at
+  `/Users/davidgoh/LocalFiles/Post-Duke/st_forum_scraper/` (Selenium,
+  non-headless by design — needs manual popup dismissal — targets
+  `opinion/forum`'s specific markup). Not adapted or wired in this session;
+  logged as a candidate, not built, per the standing decision not to add
+  more sources before GDELT vs. Alpha Vantage vs. unimodal baseline actually
+  runs. Would need de-babysitting (headless-capable) and re-verified
+  selectors for Business/Finance/Wealth sections before it could feed an
+  unattended backtest.
+
+---
+
+## 2026-08-06 — Chose BTC/SPY as aurora-forecaster targets; built and smoke-tested price/text data clients
+
+- Decided target securities: BTC and SPY, not the actual Hyperliquid book.
+  Rationale traced to Aurora's own pretraining domain — its primary
+  multimodal benchmark, TimeMMD, pairs time series with macro/economy-style
+  expert reports across 9 domains (Agriculture, Climate, Economy, Energy,
+  Environment, Health, Security, SocialGood, Traffic), not asset-specific
+  headline chatter. `WLFI`/`VVV`/`XPL` etc. would fail this test twice —
+  they already lack price history (2026-08-06 proxy-backtest finding) and
+  would have near-zero text coverage in Aurora's pretraining distribution.
+  `evaluation-framework`'s metrics were confirmed *not* a constraint here —
+  already asset-class-agnostic (spans SGX 252-day and crypto 365-day
+  annualisation).
+- TDD-built (tests first, dependency-injected fakes, no network in the fast
+  suite — 10/10 passing) three data clients in `aurora-forecaster/`:
+  `data/price.py` (BTC via ccxt/Binance, SPY via yfinance — reusing existing
+  repo conventions per `wiki/concepts/data-sourcing.md`, no new tooling
+  needed there), `data/text_gdelt.py` (GDELT DOC 2.0, free/keyless),
+  `data/text_alphavantage.py` (Alpha Vantage `NEWS_SENTIMENT`, free tier,
+  needs an API key).
+- User chose to keep and compare both text sources rather than commit to one
+  upfront (GDELT's domain-alignment vs. Alpha Vantage's ticker-tagging is
+  itself part of the feasibility question). Real-endpoint smoke tests
+  confirmed working for BTC, SPY, and GDELT; Alpha Vantage untested pending
+  an API key (documented in `aurora-forecaster/README.md`).
+- Added a "News / text (multimodal forecasting)" section to
+  `wiki/concepts/data-sourcing.md` — first time this repo has sourced text
+  data rather than only price/funding/order-book.
+
+---
+
+## 2026-08-06 — Scaffolded aurora-forecaster/, a new forecasting-archetype project
+
+- New top-level project `aurora-forecaster/`, separate from
+  `freqtrade-experiment/` because [DecisionIntelligence/Aurora](https://huggingface.co/DecisionIntelligence/Aurora)
+  ([arXiv:2509.22295](https://arxiv.org/abs/2509.22295)) is a pretrained
+  multimodal generative forecasting foundation model (time series + text +
+  image inputs, flow-matching decoder), not a Freqtrade strategy — it
+  predicts forward returns directly rather than trading a current
+  mispricing back to an anchor, which is a genuinely new archetype relative
+  to everything in `wiki/concepts/strategy-archetypes.md`.
+- TDD-built device selection (`aurora_forecaster/device.py`, tests written
+  first) and confirmed real pretrained weights load and run end-to-end on
+  local Apple Silicon (M3, MPS backend) via `scripts/smoke_test.py` — output
+  shape `(1, 10, 96)` for a synthetic unimodal input. Model is small (0.2B
+  params, ~800MB F32); local CPU/MPS is sufficient for now.
+- Two real compatibility issues surfaced and fixed: (1) the model card's
+  `torch==2.4.0` pin has no Python 3.13 wheel — relaxed to `torch>=2.6`;
+  (2) that pulled in `transformers>=5`, whose internal weight-tying API
+  change (`all_tied_weights_keys`) breaks `aurora-model==0.2.0`'s
+  `from_pretrained` — pinned `transformers<5,>=4.44` instead, confirmed
+  working. Both documented in `aurora-forecaster/README.md`.
+- User confirmed a UofT CSLab Slurm GPU cluster is available (personal use
+  permitted as a full-time grad student, underused over summer) but decided
+  to hold off — local is sufficient for the model's size, cluster use is
+  deferred until an actual compute bottleneck appears (e.g. sweeping
+  text-context variants at scale).
+- Open design gap, not yet started: no text-context data source exists in
+  this repo for the multimodal path, and `evaluation-framework`'s metrics
+  assume realized returns, not a probabilistic forecast — both need design
+  work before this can produce a comparable backtest result.
+
+---
+
+## 2026-08-06 — Ethan confirmed Vercel paper monitor deployed but non-functional
+
+- Ethan confirmed he deployed his own paper monitor at
+  https://vercel-paper-dashboard.vercel.app/ directly (never pushed the
+  `.vercel` config to the repo, which is why no local evidence of it existed
+  — see prior entry below). He also confirmed it is **not working**, which
+  corroborates this session's cross-cycle proxy-backtest finding casting
+  doubt on `shrunk_mean_variance_signed`'s edge. Still unresolved: whether
+  he wants cross-cycle validation to formally gate this project (see
+  `open-threads.md`).
+
+---
 
 ## 2026-08-06 — Cross-cycle proxy test for signed mean-variance; traced the "cross-cycle validation required" requirement's origin
 

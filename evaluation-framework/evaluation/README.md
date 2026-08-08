@@ -27,6 +27,7 @@ Extras: `freqtrade` (pyarrow, for `.feather` ZIP reading), `factor`
 | `backtest.py` | Freqtrade backtest ZIP readers (wallet curve, trade returns) | — |
 | `ledger.py` | Append-only trial ledger — the real search size DSR/PBO need, including discarded trials; `effective_trials()` clusters near-duplicate trials | Bailey & López de Prado 2014; Harvey/Liu/Zhu 2016; Jadouli 2026; Chauhan 2026 (SSRN 6861958) |
 | `pbo.py` | Probability of Backtest Overfitting via CSCV — a deflator that doesn't share DSR's Cornish-Fisher approximation | Bailey/Borwein/López de Prado/Zhu 2017 |
+| `spa.py` | Hansen's Test for Superior Predictive Ability (studentized, data-dependent null) plus White's Reality Check for comparison, both via stationary bootstrap | White 2000; Hansen 2005 |
 | `bootstrap.py` | Block-bootstrap (moving/circular/stationary) CIs and paired tests for serially-dependent returns | Politis-Romano; Bysik & Ślepaczuk 2026; Chauhan 2026; Oliveira/Guzman/Firoozye 2025 |
 | `intervals.py` | `metrics_with_ci()` — bootstrap CI as the default rendering, not opt-in | (wraps `bootstrap.py`) |
 | `splits.py` | Purged K-fold, purged walk-forward, double-OOS split, combinatorial purged splits (CPCV) | Mroziewicz & Ślepaczuk 2026; Bieganowski & Ślepaczuk 2026; Jadouli 2026; Deep/Deep/Lamptey 2025 |
@@ -41,7 +42,7 @@ Extras: `freqtrade` (pyarrow, for `.feather` ZIP reading), `factor`
 Every citation above resolves to an entry in
 [`../literature/strategy-evaluation/_index.md`](../literature/strategy-evaluation/_index.md).
 
-## Worked example: ledger → splits → costs → metrics+CI → PBO → benchmark/factor/regime → live reconcile
+## Worked example: ledger → splits → costs → metrics+CI → PBO/SPA → benchmark/factor/regime → live reconcile
 
 ```python
 import pandas as pd
@@ -51,6 +52,7 @@ from evaluation import (
     CostModel, apply_costs,
     metrics_with_ci, CRYPTO_ANNUAL,
     cscv_pbo,
+    spa_test,
     buy_and_hold, excess_metrics,
     factor_regression,
     label_regimes, regime_metrics,
@@ -78,9 +80,11 @@ priced_trades = apply_costs(trades, model)
 # 4. Report every headline metric with a bootstrap interval, not a bare point estimate.
 metrics, cis = metrics_with_ci(wallet, annualisation=CRYPTO_ANNUAL)
 
-# 5. Deflate with both DSR (evaluation.dsr) and PBO — PBO doesn't inherit
-#    DSR's fat-tail sensitivity, so run both and read PBO when they disagree.
+# 5. Deflate with DSR (evaluation.dsr), PBO, and SPA — PBO doesn't inherit
+#    DSR's fat-tail sensitivity, and SPA is a direct beat-the-benchmark test
+#    rather than a deflator, so read all three rather than trusting one.
 pbo_result = cscv_pbo(trial_returns_matrix, n_splits=8)
+spa_result = spa_test(trial_returns_matrix, benchmark_returns)
 
 # 6. Compare against a benchmark, not just zero return.
 excess = excess_metrics(wallet, buy_and_hold(prices))

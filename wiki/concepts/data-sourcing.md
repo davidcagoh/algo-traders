@@ -41,6 +41,24 @@ Default order of preference for market data, with the rationale for each. Goal: 
 - Feishu competition: data is delivered by competition organisers in-band; no external sourcing needed for the IS+OOS windows.
 - For independent equity research: `yfinance` (US), Tushare or AkShare (China A-share, free with rate limits).
 
+### News / text (multimodal forecasting)
+
+- **GDELT Project** (`aurora-forecaster/aurora_forecaster/data/text_gdelt.py`):
+  free, no API key, global news/event database (DOC 2.0 API). Not
+  ticker-tagged — needs keyword/entity filtering per asset. Domain-matches
+  TimeMMD's macro/economy-report text style, which is what
+  `DecisionIntelligence/Aurora` was pretrained on — prefer this over
+  asset-specific headline feeds when the goal is staying in-distribution for
+  a pretrained multimodal model, not just relevance.
+- **Alpha Vantage `NEWS_SENTIMENT`**
+  (`aurora-forecaster/aurora_forecaster/data/text_alphavantage.py`): free
+  tier, API key required, directly ticker-tagged with a sentiment score.
+  More relevant per-asset but a different text style (headline+summary,
+  real-time) than Aurora's pretraining corpus.
+- Use case: `aurora-forecaster`'s multimodal text-context leg for BTC/SPY
+  (see its README) — both sources kept and compared rather than picking one
+  upfront.
+
 ### Macro covariates
 
 - `yfinance` for SPY, DXY, VIX, gold, treasuries.

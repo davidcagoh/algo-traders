@@ -2,8 +2,8 @@
 
 Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
-> **Now:** `evaluation-framework/evaluation/` is built out as an installable, tested package (ledger, PBO, purged splits, sealed holdout, costs, live reconciliation — 155 tests, 96% coverage) per `evaluation-framework/PLAN.md`. The cross-project trial registry (`project`/`venue`/`evidence_stage`/`gate_outcome` on `TrialRecord`) now spans both `hmm-slope-experiment` and `mean-variance-paper`. All `hmm-slope-experiment` analysis drivers are migrated onto the package (formula duplication removed); doing so surfaced and fixed a real annualisation bug in `run_correlation_mdb.py` (was silently using 252 instead of crypto's 365).
-> **Queue:** A liquid-majors proxy backtest found signed MV does not reproduce its headline edge in a bull or chop window — ask Ethan whether he wants cross-cycle validation to actually gate this project (that requirement was inherited from hmm-slope-experiment's methodology by an earlier Claude session, not decided by him) and whether the Vercel paper monitor is deployed anywhere he hasn't pushed. Manually triggered the literature-search workflow 2026-08-06 (its first-ever run, `gh run 31125217798`) — check for its PR next session.
+> **Now:** `mean-variance-paper`'s forward accumulation is fixed and fully automated (2026-08-07, confirmed end-to-end). The original design re-ran a full backtest over Hyperliquid's ~208-day capped window each day, which structurally froze N at 148 forever; `forward_state.py` now persists equity/notional/day_counter and advances one real day at a time, backfilled with the 148 days already observed. Daily GitHub Action `.github/workflows/forward-accumulation.yml` (cron `30 1 * * *` UTC) refreshes data, runs the accumulation, commits state back to `main`, and pings healthchecks.io — verified via manual `workflow_dispatch`: correctly no-op'd on a same-day rerun, success ping confirmed received. ~102 more days to the N=250 DSR-binding floor, unattended from here. Signed MV's first-148-day result (dominates equal-weight on Sharpe/Calmar/return, triggers decision-012's Kill If rule on max drawdown) is still not settled: needs a bootstrap CI on the MDD gap before trusting a point estimate below the DSR-binding floor.
+> **Queue:** Bootstrap the MDD CI; relay the TON delisting to Ethan. Separately: `aurora-forecaster/` now has a working rolling-forecast loop + scoring module + a visualization joining both (2026-08-07) — first real result on 4 BTC origins found badly overconfident calibration (nominal 50/80/95% coverage only ~20/28/38% empirical), still needs its four text sources aligned into one input for the unimodal-vs-multimodal comparison, and its `artifacts/` output is still undecided between committed-evidence and `.gitignore`d. Also check for the literature-search workflow's first-ever PR (`gh run 31125217798`, triggered 2026-08-06).
 
 ---
 
@@ -54,6 +54,7 @@ Shared knowledge distilled from trading experiments; concrete results remain wit
 ## Related Stores
 
 - [`../freqtrade-experiment/`](../freqtrade-experiment/) — completed crypto experiment and evidence.
+- [`../aurora-forecaster/`](../aurora-forecaster/) — new forecasting-archetype experiment (multimodal generative forecaster, DecisionIntelligence/Aurora); smoke-tested locally, text-context design still open.
 - [`../evaluation-framework/`](../evaluation-framework/) — reusable evaluation code and its evolving manuscript/essays.
 - [`../literature/`](../literature/) — primary sources, paper notes, and literature indexes.
 - [`../quant-research-agent/`](../quant-research-agent/) — reusable search and research-loop automation.

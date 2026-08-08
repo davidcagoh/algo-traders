@@ -8,11 +8,11 @@ already moved past the May draft.
 ## Current state (2026-08-06)
 
 - **Package: installable and tested.** `pip install -e ".[dev,freqtrade,factor]"`,
-  150 tests, 96% coverage, clean ruff/black/mypy, CI at
-  `.github/workflows/evaluation-framework-ci.yml`. All six planned phases
+  162 tests, clean ruff/black/mypy, CI at
+  `.github/workflows/evaluation-framework-ci.yml`. All seven planned phases
   (ledger, PBO/bootstrap, purged splits + sealed holdout, funding-aware
-  costs, benchmark/factor/regime + live reconciliation, docs) are done —
-  see `PLAN.md` and `evaluation/README.md`'s module map.
+  costs, benchmark/factor/regime + live reconciliation, docs, SPA/Reality
+  Check) are done — see `PLAN.md` and `evaluation/README.md`'s module map.
 - DSR: kurtosis carve-out removed, trial-count derivation fixed, and (found
   while re-running the DSR-vs-PBO head-to-head) narrow-family `sharpe_var`
   under-estimation fixed — 2026-08-06, see `../wiki/decisions-archive.md`
@@ -41,8 +41,13 @@ already moved past the May draft.
 
 ## Next up
 
-- Package is feature-complete against the original plan. Remaining
-  optional items: SPA/Reality Check (sources inaccessible — see
-  `evaluation/pbo.py`), real order-book capture for `stress.py`.
+- Package is feature-complete against the 7-phase plan, including the
+  previously-blocked SPA/Reality Check item (`evaluation/spa.py`,
+  `PLAN.md` Phase 7, done 2026-08-06). White 2000 and Hansen 2005 were
+  acquired directly and read in full once their original blockers (TLS
+  failure / paywall) were no longer an issue.
+- Only remaining optional item: real order-book capture for `stress.py`
+  (no L2 data retained anywhere in this repo today) — this was never
+  blocked on source access, just out of scope for the original plan.
 - Re-open the methods paper only after the package produces a further
   package-vs-literature-backed result worth writing up.

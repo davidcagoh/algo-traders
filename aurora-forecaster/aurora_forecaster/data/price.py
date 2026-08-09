@@ -51,10 +51,18 @@ def fetch_btc_ohlcv(
     return pd.DataFrame(rows, columns=OHLCV_COLUMNS)
 
 
-def fetch_spy_ohlcv(period: str = "2y", interval: str = "1h", downloader=None) -> pd.DataFrame:
+def _fetch_yfinance_ohlcv(ticker: str, period: str, interval: str, downloader) -> pd.DataFrame:
     if downloader is None:
         import yfinance as yf
 
         downloader = yf.download
 
-    return downloader("SPY", period=period, interval=interval)
+    return downloader(ticker, period=period, interval=interval)
+
+
+def fetch_spy_ohlcv(period: str = "2y", interval: str = "1h", downloader=None) -> pd.DataFrame:
+    return _fetch_yfinance_ohlcv("SPY", period, interval, downloader)
+
+
+def fetch_dxy_ohlcv(period: str = "2y", interval: str = "1h", downloader=None) -> pd.DataFrame:
+    return _fetch_yfinance_ohlcv("DX-Y.NYB", period, interval, downloader)

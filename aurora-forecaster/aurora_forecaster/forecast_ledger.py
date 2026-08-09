@@ -17,8 +17,9 @@ from pathlib import Path
 from typing import Any, Literal
 
 Modality = Literal["unimodal", "multimodal"]
+CovariateEncoding = Literal["text", "vision"]
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 3
 
 
 @dataclass(frozen=True)
@@ -34,6 +35,8 @@ class ForecastRecord:
     num_samples: int
     sample_mean: list[float]  # len == horizon
     sample_std: list[float]  # len == horizon
+    text_config: str = "unimodal"  # StreamConfig.name that produced this record
+    covariate_encoding: CovariateEncoding = "text"  # meaningless for unimodal records
     schema_version: int = SCHEMA_VERSION
 
     def to_json_line(self) -> str:

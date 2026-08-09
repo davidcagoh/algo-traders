@@ -1,6 +1,6 @@
 import pandas as pd
 
-from aurora_forecaster.data.price import fetch_btc_ohlcv, fetch_spy_ohlcv
+from aurora_forecaster.data.price import fetch_btc_ohlcv, fetch_dxy_ohlcv, fetch_spy_ohlcv
 
 
 class FakeExchange:
@@ -85,4 +85,13 @@ def test_fetch_spy_ohlcv_queries_spy():
     df = fetch_spy_ohlcv(period="1y", interval="1h", downloader=downloader)
 
     assert downloader.calls == [("SPY", "1y", "1h")]
+    assert not df.empty
+
+
+def test_fetch_dxy_ohlcv_queries_dxy_ticker():
+    downloader = FakeDownloader()
+
+    df = fetch_dxy_ohlcv(period="1y", interval="1h", downloader=downloader)
+
+    assert downloader.calls == [("DX-Y.NYB", "1y", "1h")]
     assert not df.empty

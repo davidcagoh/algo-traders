@@ -45,12 +45,45 @@ returns, which a probabilistic price forecast doesn't have.
   the lookback window's own lag-1 naive error), skill score vs. a
   random-walk-flat baseline, and calibration coverage from standardized
   residuals. No scipy dependency — Gaussian CDF/PDF via `math.erf`.
-- `aurora_forecaster/compare.py` — Diebold & Mariano paired test, built now
-  so a real unimodal-vs-multimodal significance test is ready the moment a
-  multimodal ledger exists; inert until then.
+- `aurora_forecaster/compare.py` — Diebold & Mariano paired test. Uses a
+  Bartlett/Newey-West kernel long-run variance estimator (2026-08-08) rather
+  than the plain sample variance, since `h`-step-ahead rolling-forecast
+  origins overlap in time and induce serial correlation the plain form
+  understates — an ablation sweeping daily-cadence origins against a 96h
+  horizon would otherwise report false-positive "significant" results.
 - `aurora_forecaster/data/price.py::fetch_btc_ohlcv` gained an optional
   `since` (ms epoch) param with pagination past Binance's 1000-row cap, to
   reconstruct a specific historical span rather than "most recent N bars".
+
+### Stream ablation
+
+`aurora_forecaster/ablation.py` (2026-08-08) defines `StreamConfig` — which
+text sources (`sources`) or real-image covariate sources (`vision_sources`)
+feed one walk-forward run (`UNIMODAL`, `GDELT_ONLY`, `CURRENTS_ONLY`,
+`GDELT_CURRENTS`, `FUNDING_ONLY`, `DXY_ONLY`, `SPY_ONLY`, `FUNDING_VISION`,
+`DXY_VISION`, `SPY_VISION` in `STANDARD_CONFIGS`; Alpha Vantage is excluded
+from the standing rotation, see Data sources below) — and per-config
+ledger/scored-ledger file naming (`btc_{config.name}_forecast_ledger.jsonl`,
+which reduces to the existing filenames for `unimodal`). Sources don't
+combine with each other, with the news sources, or with their own
+text/vision variant yet — single-source-first, same incremental approach
+used for `gdelt`/`currents` before `gdelt+currents` was added.
+`rolling_forecast_btc.py` and `score_forecast_ledger.py` both read a
+`STREAM_CONFIG` module constant (default `UNIMODAL`) — edit it and rerun
+both scripts to build a non-default config's ledger, same "edit the
+constant, rerun" convention used for `LOOKBACK`/`HORIZON` elsewhere in this
+file.
+
+`aurora_forecaster/ablation_core.py` holds the actual N-way comparison logic
+(per-config summary stats, all-pairs Diebold-Mariano, markdown report) with
+zero aurora-specific types — the literal promotion candidate for
+`time-series/forecast_eval/` once a second project needs stream ablation
+(see `wiki/decisions-archive.md`'s eval-package-boundary decision,
+2026-08-08).
+
+`scripts/run_ablation.py` builds the report across every `STANDARD_CONFIGS`
+config that has a scored ledger yet, printing it and writing
+`artifacts/btc_ablation_report.md`. Pure local file I/O, no network/model.
 
 **First real result (4 BTC origins, 2026-07-19 to 2026-07-31, 96h horizon,
 scored 2026-08-07):** skill vs. naive-flat is mixed (−0.26 to +0.41 across
@@ -156,10 +189,70 @@ pointing this at the illiquid book.
   of the other three. Kept ready-but-unused per standing decision: verified
   it works, not yet wired into any pipeline — actually use it once the
   GDELT/Alpha Vantage/Currents comparison shows a need for it.
+- **Funding rate — Hyperliquid** (`aurora_forecaster/data/text_funding.py`):
+  BTC perp funding rate via Hyperliquid's free `/info` endpoint, no API key,
+  no documented daily cap (informal throttling only — same 6-attempt/3s-base
+  backoff as `text_gdelt.py`). Fetches a single nearest-at-or-before value
+  per origin (no lookahead), not full history. Suggested by Ethan
+  (2026-08-08) as a natural non-price series worth testing.
+- **DXY** (`aurora_forecaster/data/price.py::fetch_dxy_ohlcv`, ticker
+  `DX-Y.NYB`): dollar index via yfinance, same pattern as `fetch_spy_ohlcv`
+  (shared `_fetch_yfinance_ohlcv` helper). Also suggested by Ethan.
+- **SPY** (`aurora_forecaster/data/price.py::fetch_spy_ohlcv`): already
+  existed as a possible target-security series (see Target securities
+  above); now also wired as an `"spy"` text-covariate source for BTC
+  forecasts.
 
-All four text sources are being kept and compared side by side (user
-decision, 2026-08-06) rather than picking one upfront — the text-source
-choice itself is part of what this feasibility test is meant to answer.
+Funding/DXY/SPY enter through the text-context or vision-context path (see
+below), not as extra numeric channels — confirmed 2026-08-08 by reading
+`aurora-model==0.2.0`'s source: `ts_generation_mixin.py` hard-enforces
+`inputs.shape == [batch_size, seq_len]` (2-D, no channel dimension) and
+`AuroraConfig` has no `num_channels`/`num_variates` field, so Aurora has no
+multivariate numeric input path. "Multimodal" in Aurora's own framing means
+time series + text + image, not multiple numeric series.
+
+All seven text sources (four news, three covariate) are being kept and
+compared side by side (user decision, 2026-08-06, extended 2026-08-08)
+rather than picking one upfront — the source choice itself is part of what
+this feasibility test is meant to answer.
+
+## Vision covariates
+
+Real-image alternative to the funding/DXY/SPY text snippets above (user
+idea, 2026-08-08): render the same covariate series as a chart instead of a
+sentence, to test whether image-encoding vs. text-encoding of the same
+information changes forecast quality — not a new information source, a
+different encoding of the same one. `FUNDING_VISION`/`DXY_VISION`/
+`SPY_VISION` in `aurora_forecaster/ablation.py`'s `STANDARD_CONFIGS`.
+
+Distinct from Aurora's own always-on "pseudo" vision (`AuroraModel.forward`
+auto-derives an image from the primary time series whenever no real image
+is given via a period-detected reshape into a 2D grid — architecturally
+separate, already active on every call this project makes, real image or
+not).
+
+- `aurora_forecaster/vision.py::render_line_chart` — white-background line
+  chart via Pillow's `ImageDraw`. No plotting library (matplotlib/plotly) is
+  installed in this project's venv; hand-drawing avoided adding one for a
+  single chart type.
+- `aurora_forecaster/vision_fetch.py::build_vision_context` — mirrors
+  `text_fetch.py::build_text_context`'s dispatch shape, reusing the same
+  underlying fetchers (`fetch_dxy_ohlcv`/`fetch_spy_ohlcv`/
+  `post_funding_history`) already built for the text path; only the render
+  step differs.
+- **`vision_inputs` must be a raw PIL Image (`[image]`), never
+  preprocessed** — confirmed the hard way 2026-08-08: Aurora's own
+  `VisionEncoder`/`UnifiedImageProcessor.process_real_image` runs its own
+  internal `ViTImageProcessor` pass, so pre-normalizing crashes it
+  (`ValueError: ... values outside the range [0, 1], got [-1.0, 1.0]`).
+- **Real Aurora limitation, not a usage mistake: `vision_inputs` only works
+  on `device="cpu"`.** The internal `ViTImageProcessor` output never gets
+  moved off CPU before the ViT conv layers, so MPS/CUDA raise `RuntimeError:
+  ... must be on the same device`. `rolling_forecast_btc.py` forces
+  `device="cpu"` whenever `STREAM_CONFIG.vision_sources` is set.
+- Confirmed end-to-end 2026-08-08 via `scripts/vision_smoke_test.py`: real
+  BTC OHLCV + a real rendered Hyperliquid funding-rate chart through the
+  full `vision_inputs` path, output shape `(1, 10, 96)`.
 
 ## Known library bug: batch-collapsing at batch size 1
 
@@ -186,3 +279,6 @@ text through the full multimodal path, output shape `(1, 10, 96)`.
   deliberately doesn't attempt this mapping yet — build it only once there's
   a concrete reason to compare a forecast's score against a strategy's
   Sharpe in one registry.
+- `time-series/forecast_eval/compare.py` still has the old plain
+  (non-HAC) Diebold-Mariano implementation that `aurora_forecaster/compare.py`
+  had until 2026-08-08 — known follow-up, not fixed by this project's pass.

@@ -1,0 +1,17 @@
+{"config_name": "unimodal", "mean_loss": 665.983750968396, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 83.54895578696801}
+{"config_name": "gdelt", "mean_loss": 650.8681979688492, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 158.76810093095474}
+{"config_name": "currents", "mean_loss": 689.1737974482048, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 170.79309069673556}
+{"config_name": "funding", "mean_loss": 676.6801397767233, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 143.5221916678852}
+{"config_name": "dxy", "mean_loss": 697.2029261485117, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 205.97420510887665}
+{"config_name": "spy", "mean_loss": 627.6300920701487, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 124.97533510473382}
+{"config_name": "funding-vision", "mean_loss": 607.4322036459961, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 67.99228339821073}
+{"config_name": "dxy-vision", "mean_loss": 644.5991073119746, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 94.74208328490589}
+{"config_name": "spy-vision", "mean_loss": 663.6541842007405, "n_origins": 4, "run_at": "2026-08-09T07:31:33.867580+00:00", "std_loss": 121.02573900036973}
+{"config_name": "unimodal", "mean_loss": 1387.3577947886904, "n_origins": 12, "run_at": "2026-08-09T07:51:55.813325+00:00", "std_loss": 1355.7468852899656}
+{"config_name": "currents", "mean_loss": 1416.3777881451333, "n_origins": 12, "run_at": "2026-08-09T07:51:55.813325+00:00", "std_loss": 1355.7227011584182}
+{"config_name": "funding", "mean_loss": 1291.9085592308759, "n_origins": 12, "run_at": "2026-08-09T07:51:55.813325+00:00", "std_loss": 1327.8005869183419}
+{"config_name": "dxy", "mean_loss": 1297.9471088582152, "n_origins": 12, "run_at": "2026-08-09T07:51:55.813325+00:00", "std_loss": 1161.4655829995975}
+{"config_name": "spy", "mean_loss": 1353.2482215062985, "n_origins": 12, "run_at": "2026-08-09T07:51:55.813325+00:00", "std_loss": 1254.7738904014757}
+{"config_name": "funding-vision", "mean_loss": 1366.271168626013, "n_origins": 12, "run_at": "2026-08-09T07:51:55.813325+00:00", "std_loss": 1344.8832885227612}
+{"config_name": "dxy-vision", "mean_loss": 1423.640687605546, "n_origins": 12, "run_at": "2026-08-09T07:51:55.813325+00:00", "std_loss": 1366.81150491317}
+{"config_name": "spy-vision", "mean_loss": 1390.3929556897983, "n_origins": 12, "run_at": "2026-08-09T07:51:55.813325+00:00", "std_loss": 1358.633807526273}

@@ -37,3 +37,80 @@ def test_append_scored_is_append_only(tmp_path):
     assert len(lines) == 2
     assert json.loads(lines[0])["forecast_id"] == "f-1"
     assert json.loads(lines[1])["forecast_id"] == "f-2"
+
+
+def test_text_config_defaults_to_unimodal():
+    record = make_record()
+
+    assert record.text_config == "unimodal"
+
+
+def test_from_dict_defaults_text_config_for_old_lines_missing_the_key():
+    old_line = make_record()
+    d = json.loads(old_line.to_json_line())
+    del d["text_config"]
+
+    restored = ScoredForecastRecord.from_dict(d)
+
+    assert restored.text_config == "unimodal"
+
+
+def test_round_trip_json_line_with_non_default_text_config():
+    record = ScoredForecastRecord(
+        forecast_id="f-1",
+        scored_at="2026-08-07T00:00:00+00:00",
+        asset="BTC",
+        modality="multimodal",
+        model_id="DecisionIntelligence/Aurora",
+        origin_timestamp="2026-08-06T23:00:00+00:00",
+        crps_per_step=[1.0, 2.0],
+        crps_mean=1.5,
+        mase=0.9,
+        skill_score_vs_naive=0.1,
+        z_scores=[0.1, -0.2],
+        text_config="gdelt+currents",
+    )
+
+    restored = ScoredForecastRecord.from_dict(json.loads(record.to_json_line()))
+
+    assert restored == record
+    assert restored.text_config == "gdelt+currents"
+
+
+def test_covariate_encoding_defaults_to_text():
+    record = make_record()
+
+    assert record.covariate_encoding == "text"
+
+
+def test_from_dict_defaults_covariate_encoding_for_old_lines_missing_the_key():
+    old_line = make_record()
+    d = json.loads(old_line.to_json_line())
+    del d["covariate_encoding"]
+
+    restored = ScoredForecastRecord.from_dict(d)
+
+    assert restored.covariate_encoding == "text"
+
+
+def test_round_trip_json_line_with_vision_covariate_encoding():
+    record = ScoredForecastRecord(
+        forecast_id="f-1",
+        scored_at="2026-08-07T00:00:00+00:00",
+        asset="BTC",
+        modality="multimodal",
+        model_id="DecisionIntelligence/Aurora",
+        origin_timestamp="2026-08-06T23:00:00+00:00",
+        crps_per_step=[1.0, 2.0],
+        crps_mean=1.5,
+        mase=0.9,
+        skill_score_vs_naive=0.1,
+        z_scores=[0.1, -0.2],
+        text_config="funding-vision",
+        covariate_encoding="vision",
+    )
+
+    restored = ScoredForecastRecord.from_dict(json.loads(record.to_json_line()))
+
+    assert restored == record
+    assert restored.covariate_encoding == "vision"

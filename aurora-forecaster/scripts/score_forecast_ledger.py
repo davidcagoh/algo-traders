@@ -1,15 +1,17 @@
 """
-Manual script: score every record in `btc_unimodal_forecast_ledger.jsonl`
-against realized BTC prices.
+Manual script: score every record in one config's forecast ledger against
+realized BTC prices.
 
 Fetches one contiguous OHLCV span covering every ledger origin's lookback
 start through horizon end, aligns each record to it (`realized.py`), scores
-it (`scoring.py`), and appends the result to
-`artifacts/btc_unimodal_forecast_scored.jsonl`. Needs network access, so
-it's excluded from `tests/` by design (same convention as
+it (`scoring.py`), and appends the result to that config's scored ledger
+(see `aurora_forecaster.ablation.scored_ledger_path`). Needs network access,
+so it's excluded from `tests/` by design (same convention as
 `rolling_forecast_btc.py`).
 
 Usage: python scripts/score_forecast_ledger.py
+To score a non-default stream config, edit STREAM_CONFIG below to match
+`rolling_forecast_btc.py`'s and rerun.
 """
 
 from __future__ import annotations
@@ -18,6 +20,7 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 
+from aurora_forecaster.ablation import UNIMODAL, StreamConfig, ledger_path, scored_ledger_path
 from aurora_forecaster.data.price import fetch_btc_ohlcv
 from aurora_forecaster.forecast_ledger import ForecastRecord
 from aurora_forecaster.realized import RealizedDataError, align_forecast_to_prices
@@ -27,9 +30,11 @@ from aurora_forecaster.scoring import calibration_coverage, crps_gaussian, mase,
 TIMEFRAME = "1h"
 TIMEFRAME_MS = 3_600_000
 
+STREAM_CONFIG: StreamConfig = UNIMODAL  # edit to match rolling_forecast_btc.py's STREAM_CONFIG
+
 ARTIFACTS_DIR = Path(__file__).resolve().parents[1] / "artifacts"
-FORECAST_LEDGER_PATH = ARTIFACTS_DIR / "btc_unimodal_forecast_ledger.jsonl"
-SCORED_LEDGER_PATH = ARTIFACTS_DIR / "btc_unimodal_forecast_scored.jsonl"
+FORECAST_LEDGER_PATH = ledger_path(ARTIFACTS_DIR, STREAM_CONFIG)
+SCORED_LEDGER_PATH = scored_ledger_path(ARTIFACTS_DIR, STREAM_CONFIG)
 
 
 def _load_forecasts(path: Path) -> list[ForecastRecord]:
@@ -83,6 +88,8 @@ def score_record(record: ForecastRecord, price_df) -> ScoredForecastRecord:
         mase=mase_value,
         skill_score_vs_naive=skill,
         z_scores=z_scores,
+        text_config=record.text_config,
+        covariate_encoding=record.covariate_encoding,
     )
 
 

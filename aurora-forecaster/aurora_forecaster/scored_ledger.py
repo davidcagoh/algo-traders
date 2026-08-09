@@ -16,8 +16,9 @@ from pathlib import Path
 from typing import Any, Literal
 
 Modality = Literal["unimodal", "multimodal"]
+CovariateEncoding = Literal["text", "vision"]
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 3
 
 
 @dataclass(frozen=True)
@@ -33,6 +34,8 @@ class ScoredForecastRecord:
     mase: float
     skill_score_vs_naive: float
     z_scores: list[float]  # standardized residuals per horizon step
+    text_config: str = "unimodal"  # copied from the source ForecastRecord
+    covariate_encoding: CovariateEncoding = "text"  # copied from the source ForecastRecord
     schema_version: int = SCHEMA_VERSION
 
     def to_json_line(self) -> str:

@@ -32,7 +32,12 @@ questions.
 
 ## Shared material
 
+- [Backtesting guide](backtest_guide.md) — beginner-friendly steps from a strategy class to reports and cost sweeps.
+- [EDA guide](EDA_guide.md) — beginner-friendly steps for finding, plotting, correlating, and regressing time series.
 - [Wiki](wiki/) — H3L hot/cold knowledge base with active threads, archives, concepts, and retained artifacts.
+- [Market dataset](market_data/DATASET_CHECKLIST.md) — shared crypto, derivatives, macro, market, on-chain, DeFi, and sentiment store with coverage checklist.
+- [Time-series lab](timeseries-lab/) — searchable notebook API for loading, transforming, plotting, correlating, and regressing any stored series.
+- [Backtesting suite](backtesting-suite/) — platform-agnostic target-weight simulation with independently configured execution and transaction costs.
 - [Evaluation framework](evaluation-framework/) — reusable metrics package, manuscript, essay, and worked example in one ongoing project.
 - [Literature](literature/) — indexed PDFs, paper notes, surveys, and per-thread search history.
 - [Quant research agent](quant-research-agent/) — reusable research-loop pattern and search automation specification.
@@ -41,6 +46,11 @@ questions.
 
 ```text
 algo-traders/
+├── backtesting-suite/     # platform-agnostic simulation and reporting
+├── research_strategies/   # strategy logic, kept outside execution
+├── market_data/           # reproducible shared-data ingestion
+├── timeseries-lab/        # notebook-first time-series exploration
+├── notebooks/             # runnable exploratory workflows
 ├── freqtrade-experiment/   # sibling crypto experiments
 ├── aurora-forecaster/      # multimodal forecasting experiment (Aurora)
 ├── evaluation-framework/  # evaluation code and evolving publication outputs

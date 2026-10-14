@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "algo-backtesting-suite"
+version = "0.1.0"
+description = "Platform-agnostic, target-weight backtesting for rapid paper replication"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "plotly>=6.0",
+    "pyarrow>=14",
+    "PyYAML>=6",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.5"]
+
+[project.scripts]
+bt = "backtesting_suite.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["backtesting_suite*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

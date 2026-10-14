@@ -34,6 +34,10 @@ venv/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+data/market/raw/
+data/market/normalized/
+data/market/freqtrade/
+backtest-artifacts/
 
 # Execution secrets and runtime artefacts
 freqtrade-experiment/hmm-slope-experiment/execution/ops/.env

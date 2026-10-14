@@ -1,0 +1,47 @@
+experiment: crypto_cross_sectional_momentum
+
+data:
+  manifest: data/market/manifest.json
+  market: perpetual
+  timeframe: 1d
+  universe: [BTC, ETH, BNB, ADA, DOGE, LINK, BCH, DOT, AAVE, ATOM, AVAX, UNI]
+  start: 2021-01-01
+  end: 2026-07-31
+
+strategy:
+  import: research_strategies.baselines:CrossSectionalMomentumStrategy
+  params:
+    lookback_periods: 90
+    skip_periods: 1
+    long_count: 3
+    short_count: 3
+    gross_exposure: 1.0
+  no_lookahead_check: true
+
+execution:
+  model: bar
+  price_field: open
+  signal_delay_bars: 1
+  rebalance_policy: target_change
+  initial_cash: 100000
+  funding: true
+  annual_borrow_bps: 200
+  missing_price_policy: raise
+  transaction_costs:
+    - {type: proportional, name: taker_fee, bps: 5}
+    - {type: proportional, name: slippage, bps: 3}
+  constraints:
+    max_gross_exposure: 1.0
+    max_net_exposure: 1.0
+    max_abs_weight: 0.25
+    min_cash_weight: 0.0
+    violation: raise
+
+evaluation:
+  profile: research
+  benchmark: BTC
+  bootstrap_samples: 0
+  regimes: true
+
+artifacts_dir: backtest-artifacts
+notes: "Illustrative multi-asset replication; the fixed universe is not survivorship-bias safe."

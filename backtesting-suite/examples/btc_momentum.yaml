@@ -1,0 +1,45 @@
+experiment: btc_momentum_90d
+
+data:
+  manifest: data/market/manifest.json
+  market: spot
+  timeframe: 1d
+  universe: [BTC]
+  start: 2018-01-01
+  end: 2026-07-31
+
+strategy:
+  import: research_strategies.baselines:TimeSeriesMomentumStrategy
+  params:
+    lookback_periods: 90
+    long_short: false
+    gross_exposure: 1.0
+  no_lookahead_check: true
+
+execution:
+  model: bar
+  price_field: open
+  signal_delay_bars: 1
+  rebalance_policy: target_change
+  initial_cash: 100000
+  funding: false
+  annual_borrow_bps: 0
+  missing_price_policy: raise
+  transaction_costs:
+    - {type: proportional, name: fee, bps: 10}
+    - {type: proportional, name: slippage, bps: 5}
+  constraints:
+    max_gross_exposure: 1.0
+    max_net_exposure: 1.0
+    max_abs_weight: 1.0
+    min_cash_weight: 0.0
+    violation: raise
+
+evaluation:
+  profile: research
+  benchmark: BTC
+  bootstrap_samples: 0
+  regimes: true
+
+artifacts_dir: backtest-artifacts
+notes: "Illustrative 90-day BTC time-series momentum: long when trailing momentum is positive, otherwise cash."

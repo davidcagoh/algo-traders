@@ -13,6 +13,9 @@ import pandas as pd
 from backtesting_suite.config import DataConfig, FeatureConfig
 
 
+_MAX_FUNDING_GAP = pd.Timedelta(hours=8)
+
+
 class DataError(ValueError):
     """Raised when requested research data is unavailable or ambiguous."""
 
@@ -100,19 +103,20 @@ def _load_feature(config: FeatureConfig, index: pd.DatetimeIndex, root: Path) ->
 
 def _funding_for_bars(
     manifest: dict[str, Any], market: str, index: pd.DatetimeIndex, symbols: list[str], root: Path
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, bool]:
     empty = pd.DataFrame(0.0, index=index, columns=symbols)
     if market != "perpetual" or "funding_binance" not in manifest["tables"]:
-        return empty
+        return empty, False
     path = root / manifest["tables"]["funding_binance"]["path"]
     frame = pd.read_parquet(path, columns=["timestamp", "symbol", "funding_rate"])
     frame["timestamp"] = pd.to_datetime(frame["timestamp"], utc=True)
     frame = frame[frame["symbol"].isin(symbols)]
+    frame = frame[frame["funding_rate"].notna()]
     if frame.empty:
-        return empty
+        return empty, False
 
     if len(index) < 2:
-        return empty
+        return empty, False
     bar_size = index.to_series().diff().median()
     origin = index[0]
     bucket = ((frame["timestamp"] - origin) // bar_size).astype(int)
@@ -120,7 +124,33 @@ def _funding_for_bars(
     wide = frame.pivot_table(
         index="bar_timestamp", columns="symbol", values="funding_rate", aggfunc="sum"
     )
-    return wide.reindex(index=index, columns=symbols).fillna(0.0)
+    aligned = wide.reindex(index=index, columns=symbols)
+    # A table's mere presence is not evidence of usable funding coverage. Require
+    # aligned events for every instrument throughout the requested run window.
+    available = bool(symbols)
+    bar_size = index.to_series().diff().median()
+    run_end = index[-1] + bar_size
+    for symbol in symbols:
+        symbol_rows = frame[frame["symbol"] == symbol]
+        event_times = symbol_rows.loc[
+            symbol_rows["timestamp"].between(
+                index[0] - _MAX_FUNDING_GAP, run_end + _MAX_FUNDING_GAP
+            ),
+            "timestamp",
+        ].sort_values()
+        aligned_times = aligned.index[aligned[symbol].notna()]
+        if event_times.empty or aligned_times.empty:
+            available = False
+            break
+        gaps = event_times.diff().dropna()
+        if (
+            abs(event_times.iloc[0] - index[0]) > _MAX_FUNDING_GAP
+            or abs(run_end - event_times.iloc[-1]) > _MAX_FUNDING_GAP
+            or (not gaps.empty and gaps.max() > _MAX_FUNDING_GAP)
+        ):
+            available = False
+            break
+    return aligned.fillna(0.0), available
 
 
 def load_data_bundle(config: DataConfig, root: str | Path = ".") -> DataBundle:
@@ -182,7 +212,9 @@ def load_data_bundle(config: DataConfig, root: str | Path = ".") -> DataBundle:
             .reindex(columns=list(config.universe))
         )
     index = fields["close"].index
-    funding = _funding_for_bars(manifest, config.market, index, list(config.universe), workspace)
+    funding, funding_available = _funding_for_bars(
+        manifest, config.market, index, list(config.universe), workspace
+    )
     features = {}
     feature_hashes = {}
     for feature in config.features:
@@ -203,6 +235,7 @@ def load_data_bundle(config: DataConfig, root: str | Path = ".") -> DataBundle:
         "manifest_path": str(manifest_path),
         "manifest_sha256": hashlib.sha256(manifest_bytes).hexdigest(),
         "dataset_built_at": manifest.get("built_at"),
+        "snapshot_id": manifest.get("snapshot_id"),
         "table": table_name,
         "table_sha256": table_hash,
         "funding_sha256": funding_hash,
@@ -212,5 +245,6 @@ def load_data_bundle(config: DataConfig, root: str | Path = ".") -> DataBundle:
         "end": index.max().isoformat(),
         "timeframe": config.timeframe,
         "market": config.market,
+        "funding_available": funding_available,
     }
     return DataBundle(fields=fields, funding=funding, features=features, metadata=metadata)

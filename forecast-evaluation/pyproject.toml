@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "timesfm-clickhouse-evaluation"
+version = "0.1.0"
+description = "Reproducible TimesFM 3.0 evaluation over pinned ClickHouse snapshots"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy>=1.26.4,<3",
+  "pandas>=2.2,<4",
+  "pyarrow>=16,<25",
+]
+
+[project.optional-dependencies]
+model = ["timesfm[torch]==3.0.2"]
+report = ["plotly>=6.0,<7"]
+test = ["pytest>=8,<10"]
+
+[project.scripts]
+timesfm-eval = "forecast_evaluation.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra"]

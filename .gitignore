@@ -37,6 +37,7 @@ venv/
 data/market/raw/
 data/market/normalized/
 data/market/freqtrade/
+data/clickhouse/
 backtest-artifacts/
 
 # Execution secrets and runtime artefacts

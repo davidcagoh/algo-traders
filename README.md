@@ -21,14 +21,12 @@ Key paths:
 - [Monitoring](freqtrade-experiment/hmm-slope-experiment/monitoring/) — read-only SQLite → Supabase → Vercel tape.
 - [Mean-variance paper project](freqtrade-experiment/mean-variance-paper/) — collaborator-owned signed-MV paper monitor, separate from live monitoring.
 
-## Forecasting experiment
+## Archived forecasting experiment
 
-[`aurora-forecaster/`](aurora-forecaster/) — new forecasting archetype using
+[`archive/aurora-forecaster/`](archive/aurora-forecaster/) — forecasting archetype using
 [DecisionIntelligence/Aurora](https://huggingface.co/DecisionIntelligence/Aurora),
-a pretrained multimodal generative forecaster. Separate from
-`freqtrade-experiment/` because it isn't a Freqtrade strategy. Smoke-tested
-locally on Apple Silicon; see its README for status and open design
-questions.
+a pretrained multimodal generative forecaster. Archived for reference; see its
+README and the wiki for the recorded results and open research questions.
 
 ## Shared material
 
@@ -52,7 +50,7 @@ algo-traders/
 ├── timeseries-lab/        # notebook-first time-series exploration
 ├── notebooks/             # runnable exploratory workflows
 ├── freqtrade-experiment/   # sibling crypto experiments
-├── aurora-forecaster/      # multimodal forecasting experiment (Aurora)
+├── archive/                # archived projects, including Aurora and Feishu
 ├── evaluation-framework/  # evaluation code and evolving publication outputs
 ├── literature/             # PDFs and paper notes
 ├── quant-research-agent/   # reusable autonomous-research workflow

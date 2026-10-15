@@ -1,0 +1,58 @@
+{
+  "protocol_version": "timesfm3-btc-eth-v1",
+  "snapshot": {
+    "manifest": "data/clickhouse/binance/candles_1m/f1c29fc3e938bfa7b208/manifest.json",
+    "snapshot_id": "f1c29fc3e938bfa7b208",
+    "source_table": "binance.candles_1m",
+    "data_sha256": "2b60d1bf63d96ba0098c9b04b84b13e396b1accd270c4439075d48f28e83167e",
+    "symbols": ["BTC", "ETH"],
+    "timeframe": "1h",
+    "market": "spot"
+  },
+  "target": {
+    "name": "hourly_close_to_close_log_return",
+    "formula": "log(close[t] / close[t-1])",
+    "grid": "UTC hourly",
+    "gap_policy": "reject; do not impute",
+    "context_length": 512
+  },
+  "model": {
+    "package": "timesfm",
+    "package_version": "3.0.2",
+    "checkpoint": "google/timesfm-3.0-pytorch",
+    "revision": "43046b85ec22d584a13f8098c2ed39c889e129c2",
+    "device": "cpu",
+    "batch_size": 1,
+    "point_forecast": "q50",
+    "quantiles": [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+    "prediction_options": {
+      "make_positive": false,
+      "sort_quantiles": true,
+      "use_symmetric_averaging": false,
+      "use_znorm": false,
+      "padding_mode": "none"
+    }
+  },
+  "baselines": ["zero_return", "last_return"],
+  "cumulative_horizons": [1, 6, 24, 72, 168],
+  "segments": [
+    {
+      "name": "historical_replay",
+      "origin_start": null,
+      "origin_end": null,
+      "origin_stride_hours": 168,
+      "target_cutoff_exclusive": "2026-08-31T00:00:00Z",
+      "max_horizon": 168,
+      "scored_leads": "1..168"
+    },
+    {
+      "name": "post_release_freshness",
+      "origin_start": "2026-09-01T00:00:00Z",
+      "origin_end": "2026-09-15T00:00:00Z",
+      "origin_stride_hours": 24,
+      "target_cutoff_exclusive": null,
+      "max_horizon": 24,
+      "scored_leads": [1, 6, 24]
+    }
+  ]
+}

@@ -16,7 +16,7 @@ import yaml
 
 from backtesting_suite.config import RunConfig, load_config
 from backtesting_suite.dashboard import write_dashboard
-from backtesting_suite.data import load_data_bundle
+from backtesting_suite.data import DataBundle, load_data_bundle
 from backtesting_suite.execution.bar import BarExecutionModel
 from backtesting_suite.execution.base import ExecutionModel
 from backtesting_suite.report import build_summary, write_report
@@ -29,6 +29,19 @@ class CachedRunError(RuntimeError):
         self.directory = directory
         super().__init__(
             f"identical run already exists at {directory}; pass force=True to recompute"
+        )
+
+
+def validate_data_execution(config: RunConfig, data: DataBundle) -> None:
+    """Reject perpetual runs that request funding without a funding series."""
+    if (
+        config.data.market == "perpetual"
+        and config.execution.funding
+        and not data.metadata.get("funding_available", False)
+    ):
+        raise ValueError(
+            "perpetual backtest requests funding, but the dataset has no funding series; "
+            "set execution.funding: false or include a funding dataset"
         )
 
 
@@ -146,6 +159,7 @@ def run_backtest(
     workspace = Path(root).resolve()
     config = load_config(config_or_path) if not isinstance(config_or_path, RunConfig) else config_or_path
     data = load_data_bundle(config.data, workspace)
+    validate_data_execution(config, data)
     if str(workspace) not in sys.path:
         sys.path.insert(0, str(workspace))
     strategy = load_strategy(config.strategy.import_path)

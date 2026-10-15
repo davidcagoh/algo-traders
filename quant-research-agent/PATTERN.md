@@ -1,6 +1,6 @@
 # Autonomous Quant Research Loop — Pattern Notes
 
-Observed across two independent projects (`feishu-competition/` and the project
+Observed across two independent projects (`archive/feishu-competition/` and the project
 now at `freqtrade-experiment/hmm-slope-experiment/`) using research agents and
 scheduled tasks. Both were quant-trading tasks and converged on the same
 structural pattern without being designed together.

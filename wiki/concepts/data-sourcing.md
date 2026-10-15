@@ -43,7 +43,7 @@ Default order of preference for market data, with the rationale for each. Goal: 
 
 ### News / text (multimodal forecasting)
 
-- **GDELT Project** (`aurora-forecaster/aurora_forecaster/data/text_gdelt.py`):
+- **GDELT Project** (`archive/aurora-forecaster/aurora_forecaster/data/text_gdelt.py`):
   free, no API key, global news/event database (DOC 2.0 API). Not
   ticker-tagged — needs keyword/entity filtering per asset. Domain-matches
   TimeMMD's macro/economy-report text style, which is what
@@ -51,7 +51,7 @@ Default order of preference for market data, with the rationale for each. Goal: 
   asset-specific headline feeds when the goal is staying in-distribution for
   a pretrained multimodal model, not just relevance.
 - **Alpha Vantage `NEWS_SENTIMENT`**
-  (`aurora-forecaster/aurora_forecaster/data/text_alphavantage.py`): free
+  (`archive/aurora-forecaster/aurora_forecaster/data/text_alphavantage.py`): free
   tier, API key required, directly ticker-tagged with a sentiment score.
   More relevant per-asset but a different text style (headline+summary,
   real-time) than Aurora's pretraining corpus.

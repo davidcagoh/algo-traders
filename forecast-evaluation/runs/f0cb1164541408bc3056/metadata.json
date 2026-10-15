@@ -1,0 +1,205 @@
+{
+  "run_id": "f0cb1164541408bc3056",
+  "created_at": "2026-10-15T01:38:17.925852+00:00",
+  "package_version": "0.1.0",
+  "python_version": "3.12.12",
+  "torch_version": "2.14.1",
+  "device": "cpu",
+  "snapshot": {
+    "id": "f1c29fc3e938bfa7b208",
+    "sha256": "2b60d1bf63d96ba0098c9b04b84b13e396b1accd270c4439075d48f28e83167e",
+    "source_table": "binance.candles_1m",
+    "manifest": "data/clickhouse/binance/candles_1m/f1c29fc3e938bfa7b208/manifest.json",
+    "data_file": "data/clickhouse/binance/candles_1m/f1c29fc3e938bfa7b208/bars.parquet",
+    "symbols": [
+      "BTC",
+      "ETH"
+    ],
+    "rows": 47520
+  },
+  "model": {
+    "name": "TimesFM 3.0",
+    "package": "timesfm",
+    "package_version": "3.0.2",
+    "checkpoint": "google/timesfm-3.0-pytorch",
+    "revision": "43046b85ec22d584a13f8098c2ed39c889e129c2",
+    "config": {
+      "package": "timesfm",
+      "package_version": "3.0.2",
+      "checkpoint": "google/timesfm-3.0-pytorch",
+      "revision": "43046b85ec22d584a13f8098c2ed39c889e129c2",
+      "device": "cpu",
+      "batch_size": 1,
+      "point_forecast": "q50",
+      "quantiles": [
+        0.1,
+        0.2,
+        0.3,
+        0.4,
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9
+      ],
+      "prediction_options": {
+        "make_positive": false,
+        "sort_quantiles": true,
+        "use_symmetric_averaging": false,
+        "use_znorm": false,
+        "padding_mode": "none"
+      }
+    }
+  },
+  "protocol": {
+    "version": "timesfm3-btc-eth-v1",
+    "sha256": "9d79a2e058aa6f58998503e7009ecc67d6ba9d13f782a9c615a68412ca329270",
+    "evaluator_source_sha256": "e7dc805418336cf07684ae229a5c9389d7c354d6107a84fc6ae890dac1446ea7",
+    "git_head": "b75f952b849614abba66d3fa4c7e59053a914a59",
+    "modes": [
+      "univariate",
+      "multivariate"
+    ],
+    "config": {
+      "protocol_version": "timesfm3-btc-eth-v1",
+      "snapshot": {
+        "manifest": "data/clickhouse/binance/candles_1m/f1c29fc3e938bfa7b208/manifest.json",
+        "snapshot_id": "f1c29fc3e938bfa7b208",
+        "source_table": "binance.candles_1m",
+        "data_sha256": "2b60d1bf63d96ba0098c9b04b84b13e396b1accd270c4439075d48f28e83167e",
+        "symbols": [
+          "BTC",
+          "ETH"
+        ],
+        "timeframe": "1h",
+        "market": "spot"
+      },
+      "target": {
+        "name": "hourly_close_to_close_log_return",
+        "formula": "log(close[t] / close[t-1])",
+        "grid": "UTC hourly",
+        "gap_policy": "reject; do not impute",
+        "context_length": 512
+      },
+      "model": {
+        "package": "timesfm",
+        "package_version": "3.0.2",
+        "checkpoint": "google/timesfm-3.0-pytorch",
+        "revision": "43046b85ec22d584a13f8098c2ed39c889e129c2",
+        "device": "cpu",
+        "batch_size": 1,
+        "point_forecast": "q50",
+        "quantiles": [
+          0.1,
+          0.2,
+          0.3,
+          0.4,
+          0.5,
+          0.6,
+          0.7,
+          0.8,
+          0.9
+        ],
+        "prediction_options": {
+          "make_positive": false,
+          "sort_quantiles": true,
+          "use_symmetric_averaging": false,
+          "use_znorm": false,
+          "padding_mode": "none"
+        }
+      },
+      "baselines": [
+        "zero_return",
+        "last_return"
+      ],
+      "cumulative_horizons": [
+        1,
+        6,
+        24,
+        72,
+        168
+      ],
+      "segments": [
+        {
+          "name": "historical_replay",
+          "origin_start": null,
+          "origin_end": null,
+          "origin_stride_hours": 168,
+          "target_cutoff_exclusive": "2026-08-31T00:00:00Z",
+          "max_horizon": 168,
+          "scored_leads": "1..168"
+        },
+        {
+          "name": "post_release_freshness",
+          "origin_start": "2026-09-01T00:00:00Z",
+          "origin_end": "2026-09-15T00:00:00Z",
+          "origin_stride_hours": 24,
+          "target_cutoff_exclusive": null,
+          "max_horizon": 24,
+          "scored_leads": [
+            1,
+            6,
+            24
+          ]
+        }
+      ]
+    }
+  },
+  "origin_counts": [
+    {
+      "segment": "historical_replay",
+      "mode": "multivariate",
+      "symbol": "BTC",
+      "origins": 135
+    },
+    {
+      "segment": "historical_replay",
+      "mode": "multivariate",
+      "symbol": "ETH",
+      "origins": 135
+    },
+    {
+      "segment": "historical_replay",
+      "mode": "univariate",
+      "symbol": "BTC",
+      "origins": 135
+    },
+    {
+      "segment": "historical_replay",
+      "mode": "univariate",
+      "symbol": "ETH",
+      "origins": 135
+    },
+    {
+      "segment": "post_release_freshness",
+      "mode": "multivariate",
+      "symbol": "BTC",
+      "origins": 15
+    },
+    {
+      "segment": "post_release_freshness",
+      "mode": "multivariate",
+      "symbol": "ETH",
+      "origins": 15
+    },
+    {
+      "segment": "post_release_freshness",
+      "mode": "univariate",
+      "symbol": "BTC",
+      "origins": 15
+    },
+    {
+      "segment": "post_release_freshness",
+      "mode": "univariate",
+      "symbol": "ETH",
+      "origins": 15
+    }
+  ],
+  "limitations": [
+    "Historical replay targets may overlap TimesFM pretraining.",
+    "Post-release freshness results have only 15 origins and are exploratory.",
+    "q10-q90 intervals are nominal and have not been calibrated.",
+    "Forecast accuracy is not evidence of a profitable trading strategy.",
+    "TimesFM 3.0 checkpoint weights are restricted to non-commercial, non-production use."
+  ]
+}

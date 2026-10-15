@@ -62,6 +62,45 @@ it does not require a server or internet connection.
 Every new completed specification is also appended to
 `backtest-artifacts/trials.jsonl` through the existing evaluation package.
 
+## ClickHouse data
+
+The ClickHouse account is used in read-only mode. Put `CLICKHOUSE_PASSWORD` in
+the repository-root `.env` file; it is never written to snapshots or reports.
+The data commands issue metadata queries or bounded `SELECT` queries only.
+
+```bash
+bt data sources
+bt data inspect binance.candles_1m
+bt data snapshot binance.candles_1m \
+  --start 2024-01-01 --end 2024-03-31 \
+  --symbol BTC --timeframe 1h --market spot
+```
+
+The command prints a local manifest path under `data/clickhouse/`. Use that
+path as `data.manifest` in the usual run YAML, with the same timeframe and
+canonical symbol (`BTC`). Snapshots are content-addressed and ignored by Git.
+Daily date-only end values include the whole end date. Exports are capped at
+2,000,000 rows by default; use a smaller range or universe if the cap is hit.
+
+Hyperliquid candles are perpetual data and currently have no funding series in
+the warehouse snapshot, so set `execution.funding: false` for those runs. The
+ClickHouse Binance candle table is verified as spot only. The CLI refuses to
+label it as perpetual.
+
+`bt data inspect` catalogs schema and time coverage. Other warehouse domains
+can be exported as bounded raw Parquet snapshots, for example:
+
+```bash
+bt data snapshot ivydb.opprcd2025 --start 2025-01-01 --end 2025-01-31 \
+  --column date --column symbol --column cp_flag --column strike_price \
+  --time-column date --instrument-column symbol --symbol AAPL
+```
+
+Raw snapshots are explicitly marked unsupported by the bar backtester. Feature
+and target warehouse tables remain separate; target columns are never loaded
+into strategy features by this workflow. Large tables require explicit column
+selection, and all snapshots require time bounds.
+
 ## Strategy contract
 
 Strategies live outside the suite and implement one method:

@@ -2,8 +2,9 @@
 
 Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
-> **Now:** `aurora-forecaster`'s stream-ablation harness ran at n=12 origins (2026-08-09, 8/10 `STANDARD_CONFIGS` — `gdelt`/`gdelt+currents` still blocked by GDELT rate limiting): the striking n=4 `funding-vision` result (beat unimodal p=0.000) did **not replicate** — no config beats `unimodal` significantly at n=12. Next priority: revisit the original, more fundamental calibration-miscalibration finding (nominal 50/80/95% coverage vs. ~20/28/38% empirical, first found 2026-08-07 at n=4) against the now-available 12-origin `unimodal` ledger — scoped for a future session. Dashboard/leaderboard tooling (`artifacts/dashboard.html`, `leaderboard_history.jsonl`) now exists to track this across reruns.
-> **Queue:** `mean-variance-paper`'s forward accumulation is automated and running (2026-08-07, `.github/workflows/forward-accumulation.yml`, daily cron, ~102 more days to N=250); still needs a bootstrap CI on the signed-MV MDD gap and the TON delisting relayed to Ethan. `GDELT_ONLY`/`GDELT_CURRENTS` remain low-priority-blocked. `aurora-forecaster/artifacts/` still undecided between committed-evidence and `.gitignore`d.
+> **Archive:** Aurora's stream-ablation harness ran at n=12 origins (2026-08-09, 8/10 `STANDARD_CONFIGS`): the n=4 `funding-vision` result did not replicate, and no config significantly beat `unimodal`. The experiment and artifacts are retained in [`archive/aurora-forecaster/`](../archive/aurora-forecaster/). The calibration question remains open in [`open-threads.md`](open-threads.md).
+> **Now:** `mean-variance-paper`'s forward accumulation is automated and running daily; latest recorded sample is N=216 on 2026-10-14, with the DSR checkpoint at N=250. The bootstrap CI on the signed-MV drawdown gap and relaying the TON delisting to Ethan remain open.
+> **Queue:** `GDELT_ONLY`/`GDELT_CURRENTS` were rate-limited during the archived Aurora experiment; retry only if that work resumes.
 
 ---
 
@@ -39,6 +40,11 @@ Shared knowledge distilled from trading experiments; concrete results remain wit
 - [`concepts/random-projection-stability.md`](concepts/random-projection-stability.md)
 - [`concepts/strategy-archetypes.md`](concepts/strategy-archetypes.md)
 
+### Skills
+
+- [`skills/timesfm-forecasting/`](skills/timesfm-forecasting/) — upstream forecasting reference with TimesFM 3.0 API and license notes.
+- [`skills/cslab-compute/SKILL.md`](skills/cslab-compute/SKILL.md) — David-scoped CSLab access, Slurm, storage, and TimesFM resource workflow.
+
 ### Artifacts
 
 - [`artifacts/equity-trend-vol/README.md`](artifacts/equity-trend-vol/README.md)
@@ -54,7 +60,7 @@ Shared knowledge distilled from trading experiments; concrete results remain wit
 ## Related Stores
 
 - [`../freqtrade-experiment/`](../freqtrade-experiment/) — completed crypto experiment and evidence.
-- [`../aurora-forecaster/`](../aurora-forecaster/) — new forecasting-archetype experiment (multimodal generative forecaster, DecisionIntelligence/Aurora); smoke-tested locally, text-context design still open.
+- [`../archive/aurora-forecaster/`](../archive/aurora-forecaster/) — archived forecasting-archetype experiment (multimodal generative forecaster, DecisionIntelligence/Aurora).
 - [`../evaluation-framework/`](../evaluation-framework/) — reusable evaluation code and its evolving manuscript/essays.
 - [`../literature/`](../literature/) — primary sources, paper notes, and literature indexes.
 - [`../quant-research-agent/`](../quant-research-agent/) — reusable search and research-loop automation.

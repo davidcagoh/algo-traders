@@ -34,7 +34,7 @@ Every new strategy that graduates from research to evaluation gets a kill-criter
 Lift this as a cross-project methodology rule:
 
 - **Freqtrade experiment:** decision docs live at `freqtrade-experiment/hmm-slope-experiment/research/analysis/reports/YYYY-MM-DD-decision-00N-kill-criteria-<strategy>.md`.
-- **Feishu competition:** decision docs live with that project's dated reports under `feishu-competition/analysis/reports/`.
+- **Feishu competition:** pre-registered decisions are archived in `archive/feishu-competition/wiki/decisions.md`.
 - **Naming:** the strategy name in the filename must match the strategy file in code exactly.
 - **Timing:** the doc is committed before any backtest result that would inform threshold-setting is logged. This is the only way to keep thresholds from being silently moved after seeing the result.
 

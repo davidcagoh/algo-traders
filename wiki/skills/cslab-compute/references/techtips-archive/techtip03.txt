@@ -1,0 +1,48 @@
+From: Alan J Rosenthal <flaps@cs.toronto.edu>
+To: mscac2025@cs.toronto.edu
+Subject: Tech tip #3: Disk space at CS
+Date: Mon, 15 Sep 2025 11:53:17 -0400
+Message-Id: <20250915155317.39A585832CD@apps1.cs.toronto.edu>
+
+Hi,
+
+When you log in to your CSLab account, your current directory is initially
+set to your "home directory".
+
+This directory is suitable for documents and small things and e-mail,
+but to make sure that people's home directories remain functional, there
+is a sharp disk usage limit on your home directory -- 10 GB.
+
+When you need more space, you also have a directory in each of two other
+places:  /w/20251 (exists now) and /w/20252 (coming soon).  For example,
+one of my directory names would be /w/20251/flaps.  If other students
+have filled up one of these filesystems, you can use the other one.
+
+But please keep in mind that there is a finite amount of space and it's
+shared by all MScAC students.  So it's up to you to make responsible
+use of the space, and most of all, to delete large items when you're
+done with them.
+
+You can see how much space other students are using (and they can see how
+much space you are using).  Each filesystem has a directory ".diskuse", and
+the file in there you want is "report".  For example, /w/20251/.diskuse/report
+
+Note that while your home directory is protected by default so that only
+you can see it, these "work directories" are open by default.  You can
+use the "chmod" command to change permissions in either direction, as I
+assume you know, but if you need a refresher on unix file permissions
+please see https://www.cs.toronto.edu/~flaps/fileperms.html
+
+Note that we will delete all of /w/20251 and /w/20252 very shortly after
+you graduate, because we will need the large disk space for the next
+MScAC cohort.  But nevertheless we'd ask you please to delete large items
+when you're done with them (only once you're sure you're done with them),
+so that others can use the space sooner (including next year's cohort
+in September 2026).
+
+Any questions or issues, please ask!
+
+regards,
+ajr
+
+p.s. various other information from me at https://www.cs.toronto.edu/~pocpm/

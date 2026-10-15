@@ -1,0 +1,58 @@
+From: Alan J Rosenthal <flaps@cs.toronto.edu>
+To: mscac2025@cs.toronto.edu
+Subject: Tech tip #4: heavy computation, GPUs, Matlab
+Date: Mon, 22 Sep 2025 12:14:03 -0400
+Message-Id: <20250922161403.677D9582A12@apps1.cs.toronto.edu>
+
+Hi,
+
+We have some very powerful machines for heavy computation.  Some of which
+have a quarter terabyte of RAM.  And some of which have GPUs.
+
+Your usual CS home directory is your home directory on these "compute
+servers".  So there's no additional issue of copying files specifically
+to the compute servers.
+
+The machines apps0 and apps1 are used for non-computationally-intensive
+computing, such as e-mail.  You've been using them, perhaps under the name
+"cs.toronto.edu" which is an alternate name for apps0.cs.toronto.edu.
+
+Some of the compute servers are named comps0, comps1, comps2, and comps3.
+You can log in to these at any time (via ssh).  There is also a "Slurm"
+cluster which allows you exclusive access to a machine while your job is
+being run; a number of the machines in the Slurm cluster have GPUs.
+
+The specifications for these compute servers are described at
+https://support.cs.toronto.edu/systems/linuxcompute.html
+
+If when you log in to a comps server you include the '-X' flag in your
+ssh command-line (which might be default, depending on how your computer
+is set up), you can display the graphics over the ssh connection too, so
+long as you have an X-Windows server on your local computer.
+For Mac OS you can install XQuartz, and for MS-Windows you can install XMing.
+
+Slurm specifically is described at
+https://support.cs.toronto.edu/systems/slurmresource.html
+Jobs on Slurm nodes can't do X-Windows operations over the net, though.
+
+There is a University of Toronto site licence for Matlab, but how
+to access it keeps changing and I haven't yet figured out this year's
+edition.  I don't think that Matlab use is very common these days anyway.
+If you would like to use our site licence for Matlab, you can try working
+through the intructions at
+	https://login.mathworks.com/embedded-login/landing.html
+, or you can ask me and I can set it up here and figure out how to use
+it and tell you.
+
+
+Please remember last week's tech-tip about disk space -- you will want to
+store your large files (including software builds, pip installs, etc)
+on a /w filesystem, not under your home directory.
+
+Any questions, please ask.
+
+regards,
+ajr
+
+p.s. various other information from me at https://www.cs.toronto.edu/~pocpm/
+and also see "Tech tip #1" about accounts

@@ -1,6 +1,6 @@
 # Data Sourcing
 
-**Status:** Working notes. Last updated 2026-05-09.
+**Status:** Working notes. Last updated 2026-10-14.
 
 Default order of preference for market data, with the rationale for each. Goal: avoid reaching for exotic tools when boring free APIs cover the case.
 
@@ -14,6 +14,24 @@ Default order of preference for market data, with the rationale for each. Goal: 
 4. **Exchange S3 archives** — for bulk historical data that REST APIs cap (e.g., Hyperliquid L2 snapshots at `s3://hyperliquid-archive/market_data/`). Massive; only ingest when a specific hypothesis needs it.
 5. **`yfinance`** — equities/ETFs/spot crypto, daily and hourly. Free. Use for macro covariates (SPY, DXY, VIX, gold) feeding into a crypto regime model. **Not** a perp/funding/intraday source.
 6. **Scrapers (`Scrapling`, `playwright`, etc.)** — only when the data exists in a website but not in any API. Bookmark, don't default.
+
+## Personal ClickHouse warehouse
+
+This repository now has read-only access to David's ClickHouse warehouse through
+the existing `bt data` commands. Use it as an available source when the table
+matches the research question; it is not Ethan's private market-data store.
+Read credentials from the root `.env`, issue metadata or bounded `SELECT`
+queries, and save immutable local snapshots with manifests and content hashes.
+Never put credentials in manifests or run artifacts. Operational steps are in
+[David's ClickHouse guide](../../david_clickhouse_guide.md).
+
+The first validated path is Binance and Hyperliquid candles normalized for the
+bar engine. CRSP needs explicit price, adjustment, return, and identifier
+semantics. Feature tables need point-in-time availability and strict separation
+of future-horizon targets. Options and prediction-market tables can be
+catalogued and exported as raw snapshots, but require their own execution or
+settlement models before they support backtest claims. A snapshot existing
+does not by itself make a dataset valid for a strategy or backtest.
 
 ## Per-domain notes
 

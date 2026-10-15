@@ -4,6 +4,19 @@ Append-only daily log. Newest entry at the top.
 
 > **Archived:** entries before 2026-08-07 (aurora-forecaster rolling-forecast loop) moved to `session-log-archive-2026-08.md`.
 
+## 2026-10-14 — archive inactive projects, operationalize ClickHouse snapshots, and publish the TimesFM evaluation story
+
+- Archived `feishu-competition/` and `aurora-forecaster/` under `archive/`. Kept `backtesting-suite/` and other subprojects in place because ownership and current work were uncertain; no Ethan-owned work was deliberately reorganized. See `decisions-archive.md`.
+- Added read-only ClickHouse catalog, inspect, and bounded snapshot commands to `backtesting-suite/`. Binance and Hyperliquid candles are the first supported inputs to the existing manifest-backed `bt validate` / `bt run` workflow. CRSP, feature targets, options, and prediction-market data remain unavailable to bar execution until their data, timing, return, execution, or settlement semantics are validated. The operator guide is [`../david_clickhouse_guide.md`](../david_clickhouse_guide.md); credentials remain local in `.env` and are not recorded here.
+- Recorded the reusable boundary: `backtesting-suite/` handles bar simulation and execution; `evaluation-framework/` handles portfolio metrics and statistical checks; `forecast-evaluation/` evaluates forecast-versus-realized pairs. These layers compose where contracts fit but their estimands are not interchangeable.
+- Ran a frozen TimesFM 3.0 BTC/ETH hourly-return evaluation on ClickHouse snapshot `f1c29fc3e938bfa7b208`. Historical mean MAE was about 0.2% worse than predict-no-change and 34.1% better than repeat-last; direction accuracy was about 50.1%. At 168 hours, cumulative MAE was 7.1%–16.1% worse than no-change. Post-hoc paired inference covered 1,400 comparisons; none passed Holm correction (minimum adjusted p=0.140). The freshness slice has only 15 origins per asset. This demonstrates a reproducible evaluation process, not TimesFM superiority, equivalence, or profitability. Full results and limits: [`../forecast-evaluation/findings.md`](../forecast-evaluation/findings.md).
+- Reworked the standalone viewer answer-first around the comparator-sensitive finding, made significance narration effect-direction-aware, and collapsed the diagnostic chart deck behind an explanation of what those charts answer. The reviewed viewer is [`../forecast-evaluation/analyses/f0cb1164541408bc3056/ac3c3ba51e0ce4a5d6f6/report.html`](../forecast-evaluation/analyses/f0cb1164541408bc3056/ac3c3ba51e0ce4a5d6f6/report.html).
+- Added a CSLab compute reference from the authenticated Tech Tips. The seven source `.txt` files are copied into wiki references, so the archive does not depend on David's local `compute-resources` symlink. The note at that symlink's path is for a separate memory-recommender project; it was left untouched and excluded from this repo's guide. VPN/SSH, scheduler availability, and a sample cluster run remain unverified; no remote job was submitted.
+- Linked the strategy-skills collection into `wiki/skills/` and David's local Codex skill path. The collection symlink is local-source-dependent; the compute and TimesFM references are copied into the wiki.
+- Work is on `feat/david-clickhouse-timesfm-eval`; implementation is committed locally and not pushed. The report task is closed in Beads; a follow-up Beads issue tracks this wiki handoff.
+
+**Next:** Treat the TimesFM analysis as exploratory. Before any confirmatory superiority claim, freeze the estimand, baseline family, endpoints, multiplicity plan, and sample-size rationale before collecting genuinely post-release outcomes. Do not read a non-significant result as evidence of equivalence. Resume Aurora-specific questions only if that archived project is explicitly reopened.
+
 ---
 
 ## 2026-08-09 — aurora-forecaster: funding/DXY/SPY text+vision streams built, n=4→n=12 rerun, dashboard built; funding-vision result did NOT replicate

@@ -2,9 +2,9 @@
 
 Shared knowledge distilled from trading experiments; concrete results remain with their owning project.
 
-> **Archive:** Aurora's stream-ablation harness ran at n=12 origins (2026-08-09, 8/10 `STANDARD_CONFIGS`): the n=4 `funding-vision` result did not replicate, and no config significantly beat `unimodal`. The experiment and artifacts are retained in [`archive/aurora-forecaster/`](../archive/aurora-forecaster/). The calibration question remains open in [`open-threads.md`](open-threads.md).
-> **Now:** `mean-variance-paper`'s forward accumulation is automated and running daily; latest recorded sample is N=216 on 2026-10-14, with the DSR checkpoint at N=250. The bootstrap CI on the signed-MV drawdown gap and relaying the TON delisting to Ethan remain open.
-> **Queue:** `GDELT_ONLY`/`GDELT_CURRENTS` were rate-limited during the archived Aurora experiment; retry only if that work resumes.
+> **Archive:** Feishu and Aurora were moved under [`archive/`](../archive/) on 2026-10-14. `backtesting-suite/` remains in place because ownership and ongoing work are uncertain. Aurora's n=12 result did not replicate its n=4 headline; dormant follow-ups are recorded in [`open-threads.md`](open-threads.md).
+> **Now:** ClickHouse is available through bounded read-only snapshots for the existing `bt` manifest workflow. The TimesFM 3.0 BTC/ETH evaluation is reproducible, but its post-hoc tests found no Holm-adjusted significant comparison (minimum adjusted p=0.140); see [`forecast-evaluation/findings.md`](../forecast-evaluation/findings.md). `mean-variance-paper`'s latest recorded sample is N=216 (2026-10-14), with DSR checkpoint N=250.
+> **Queue:** A confirmatory TimesFM result needs a prospectively frozen protocol and more post-release outcomes; current inference is exploratory. CSLab access and scheduler availability remain unverified until VPN access is available.
 
 ---
 
@@ -18,6 +18,8 @@ Shared knowledge distilled from trading experiments; concrete results remain wit
 | Find a committed cross-project decision | [`decisions-archive.md`](decisions-archive.md) (grep) |
 | Read reusable methodology or reference material | [`concepts/`](concepts/) |
 | Inspect retained historical evidence | [`artifacts/`](artifacts/) |
+| Use the personal ClickHouse warehouse with backtests | [David's ClickHouse guide](../david_clickhouse_guide.md) |
+| Reproduce the TimesFM demo and inspect its limits | [`forecast-evaluation/`](../forecast-evaluation/README.md) and [findings](../forecast-evaluation/findings.md) |
 
 ## File Inventory
 
@@ -44,6 +46,7 @@ Shared knowledge distilled from trading experiments; concrete results remain wit
 
 - [`skills/timesfm-forecasting/`](skills/timesfm-forecasting/) — upstream forecasting reference with TimesFM 3.0 API and license notes.
 - [`skills/cslab-compute/SKILL.md`](skills/cslab-compute/SKILL.md) — David-scoped CSLab access, Slurm, storage, and TimesFM resource workflow.
+- [`skills/strategy-skills`](skills/strategy-skills) — local symlink to the strategy-skills collection; individual skills are also linked into Codex's default skill directory on David's machine.
 
 ### Artifacts
 
@@ -60,8 +63,11 @@ Shared knowledge distilled from trading experiments; concrete results remain wit
 ## Related Stores
 
 - [`../freqtrade-experiment/`](../freqtrade-experiment/) — completed crypto experiment and evidence.
+- [`../backtesting-suite/`](../backtesting-suite/) — reusable bar simulation and execution layer.
+- [`../evaluation-framework/`](../evaluation-framework/) — reusable portfolio metrics, statistical checks, and inference.
+- [`../forecast-evaluation/`](../forecast-evaluation/) — forecast-versus-realized scoring and the TimesFM demonstration.
 - [`../archive/aurora-forecaster/`](../archive/aurora-forecaster/) — archived forecasting-archetype experiment (multimodal generative forecaster, DecisionIntelligence/Aurora).
-- [`../evaluation-framework/`](../evaluation-framework/) — reusable evaluation code and its evolving manuscript/essays.
+- [`../archive/feishu-competition/`](../archive/feishu-competition/) — archived competition project.
 - [`../literature/`](../literature/) — primary sources, paper notes, and literature indexes.
 - [`../quant-research-agent/`](../quant-research-agent/) — reusable search and research-loop automation.
 

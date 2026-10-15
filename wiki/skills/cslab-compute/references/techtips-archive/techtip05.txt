@@ -1,0 +1,41 @@
+From: Alan J Rosenthal <flaps@cs.toronto.edu>
+To: mscac2025@cs.toronto.edu
+Subject: Tech tip #5: How to publish your CS web pages
+Date: Tue, 30 Sep 2025 12:11:38 -0400
+Message-Id: <20250930161138.D3C5858322D@apps1.cs.toronto.edu>
+
+Greetings,
+
+Your URL is https://www.cs.toronto.edu/~yourname
+e.g. mine is https://www.cs.toronto.edu/~flaps
+
+Put your files under the "public_html" directory under your home directory,
+and call your first file index.html.
+
+(Advanced note: "public_html" is actually a symlink pointing to the place the
+documents are really supposed to be, which is /cs/htuser/yourname/public_html.
+So you can't just make your own such directory.  Please ask me for help
+as needed (with this and all other such things!).)
+
+The CS web server serves static files and cgi programs.  Things such as
+PHP require you to run your own "user-managed web server"; but if you're
+considering going in that direction I'd urge you to consider whether it
+adds anything or is just a time sink (and whether the result is
+going to be less likely to look right on all web browsers!).
+
+Note that everything under public_html is published.  If you have some
+files you don't want to publish (e.g. old versions of files), don't put
+them there, or protect them so as not to be readable by others (and
+test it).  Don't assume that people won't be able to guess the URLs;
+it's easy to guess a suffix of ".old" or a tilde; more complicated things
+are still usually pretty easy to guess... just don't publish them if you
+don't want them to be published.
+
+Any questions, please don't hesitate to ask.
+
+regards,
+ajr
+
+p.s. various other information from me at https://www.cs.toronto.edu/~pocpm/
+p.p.s. previous tech tips are now available at
+https://mscac.cs.toronto.edu/techtips/ (use your CS user name and password)

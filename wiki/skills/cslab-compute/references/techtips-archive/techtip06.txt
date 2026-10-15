@@ -1,0 +1,51 @@
+From: Alan J Rosenthal <flaps@cs.toronto.edu>
+To: mscac2025@cs.toronto.edu
+Subject: Tech tip #6: using the linux/unix command-line
+Date: Sun, 05 Oct 2025 17:03:08 -0400
+Message-Id: <20251005210308.A1B4258322D@apps1.cs.toronto.edu>
+
+Greetings,
+
+The unix/linux command-line is not actually all that difficult, and
+you will find increased proficiency with it to be very useful in your
+studies here, and in the rest of your computing life.  It's a powerful
+bunch of tools.
+
+There is a video introducing the unix command-line which you can watch
+at https://www.youtube.com/watch?v=3dKGUQb8CaY (12 minutes)
+
+In addition to the basics in that video, I'd like to mention the "screen"
+program.  This is especially useful for long-running computational tasks.
+It gives you an interactive session -- just another shell command prompt --
+but then if your connection gets interrupted, it continues in the background
+and you can reconnect to the session.  Or you can explicitly detach so that
+you can log out and return to the session later, leaving everything running
+in the interim.
+
+Here's how to use "screen":
+You run "screen" and it starts a new session.  You can detach from this
+session with control-A control-D (those two characters in sequence).
+Later you can reattach to this session with "screen -r".  If you have
+multiple screen sessions going, then "screen -r" will instead give
+you a list of detached sessions, and you can then type "screen -r
+sessionname" to reattach to that session.  Note that this all has to
+be on the same computer which is actually running the detached session
+(e.g. if it's comps1, then "screen -r" on comps2 will say you have no
+existing sessions).
+
+If you want to go further with the unix command-line, you can go through
+more material about software tools at
+https://www.teach.cs.toronto.edu/~ajr/209/video/tools01.html
+and
+https://www.teach.cs.toronto.edu/~ajr/209/notes/tools02.html
+, and even further to that you can watch a series of videos about shell
+programming at https://www.teach.cs.toronto.edu/~ajr/209/video/shell.html
+
+And you're always welcome to ask me about any of this material.
+
+regards,
+ajr
+
+p.s. various other information from me at https://www.cs.toronto.edu/~pocpm/
+p.p.s. previous tech tips are now available at
+https://mscac.cs.toronto.edu/techtips/ (use your CS user name and password)

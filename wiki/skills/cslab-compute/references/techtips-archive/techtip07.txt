@@ -1,0 +1,45 @@
+From: Alan J Rosenthal <flaps@cs.toronto.edu>
+To: mscac2025@cs.toronto.edu
+Subject: Tech tip #7: Sharing files at CS
+Date: Mon, 20 Oct 2025 11:12:59 -0400
+Message-Id: <20251020151259.A7660582243@apps1.cs.toronto.edu>
+
+In working with others at CS you may want to share files.
+
+Your home directory is protected by default so that it can't be accessed
+by anyone else.  But you can change this, and you can change it in
+sufficiently small ways as to maintain your privacy for all other files
+while sharing files you wish to share.
+
+I've written an introduction to basic unix file permissions at
+https://www.cs.toronto.edu/~flaps/fileperms.html
+
+If you want to share files under your home directory with others, you
+probably want to change your home directory to be mode 711 (rwx--x--x).
+This would mean that other people could specify files under your home
+directory if they know their name, but they still couldn't read nor write
+your home directory itself.  (However, you still need to use appropriate
+file permissions on the files (and directories) themselves; don't assume
+that people can't guess file names.)
+
+On the other hand, your directories under /w/20251 and /w/20252 are
+world-readable by default (rwxr-xr-x).  So you don't need to open it
+up further to grant people access to your files, although you could use
+the chmod command to protect it further if desired.
+
+For some files, group access by the group of MScAC students might suffice
+(the group is named "pmstudgrp").  But if you need finer access control,
+the easiest way to do this is to create new groups.  E-mail me what you
+want to do and we'll figure out what group(s) to create.  You can change
+the group of a file you own with the "chgrp" command, and you can change
+it to any group you are a member of.  The "id" command will show you
+which groups you are a member of.
+
+Any questions, please ask!
+
+regards,
+ajr
+
+p.s. various other information from me at https://www.cs.toronto.edu/~pocpm/
+p.p.s. previous tech tips are now available at
+https://mscac.cs.toronto.edu/techtips/ (use your CS user name and password)

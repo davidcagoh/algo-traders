@@ -214,8 +214,7 @@ policies against the linked official pages before relying on them.
 
 ## Source notes
 
-- [Local CSLab resource note](../../../compute-resources/using-uoft-cslab-compute.md)
-- [Archived Tech Tips text copies](../../../compute-resources/techtips/README.md)
+- [Archived Tech Tips text copies](references/techtips-archive/README.md)
 - [MScAC Tech Tips directory](https://mscac.cs.toronto.edu/techtips/)
 - [Tech Tip 1: accounts and computers](https://mscac.cs.toronto.edu/techtips/techtip01.txt)
 - [Tech Tip 2: MScAC space equipment](https://mscac.cs.toronto.edu/techtips/techtip02.txt)
@@ -226,3 +225,8 @@ policies against the linked official pages before relying on them.
 - [Tech Tip 7: file sharing and permissions](https://mscac.cs.toronto.edu/techtips/techtip07.txt)
 - [TimesFM 3.0 repo notes](../timesfm-forecasting/references/timesfm3.md)
 - [TimesFM resource preflight](../timesfm-forecasting/references/system_requirements.md)
+
+The local `compute-resources/using-uoft-cslab-compute.md` note is for a separate
+memory-recommender project and is not an execution guide for this repository.
+This skill contains the repo-specific paths and safe job template; do not reuse
+the other project's environment, model, credential, or job commands here.

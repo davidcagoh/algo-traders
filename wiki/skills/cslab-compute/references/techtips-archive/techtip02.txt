@@ -1,0 +1,72 @@
+From: Alan J Rosenthal <flaps@cs.toronto.edu>
+To: mscac2025@cs.toronto.edu
+Subject: Tech tip #2: Computing equipment in the MScAC space
+Date: Mon, 08 Sep 2025 10:35:36 -0400
+Message-Id: <20250908143536.072245827E2@apps1.cs.toronto.edu>
+
+Greetings,
+
+As mentioned in the summer, we are assuming that you have a laptop
+to use as your computing console most of the time (from which you can
+connect to an assortment of powerful servers).
+
+Many people have requested a computer monitor, keyboard, and/or mouse to
+use with their laptop.  You can make a request or check that a request is
+pending at https://mscac.cs.toronto.edu/accessories
+
+If there are any of these items (monitor/keyboard/mouse/video-cables) at
+your desk which you no longer want, I can remove them -- please just send
+e-mail to ask.  Or any additional requests or changes can be sent by e-mail.
+
+These items do have to stay in the room unless you have permission to
+use them elsewhere.  In any case they need to be left at your desk when
+you leave for your internships at the end of April.
+
+
+There are two printers in the north-west end of the space.  Instructions
+for configuring your laptop to print on these printers can be found at
+https://www.cs.toronto.edu/~pocpm/printing.html
+or you're welcome to ask me for assistance with this.
+
+We will be supplying paper for the printers, but we're hoping that
+you can do the actual replacing of the paper yourselves when needed.
+The paper trays each only hold one ream of paper, so easiest is to let
+it run out completely before adding more paper.  There is paper in the
+deskside cabinets below the printers.
+
+There are also two desktop computers by the printers, meant for quick use
+to print something, quickly check your e-mail, etc, e.g. if you don't
+bring your laptop some day.  All of you automatically have accounts on
+these two computers, with a copy of your CS password, even though they're
+not run by the CS core computing people (they are run by me).
+
+The most important consequence of the fact that they are not actually CSLab
+machines is that your home directory on these machines is local.  It's also
+not backed up, so don't store the only copy of anything important there.
+
+Please leave these computers turned on so that I can manage them remotely;
+and please don't reboot them unnecessarily, or try to perform administrative
+operations.  If you need certain software installed, please ask.  If you
+can't manage to get an application to quit, you can either log in on
+a text console or log in via ssh to kill processes as needed (their
+names are gyre.red.sandbox and gimble.red.sandbox, as labelled).  Or,
+ctrl+alt+backspace should usually log you out.  Or if you really must
+reboot the machine, please do a proper shutdown:  You can press ctrl+alt+F3
+to switch to a text console, then you can press ctrl+alt+delete to do a
+proper shutdown and reboot.
+
+
+Any questions about the computer equipment, workstations, or anything else,
+please ask.
+
+regards,
+ajr
+
+p.s. various other information from me at https://www.cs.toronto.edu/~pocpm/
+
+p.p.s. see tech-tip #1 forwarded below
+
+
+------- Forwarded Message
+
+...

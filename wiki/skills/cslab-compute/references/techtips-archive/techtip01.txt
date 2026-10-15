@@ -1,0 +1,64 @@
+From: Alan J Rosenthal <flaps@cs.toronto.edu>
+To: mscac2025@cs.toronto.edu
+Subject: Tech tip #1: All these different accounts and computers!
+Date: Tue, 02 Sep 2025 11:44:13 -0400
+Message-Id: <20250902154413.135255817DA@apps1.cs.toronto.edu>
+
+Greetings,
+
+The Department of Computer Science runs two separate computing facilities:
+one for research computing, one for instructional computing.  The research
+facility is called CSLab.  The instructional computing facility is now called
+"teaching labs" or "teach.cs" (but was formerly called CDF, in
+case you've heard of that).
+
+For research computing, you have created a CSLab account which enables you
+to ssh to "cs.toronto.edu".  This is actually a nickname for the computer
+"apps0.cs.toronto.edu".  There is also apps1.  These "application servers"
+are meant for lightweight computing tasks such as e-mail, editing files,
+and small program runs.
+
+There are also "computation servers".  Some of these are quite substantial
+machines.  Their specifications are described at
+https://support.cs.toronto.edu/systems/linuxcompute.html
+Some of them can be logged in to interactively at any time; others are
+accessed by submitting jobs via "Slurm".  All is described on that web page.
+
+
+Please restrict your use of the apps machines to interactive, low-cpu-using
+applications.  Computationally-intensive and/or long-running processes
+should be run on the comps machines, because they have more CPU power and
+because they are used less interactively.
+
+
+As to the teaching labs:  you might get an account there if you are
+taking a course which makes use of that facility.  Many graduate courses
+use research computing facilities instead.  But if you are taking a
+teach.cs-using course, you will get an account on the teach.cs machines.
+The name of the account will be the same as your UTORid, but other than
+a coincidence of names the account is separate.
+
+If you are a TA for a teach.cs-using course, you will get a separate TA
+account at the teaching labs.  These accounts' names begin with a 't'
+and then a digit indicating the year it was created; so your TA account
+will probably begin with "t5".
+
+Both student and TA teaching labs passwords can be set or reset via
+https://www.teach.cs.toronto.edu/account
+
+
+And if you're wondering where UTORids and/or yourname@mail.utoronto.ca fit
+into all this, the answer is that they don't.  We've been doing computing
+and computer accounts much longer than the central U of T IT folks, so we
+mostly continue to do things our own way.  Often our way is more useful,
+at least for research computing purposes.
+
+However, SGS might send you e-mail to yourname@mail.utoronto.ca, so you
+do want to read that too.  Last I heard, you can forward that to CS via
+the exciting URL
+https://outlook.office.com/owa/?realm=utoronto.ca&path=/options/forwarding
+
+regards,
+ajr
+
+p.s. various other information from me at https://www.cs.toronto.edu/~pocpm/
